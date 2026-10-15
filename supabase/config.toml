@@ -1,0 +1,4 @@
+[functions.admin-users]
+# The handler verifies the user JWT with Auth and checks approved admin membership.
+# Disable the legacy gateway JWT verifier to support the project's JWT signing keys.
+verify_jwt = false

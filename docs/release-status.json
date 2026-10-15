@@ -6,14 +6,22 @@
     "休止": 727
   },
   "active_kind_counts": {
-    "診療所": 88797,
-    "病院": 7933
+    "診療所": 88799,
+    "病院": 7931
   },
-  "quality_review_count": 781,
+  "quality_review_count": 0,
+  "null_bed_counts": {
+    "total_beds": 0,
+    "general_beds": 0,
+    "medical_beds": 0,
+    "psychiatric_beds": 0,
+    "tuberculosis_beds": 0,
+    "infectious_beds": 0
+  },
   "all_database_source_fields_equal": true,
   "new_designation_events": 0,
   "reported_change_events": 0,
-  "reclassified_events": 782,
+  "reclassified_events": 98237,
   "scope": "保険医療機関・通常医科主一覧",
   "prefectures": 47,
   "bureaus": 8,

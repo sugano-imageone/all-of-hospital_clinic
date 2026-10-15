@@ -1,7 +1,8 @@
 {
-  "verified_at": "2026-10-15T13:24:11.939233+09:00",
+  "verified_at": "2026-10-15T14:54:34.815755+09:00",
   "verification_method": "reuse of fingerprinted full database verification",
   "reference_date_basis": "source metadata",
+  "reused_projection_sha256": "8f28d3b778f3fe08b6358ddfd0bddb7de1283ebb5b14bea1d6d0eb735dc8d257",
   "statistics_file": "geppou0807.xlsx",
   "statistics_sha256": "bc3e6519366afbb4413ae21db3a2e944515cce682928a444031abe0014ace38c",
   "statistics_reference_date": "2026-07-31",
@@ -12,6 +13,7 @@
   "database_source_fields_equal": [
     "code",
     "prefecture_code",
+    "name",
     "kind",
     "status",
     "total_beds",
@@ -20,13 +22,15 @@
     "psychiatric_beds",
     "tuberculosis_beds",
     "infectious_beds",
+    "clinic_beds",
+    "psychiatric_class",
     "needs_review"
   ],
   "database_source_all_records_equal": true,
   "all_47_prefectures_checked": true,
   "prefectures_with_fewer_clinics": 47,
-  "clinic_difference_total": 16905,
-  "hospital_difference_total": 9,
+  "clinic_difference_total": 16903,
+  "hospital_difference_total": 11,
   "top_10_prefectures_by_absolute_gap": [
     13,
     23,
@@ -39,7 +43,7 @@
     12,
     22
   ],
-  "top_10_gap_total": 8714,
+  "top_10_gap_total": 8713,
   "prefectures": [
     {
       "prefecture_code": 1,
@@ -91,15 +95,15 @@
       "prefecture": "宮城県",
       "bureau": "東北厚生局",
       "statistics_hospitals": 133,
-      "database_active_hospitals": 135,
-      "hospital_difference": -2,
+      "database_active_hospitals": 134,
+      "hospital_difference": -1,
       "statistics_clinics": 1718,
-      "database_active_clinics": 1412,
-      "clinic_difference": 306,
-      "clinic_difference_percent": 17.81,
+      "database_active_clinics": 1413,
+      "clinic_difference": 305,
+      "clinic_difference_percent": 17.75,
       "database_suspended_clinics": 8,
       "database_review_clinics": 0,
-      "hypothetical_difference_including_nonactive": 298
+      "hypothetical_difference_including_nonactive": 297
     },
     {
       "prefecture_code": 5,
@@ -451,15 +455,15 @@
       "prefecture": "兵庫県",
       "bureau": "近畿厚生局",
       "statistics_hospitals": 335,
-      "database_active_hospitals": 337,
-      "hospital_difference": -2,
+      "database_active_hospitals": 336,
+      "hospital_difference": -1,
       "statistics_clinics": 5269,
-      "database_active_clinics": 4633,
-      "clinic_difference": 636,
-      "clinic_difference_percent": 12.07,
+      "database_active_clinics": 4634,
+      "clinic_difference": 635,
+      "clinic_difference_percent": 12.05,
       "database_suspended_clinics": 56,
       "database_review_clinics": 0,
-      "hypothetical_difference_including_nonactive": 580
+      "hypothetical_difference_including_nonactive": 579
     },
     {
       "prefecture_code": 29,
@@ -746,6 +750,5 @@
       "database_review_clinics": 0,
       "hypothetical_difference_including_nonactive": 123
     }
-  ],
-  "reused_projection_sha256": "fe793eca2c2c6ce94ca2a38067857211214951d36ceddf715811c0bf9b70cc16"
+  ]
 }

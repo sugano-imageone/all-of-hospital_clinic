@@ -66,7 +66,8 @@ def main():
     assert len({r['code'] for r in records})==len(records),'duplicate codes'
     assert len({s['prefecture_code'] for s in sources})==47,'47-prefecture main-list input required'
     production=json.loads(Path(args.database_report).read_text())
-    zero_update_status=production.get('bed_zero_update_status','完了（全件DB照合済み）')
+    zero_verified=production.get('all_database_source_fields_equal') and production.get('null_bed_counts') and all(n==0 for n in production['null_bed_counts'].values())
+    zero_update_status=production.get('bed_zero_update_status','完了（全件DB照合済み）' if zero_verified else 'この資料では未確認')
     summary=summarize(records)
     active=[r for r in records if r['status']=='現存']
     active_hospitals=sum(r['kind']=='病院' for r in active)

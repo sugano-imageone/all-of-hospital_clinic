@@ -10,7 +10,7 @@
   "region_difference_rate": 0.1623687672184855,
   "national_total_clinics": 105702,
   "national_extrapolated_reference_estimate": 17163,
-  "national_database_gap_for_comparison_only": 16905,
+  "national_database_gap_for_comparison_only": 16903,
   "independent_of_database_counts_in_calculation": true,
   "region_insured_source": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/000498885.pdf#page=83",
   "national_and_regional_total_source": "ユーザー提供 geppou0807.xlsx 第3表",

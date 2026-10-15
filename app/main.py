@@ -86,7 +86,7 @@ def logout(request:Request):
 
 @app.get('/api/me')
 def me(auth:Auth):
-    _,user=auth;return {'email':user.get('email'),'role':user['role']}
+    _,user=auth;return {'email':user.get('email'),'role':user['role'],'user_id':user['id']}
 
 @app.post('/api/search')
 def search(query:Search,auth:Auth):
@@ -151,13 +151,13 @@ class MemberUpdate(BaseModel):
 @app.get('/api/admin/members')
 def members(auth:Auth):
     db,user=auth
-    if user['role']!='admin': raise HTTPException(403,'管理者権限が必要です')
+    if user['role'] not in ['admin','master']: raise HTTPException(403,'管理者権限が必要です')
     db.audit('members_read')
     return db.all('app_members',[('order','created_at.asc,user_id.asc')])
 
 @app.post('/api/admin/members')
 def update_member(data:MemberUpdate,auth:Auth):
     db,user=auth
-    if user['role']!='admin': raise HTTPException(403,'管理者権限が必要です')
+    if user['role'] not in ['admin','master']: raise HTTPException(403,'管理者権限が必要です')
     db.rpc('set_member',{'p_user':data.user_id,'p_role':data.role,'p_approved':data.approved})
     return {'ok':True}

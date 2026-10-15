@@ -1,5 +1,5 @@
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-let page=1,total=0,lastQuery=null,dashboardData=null;
+let page=1,total=0,lastQuery=null,dashboardData=null,currentUserId=null;
 const message=t=>{$('#message').textContent=t||'';};
 async function api(url,options={},retry=true){
  const response=await fetch(url,options);
@@ -43,10 +43,10 @@ async function loadDashboard(){
 }
 async function loadMembers(){
  const members=await(await api('/api/admin/members')).json();$('#members').replaceChildren();
- for(const m of members){const row=document.createElement('div');row.className='member';const id=document.createElement('code');id.textContent=m.user_id;const role=document.createElement('select');for(const r of ['user','admin']){const o=new Option(r,r);role.add(o);}role.value=m.role;const label=document.createElement('label');label.className='inline';const check=document.createElement('input');check.type='checkbox';check.checked=m.approved;label.append(check,document.createTextNode('利用を承認'));const save=document.createElement('button');save.textContent='保存';save.onclick=async()=>{try{await post('/api/admin/members',{user_id:m.user_id,role:role.value,approved:check.checked});message('承認状態を更新しました');}catch(e){message(e.message);}};row.append(id,role,label,save);$('#members').append(row);}
+ for(const m of members){const row=document.createElement('div');row.className='member';const id=document.createElement('code');id.textContent=m.email||m.user_id;const role=document.createElement('select');for(const r of (m.role==='master'?['master']:['user','admin'])){const o=new Option(r==='master'?'マスター':r==='admin'?'管理者':'閲覧者',r);role.add(o);}role.value=m.role;const label=document.createElement('label');label.className='inline';const check=document.createElement('input');check.type='checkbox';check.checked=m.approved;label.append(check,document.createTextNode('利用を承認'));const save=document.createElement('button');save.textContent='保存';if(m.user_id===currentUserId||m.role==='master'){role.disabled=true;check.disabled=true;save.disabled=true;}save.onclick=async()=>{try{await post('/api/admin/members',{user_id:m.user_id,role:role.value,approved:check.checked});message('承認状態を更新しました');}catch(e){message(e.message);}};row.append(id,role,label,save);$('#members').append(row);}
 }
 async function loadSession(){
- try{const user=await(await api('/api/me')).json();$('#login-panel').hidden=true;$('#workspace').hidden=false;$('#account').textContent=user.email||'';const out=document.createElement('button');out.className='secondary';out.textContent='ログアウト';out.onclick=async()=>{try{await api('/auth/logout',{method:'POST'});location.reload();}catch(e){message(e.message);}};$('#account').append(out);$('#admin-nav').hidden=user.role!=='admin';await loadDashboard();message('');}
+ try{const user=await(await api('/api/me')).json();currentUserId=user.user_id;$('#login-panel').hidden=true;$('#workspace').hidden=false;$('#account').textContent=user.email||'';const out=document.createElement('button');out.className='secondary';out.textContent='ログアウト';out.onclick=async()=>{try{await api('/auth/logout',{method:'POST'});location.reload();}catch(e){message(e.message);}};$('#account').append(out);$('#admin-nav').hidden=!['admin','master'].includes(user.role);const siteLink=$('#site-settings-link');if(siteLink)siteLink.hidden=user.role!=='master';await loadDashboard();message(user.password_change_required?'仮パスワードでログインしています。「パスワード変更」からご自身のパスワードに変更してください':'');}
  catch(e){$('#login-panel').hidden=false;$('#workspace').hidden=true;if(!e.message.includes('ログイン'))message(e.message);}
 }
 $('#login').onsubmit=async e=>{e.preventDefault();message('ログイン中…');try{await api('/auth/login',{method:'POST',body:new FormData(e.target)});$('#login').reset();await loadSession();}catch(e){message(e.message);}};
@@ -54,6 +54,6 @@ $('#search').onsubmit=e=>{e.preventDefault();page=1;runSearch();};
 $$('[name=kind]').forEach(r=>r.onchange=()=>{const h=r.value==='病院';$('#search').elements.minimum.value=h?20:'';$('#search').elements.maximum.value=h?200:'';$('#search').elements.clinic_beds.value='';});
 $('#prev').onclick=()=>{page--;runSearch(false);};$('#next').onclick=()=>{page++;runSearch(false);};
 for(const sel of ['#sort','#direction'])$(sel).onchange=()=>{page=1;runSearch();};
-$$('.nav').forEach(b=>b.onclick=async()=>{$$('.nav').forEach(x=>x.classList.toggle('active',x===b));$$('.tab').forEach(t=>t.hidden=t.id!==b.dataset.tab);try{if(b.dataset.tab==='admin-panel')await loadMembers();else if(b.dataset.tab!=='search-panel')await loadDashboard();}catch(e){message(e.message);}});
+$$('.nav').forEach(b=>b.onclick=async()=>{$$('.nav').forEach(x=>x.classList.toggle('active',x===b));$$('.tab').forEach(t=>t.hidden=t.id!==b.dataset.tab);try{if(b.dataset.tab==='admin-panel')await loadMembers();else if(['dashboard-panel','sources-panel'].includes(b.dataset.tab))await loadDashboard();}catch(e){message(e.message);}});
 $$('[data-export]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{message('ファイルを生成中…');const response=await post('/api/export/'+b.dataset.export,lastQuery||query());const blob=await response.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=b.dataset.export==='csv'?'検索結果.csv':b.dataset.export==='master'?'全国医療機関マスター.xlsx':'検索結果.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);message('出力しました。対象範囲はファイル内の更新情報をご確認ください。');}catch(e){message(e.message);}finally{b.disabled=false;}});
 loadSession();

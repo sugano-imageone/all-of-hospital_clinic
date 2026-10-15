@@ -134,3 +134,18 @@ def test_all_unreported_beds_use_zero_and_clinic_threshold_without_renaming():
     assert row['total_beds']==0 and row['kind']=='診療所' and row['clinic_beds']=='無床'
     assert row['name']=='歯科併設医科病院' and row['status']=='現存'
     assert row['raw']['explicit_kind']=='病院' and row['raw']['blank_bed_kind_adjustment']
+
+
+def test_long_blank_source_tail_is_losslessly_compacted():
+    from app.importers.kyushu import parse_block
+    first=['1','021,003,9','テスト病院','福岡市','','','','令4.5.1','一般 80','病院']
+    block=[(12,first),(13,['','','','','','','','','内','現存'])]
+    block.extend((i,['']*10) for i in range(14,14100))
+    source={'bureau':'九州厚生局','sheet':'Sheet1','reference_date':'2026-10-01','file_created_date':'2026-10-01','retrieved_at':'2026-10-15T00:00:00Z','filename':'test.xlsx'}
+    row=parse_block(block,40,source)
+    assert row['total_beds']==80 and row['status']=='現存'
+    assert len(row['raw']['rows'])==2 and row['raw']['blank_row_ranges']==[[14,14099]]
+    reconstructed=row['raw']['rows']+[{'row':i,'cells':['']*10} for a,b in row['raw']['blank_row_ranges'] for i in range(a,b+1)]
+    assert reconstructed==[{'row':i,'cells':cells} for i,cells in block]
+    from app.importers.cli import snapshot_batches
+    assert len(list(snapshot_batches([row])))==1

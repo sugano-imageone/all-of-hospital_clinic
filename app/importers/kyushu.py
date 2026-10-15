@@ -113,6 +113,17 @@ def parse_block(block, pref, source):
     address = re.sub(r'^〒?\s*\d{3}[-ー−]\s*\d{4}', '',address).strip()
     local = address.removeprefix(PREFECTURES[pref])
     city = re.match(r'(.+?市.+?区|.+?市|.+?郡.+?[町村]|.+?区|.+?[町村])',local)
+    source_rows=[{'row':i,'cells':list(row[:10])} for i,row in block]
+    blank_ranges=[]
+    if len(source_rows)>1000:
+        nonempty=[]
+        for item in source_rows:
+            if not any(item['cells']):
+                if blank_ranges and item['row']==blank_ranges[-1][1]+1:
+                    blank_ranges[-1][1]=item['row']
+                else: blank_ranges.append([item['row'],item['row']])
+            else: nonempty.append(item)
+        source_rows=nonempty
     return {
         'code':institution_code(text(1),pref), 'prefecture_code':pref, 'prefecture':PREFECTURES[pref],
         'bureau':source['bureau'], 'municipality':city.group(1) if city else None,
@@ -128,7 +139,8 @@ def parse_block(block, pref, source):
         'reference_date':source['reference_date'],'file_created_date':source['file_created_date'],
         'retrieved_at':source['retrieved_at'],'source_file':source['filename'],
         'raw':{'sheet':source['sheet'],'start_row':block[0][0],
-               'rows':[{'row':i,'cells':list(row[:10])} for i,row in block],
+               'rows':source_rows,
+               **({'blank_row_ranges':blank_ranges} if blank_ranges else {}),
                'bed_interpretation':'User approved 2026-10-15: unreported bed counts are zero; total is sum of reported categories',
                'zero_filled_bed_types':sorted(set(BED_LABELS)-populated_bed_types),
                'blank_bed_kind_adjustment':blank_kind_adjustment,
@@ -178,7 +190,9 @@ def parse_workbook(blob, filename, pref, retrieved_at=None, *, bureau=None, allo
         if len(set(r['code'] for r in parsed)) != len(parsed): raise ValueError('医科施設コード重複')
         if any(not r['name'] or not r['address'] for r in parsed): raise ValueError('必須情報欠落')
         if any(r['raw'].get('classification_override') for r in parsed):
-            source['parser_version'] = VERSION + '-kind1'
+            source['parser_version'] += '-kind1'
+        if any(r['raw'].get('blank_row_ranges') for r in parsed):
+            source['parser_version'] += '-compact1'
         source['record_count'] = len(parsed)
         results.extend(parsed); sources.append(source)
     return results,sources
