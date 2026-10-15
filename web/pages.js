@@ -35,9 +35,16 @@ function searchParams(q){
  const direction=q.direction==='desc'?'desc':'asc';
  const p=new URLSearchParams({kind:'eq.'+(q.kind==='診療所'?'診療所':'病院'),status:q.include_suspended?'in.(現存,休止)':'eq.現存',order:sort+'.'+direction+'.nullslast,code.asc'});
  if(q.prefectures?.length)p.set('prefecture','in.('+q.prefectures.map(literal).join(',')+')');
+ // Use the indexed numeric location as well as the displayed prefecture name.
+ const prefectureCodes=(q.prefectures||[]).map(name=>Number(config.prefectureCodes?.[name]));
+ if(prefectureCodes.length&&prefectureCodes.every(code=>Number.isInteger(code)&&code>=1&&code<=47))p.set('prefecture_code','in.('+prefectureCodes.join(',')+')');
  // Standalone eq values must not be wrapped in PostgREST in-list quotes.
  // URLSearchParams encodes transport punctuation; quotes here become literal data.
  for(const k of ['bureau','owner_type','clinic_beds','psychiatric_class','code'])if(q[k])p.set(k,'eq.'+q[k]);
+ // Match the approved bed policy through the numeric index too. This avoids
+ // authenticated counts timing out on a text-only clinic-beds predicate.
+ if(q.clinic_beds==='無床')p.append('total_beds','eq.0');
+ if(q.clinic_beds==='有床'){p.append('total_beds','gte.1');p.append('total_beds','lte.19');}
  for(const k of ['municipality','name','owner'])if(q[k]){const value=String(q[k]).replace(/[\\%_*]/g,c=>'\\'+c);p.set(k,'ilike.%'+value+'%');}
  const bed=['total','general','medical','psychiatric','tuberculosis','infectious'].includes(q.bed_type)?q.bed_type:'total';
  for(const [k,op] of [['minimum','gte'],['maximum','lte']])if(q[k]!=null){if(!Number.isInteger(q[k])||q[k]<0||q[k]>100000)fail(400,'病床数を確認してください');p.append(bed+'_beds',op+'.'+q[k]);}

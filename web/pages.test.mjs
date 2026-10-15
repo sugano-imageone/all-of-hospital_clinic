@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 function client(){
  const calls=[];
- const config={url:'https://example.supabase.co',key:'sb_publishable_test',columns:[['code','コード']]};
+ const config={url:'https://example.supabase.co',key:'sb_publishable_test',columns:[['code','コード']],prefectureCodes:{'福岡県':40}};
  const native=async(url)=>{
   calls.push(new URL(url));
   if(url.endsWith('/auth/v1/user'))return Response.json({id:'viewer-id'});
@@ -32,6 +32,7 @@ for(const [key,value] of [['clinic_beds','無床'],['clinic_beds','有床'],['bu
   assert.equal(query.get(key),'eq.'+value);
   assert.equal(query.get('kind'),'eq.診療所');
   assert.equal(query.get('prefecture'),'in.("福岡県")');
+  assert.equal(query.get('prefecture_code'),'in.(40)');
  });
 }
 
@@ -43,4 +44,13 @@ test('search and CSV export use identical non-bedded clinic filters',async()=>{
  const queries=calls.filter(url=>url.pathname==='/rest/v1/medical_institutions').map(url=>url.searchParams);
  for(const query of queries){assert.equal(query.get('clinic_beds'),'eq.無床');assert.equal(query.get('prefecture'),'in.("福岡県")');}
  assert.equal(queries.length,2);
+ assert.equal(queries[0].get('total_beds'),'eq.0');
+});
+
+test('clinic bed classification preserves independent user bed bounds',async()=>{
+ const {window,calls}=client();
+ await window.fetch('/api/search',{method:'POST',body:JSON.stringify({kind:'診療所',clinic_beds:'有床',minimum:2,maximum:10,bed_type:'general'})});
+ const query=calls.find(url=>url.pathname==='/rest/v1/medical_institutions').searchParams;
+ assert.deepEqual(query.getAll('total_beds'),['gte.1','lte.19']);
+ assert.deepEqual(query.getAll('general_beds'),['gte.2','lte.10']);
 });
