@@ -1,0 +1,435 @@
+{
+  "reference_date": "2026-10-01",
+  "scope": "厚生局の医科主一覧。全国全診療所の網羅性は未確認",
+  "active_hospitals": 7902,
+  "active_clinics": 88057,
+  "user_clinic_benchmark": 110000,
+  "difference_from_user_benchmark": 21943,
+  "all_clinic_rows_including_suspended_review": 89502,
+  "active_clinics_unknown_beds_included": 80732,
+  "prefectures": [
+    {
+      "prefecture_code": 1,
+      "prefecture": "北海道",
+      "main_list_records": 3250,
+      "active_hospitals": 519,
+      "active_clinics": 2731,
+      "suspended": 0,
+      "review": 0
+    },
+    {
+      "prefecture_code": 2,
+      "prefecture": "青森県",
+      "main_list_records": 703,
+      "active_hospitals": 87,
+      "active_clinics": 591,
+      "suspended": 1,
+      "review": 24
+    },
+    {
+      "prefecture_code": 3,
+      "prefecture": "岩手県",
+      "main_list_records": 745,
+      "active_hospitals": 86,
+      "active_clinics": 650,
+      "suspended": 6,
+      "review": 3
+    },
+    {
+      "prefecture_code": 4,
+      "prefecture": "宮城県",
+      "main_list_records": 1555,
+      "active_hospitals": 134,
+      "active_clinics": 1382,
+      "suspended": 7,
+      "review": 32
+    },
+    {
+      "prefecture_code": 5,
+      "prefecture": "秋田県",
+      "main_list_records": 625,
+      "active_hospitals": 64,
+      "active_clinics": 547,
+      "suspended": 6,
+      "review": 8
+    },
+    {
+      "prefecture_code": 6,
+      "prefecture": "山形県",
+      "main_list_records": 741,
+      "active_hospitals": 66,
+      "active_clinics": 667,
+      "suspended": 4,
+      "review": 4
+    },
+    {
+      "prefecture_code": 7,
+      "prefecture": "福島県",
+      "main_list_records": 1166,
+      "active_hospitals": 118,
+      "active_clinics": 1018,
+      "suspended": 27,
+      "review": 3
+    },
+    {
+      "prefecture_code": 8,
+      "prefecture": "茨城県",
+      "main_list_records": 1566,
+      "active_hospitals": 168,
+      "active_clinics": 1372,
+      "suspended": 13,
+      "review": 13
+    },
+    {
+      "prefecture_code": 9,
+      "prefecture": "栃木県",
+      "main_list_records": 1286,
+      "active_hospitals": 105,
+      "active_clinics": 1171,
+      "suspended": 10,
+      "review": 0
+    },
+    {
+      "prefecture_code": 10,
+      "prefecture": "群馬県",
+      "main_list_records": 1394,
+      "active_hospitals": 123,
+      "active_clinics": 1251,
+      "suspended": 11,
+      "review": 9
+    },
+    {
+      "prefecture_code": 11,
+      "prefecture": "埼玉県",
+      "main_list_records": 4362,
+      "active_hospitals": 338,
+      "active_clinics": 3960,
+      "suspended": 34,
+      "review": 30
+    },
+    {
+      "prefecture_code": 12,
+      "prefecture": "千葉県",
+      "main_list_records": 3724,
+      "active_hospitals": 284,
+      "active_clinics": 3398,
+      "suspended": 26,
+      "review": 16
+    },
+    {
+      "prefecture_code": 13,
+      "prefecture": "東京都",
+      "main_list_records": 13960,
+      "active_hospitals": 617,
+      "active_clinics": 13242,
+      "suspended": 55,
+      "review": 46
+    },
+    {
+      "prefecture_code": 14,
+      "prefecture": "神奈川県",
+      "main_list_records": 6831,
+      "active_hospitals": 328,
+      "active_clinics": 6430,
+      "suspended": 24,
+      "review": 49
+    },
+    {
+      "prefecture_code": 15,
+      "prefecture": "新潟県",
+      "main_list_records": 1322,
+      "active_hospitals": 111,
+      "active_clinics": 1201,
+      "suspended": 5,
+      "review": 5
+    },
+    {
+      "prefecture_code": 16,
+      "prefecture": "富山県",
+      "main_list_records": 693,
+      "active_hospitals": 103,
+      "active_clinics": 579,
+      "suspended": 8,
+      "review": 3
+    },
+    {
+      "prefecture_code": 17,
+      "prefecture": "石川県",
+      "main_list_records": 783,
+      "active_hospitals": 89,
+      "active_clinics": 684,
+      "suspended": 7,
+      "review": 3
+    },
+    {
+      "prefecture_code": 18,
+      "prefecture": "福井県",
+      "main_list_records": 510,
+      "active_hospitals": 67,
+      "active_clinics": 434,
+      "suspended": 2,
+      "review": 7
+    },
+    {
+      "prefecture_code": 19,
+      "prefecture": "山梨県",
+      "main_list_records": 644,
+      "active_hospitals": 59,
+      "active_clinics": 577,
+      "suspended": 7,
+      "review": 1
+    },
+    {
+      "prefecture_code": 20,
+      "prefecture": "長野県",
+      "main_list_records": 1395,
+      "active_hospitals": 118,
+      "active_clinics": 1262,
+      "suspended": 10,
+      "review": 5
+    },
+    {
+      "prefecture_code": 21,
+      "prefecture": "岐阜県",
+      "main_list_records": 1381,
+      "active_hospitals": 91,
+      "active_clinics": 1280,
+      "suspended": 10,
+      "review": 0
+    },
+    {
+      "prefecture_code": 22,
+      "prefecture": "静岡県",
+      "main_list_records": 2438,
+      "active_hospitals": 167,
+      "active_clinics": 2227,
+      "suspended": 23,
+      "review": 21
+    },
+    {
+      "prefecture_code": 23,
+      "prefecture": "愛知県",
+      "main_list_records": 5215,
+      "active_hospitals": 300,
+      "active_clinics": 4854,
+      "suspended": 13,
+      "review": 48
+    },
+    {
+      "prefecture_code": 24,
+      "prefecture": "三重県",
+      "main_list_records": 1312,
+      "active_hospitals": 91,
+      "active_clinics": 1197,
+      "suspended": 13,
+      "review": 11
+    },
+    {
+      "prefecture_code": 25,
+      "prefecture": "滋賀県",
+      "main_list_records": 993,
+      "active_hospitals": 56,
+      "active_clinics": 933,
+      "suspended": 3,
+      "review": 1
+    },
+    {
+      "prefecture_code": 26,
+      "prefecture": "京都府",
+      "main_list_records": 2379,
+      "active_hospitals": 159,
+      "active_clinics": 2185,
+      "suspended": 33,
+      "review": 2
+    },
+    {
+      "prefecture_code": 27,
+      "prefecture": "大阪府",
+      "main_list_records": 8875,
+      "active_hospitals": 489,
+      "active_clinics": 8290,
+      "suspended": 67,
+      "review": 29
+    },
+    {
+      "prefecture_code": 28,
+      "prefecture": "兵庫県",
+      "main_list_records": 5028,
+      "active_hospitals": 336,
+      "active_clinics": 4555,
+      "suspended": 56,
+      "review": 81
+    },
+    {
+      "prefecture_code": 29,
+      "prefecture": "奈良県",
+      "main_list_records": 1119,
+      "active_hospitals": 73,
+      "active_clinics": 1039,
+      "suspended": 7,
+      "review": 0
+    },
+    {
+      "prefecture_code": 30,
+      "prefecture": "和歌山県",
+      "main_list_records": 941,
+      "active_hospitals": 81,
+      "active_clinics": 832,
+      "suspended": 13,
+      "review": 15
+    },
+    {
+      "prefecture_code": 31,
+      "prefecture": "鳥取県",
+      "main_list_records": 432,
+      "active_hospitals": 43,
+      "active_clinics": 387,
+      "suspended": 2,
+      "review": 0
+    },
+    {
+      "prefecture_code": 32,
+      "prefecture": "島根県",
+      "main_list_records": 581,
+      "active_hospitals": 46,
+      "active_clinics": 520,
+      "suspended": 5,
+      "review": 10
+    },
+    {
+      "prefecture_code": 33,
+      "prefecture": "岡山県",
+      "main_list_records": 1409,
+      "active_hospitals": 154,
+      "active_clinics": 1228,
+      "suspended": 15,
+      "review": 12
+    },
+    {
+      "prefecture_code": 34,
+      "prefecture": "広島県",
+      "main_list_records": 2381,
+      "active_hospitals": 224,
+      "active_clinics": 2106,
+      "suspended": 39,
+      "review": 12
+    },
+    {
+      "prefecture_code": 35,
+      "prefecture": "山口県",
+      "main_list_records": 1085,
+      "active_hospitals": 134,
+      "active_clinics": 933,
+      "suspended": 7,
+      "review": 11
+    },
+    {
+      "prefecture_code": 36,
+      "prefecture": "徳島県",
+      "main_list_records": 654,
+      "active_hospitals": 101,
+      "active_clinics": 506,
+      "suspended": 20,
+      "review": 27
+    },
+    {
+      "prefecture_code": 37,
+      "prefecture": "香川県",
+      "main_list_records": 750,
+      "active_hospitals": 83,
+      "active_clinics": 657,
+      "suspended": 4,
+      "review": 6
+    },
+    {
+      "prefecture_code": 38,
+      "prefecture": "愛媛県",
+      "main_list_records": 1063,
+      "active_hospitals": 129,
+      "active_clinics": 917,
+      "suspended": 15,
+      "review": 2
+    },
+    {
+      "prefecture_code": 39,
+      "prefecture": "高知県",
+      "main_list_records": 505,
+      "active_hospitals": 114,
+      "active_clinics": 358,
+      "suspended": 6,
+      "review": 27
+    },
+    {
+      "prefecture_code": 40,
+      "prefecture": "福岡県",
+      "main_list_records": 4537,
+      "active_hospitals": 432,
+      "active_clinics": 4016,
+      "suspended": 15,
+      "review": 74
+    },
+    {
+      "prefecture_code": 41,
+      "prefecture": "佐賀県",
+      "main_list_records": 663,
+      "active_hospitals": 94,
+      "active_clinics": 562,
+      "suspended": 7,
+      "review": 0
+    },
+    {
+      "prefecture_code": 42,
+      "prefecture": "長崎県",
+      "main_list_records": 1155,
+      "active_hospitals": 141,
+      "active_clinics": 998,
+      "suspended": 11,
+      "review": 5
+    },
+    {
+      "prefecture_code": 43,
+      "prefecture": "熊本県",
+      "main_list_records": 1364,
+      "active_hospitals": 192,
+      "active_clinics": 1079,
+      "suspended": 16,
+      "review": 77
+    },
+    {
+      "prefecture_code": 44,
+      "prefecture": "大分県",
+      "main_list_records": 915,
+      "active_hospitals": 149,
+      "active_clinics": 751,
+      "suspended": 12,
+      "review": 3
+    },
+    {
+      "prefecture_code": 45,
+      "prefecture": "宮崎県",
+      "main_list_records": 837,
+      "active_hospitals": 125,
+      "active_clinics": 680,
+      "suspended": 15,
+      "review": 17
+    },
+    {
+      "prefecture_code": 46,
+      "prefecture": "鹿児島県",
+      "main_list_records": 1271,
+      "active_hospitals": 225,
+      "active_clinics": 1006,
+      "suspended": 16,
+      "review": 24
+    },
+    {
+      "prefecture_code": 47,
+      "prefecture": "沖縄県",
+      "main_list_records": 919,
+      "active_hospitals": 89,
+      "active_clinics": 814,
+      "suspended": 10,
+      "review": 6
+    }
+  ]
+}

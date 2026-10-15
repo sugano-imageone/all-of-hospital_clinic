@@ -86,7 +86,7 @@ Authユーザー作成時は利用者レコードが未承認で追加されま�
 ## 九州8県の提供ZIP
 
 社内確認用の検索デモ・Excel・説明資料は [レビュー用パッケージ](docs/review-package.md) を参照してください。
-県別の取込順、同日再試行、4時間予算は [同日更新の設計](docs/same-day-updates.md) にまとめています。
+県別の取込順、同日再試行、5時間30分予算は [同日更新の設計](docs/same-day-updates.md) にまとめています。
 
 ```bash
 /workspace/.venvs/hospital/bin/python -m app.importers.inspect --input /workspace/attachments

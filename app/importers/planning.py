@@ -124,10 +124,14 @@ def main():
                   'upload_batch_max_bytes': 2*1024*1024, 'download_parse_reserve_seconds': reserve},
         'estimated_first_pass_seconds': first,
         'estimated_three_passes_with_download_seconds': round(first * 3 + reserve, 1),
-        'run_budget_seconds': 14400, 'target_day_seconds': 86400,
+        'run_budget_seconds': 19800, 'target_day_seconds': 86400,
         'production_bulk_performance_verified': False,
         'prefectures': [{'prefecture_code': t.prefecture_code, 'prefecture': t.source['prefecture'],
                          'record_count': t.source['record_count'], 'estimated_seconds': t.estimated_seconds} for t in ordered]}
+    scaled = [Task({**t.source,'record_count':math.ceil(t.source['record_count']*130000/report['record_count'])},t.path) for t in ordered]
+    capacity_pass = sum(t.estimated_seconds for t in order_tasks(scaled))
+    report['capacity_records'] = sum(t.source['record_count'] for t in scaled)
+    report['capacity_three_passes_with_download_seconds'] = round(capacity_pass*3+reserve,1)
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2))

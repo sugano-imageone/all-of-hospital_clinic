@@ -18,7 +18,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 355
     # Keep the schedule disabled until all approved sources and DB configuration exist.
     if: github.event_name == 'workflow_dispatch' || vars.ENABLE_MEDICAL_MONTHLY == 'true'
     env:
@@ -40,7 +40,7 @@ jobs:
           args=()
           if [[ "$DO_APPLY" == "true" ]]; then args+=(--apply); fi
           if [[ "$IS_SCHEDULED" == "true" ]]; then args+=(--scheduled); fi
-          python -m app.importers.monthly --budget-seconds 14400 --max-attempts 3 "${args[@]}"
+          python -m app.importers.monthly --budget-seconds 19800 --max-attempts 3 "${args[@]}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -65,7 +65,7 @@ def main():
     parser.add_argument('--manifest', default='config/sources.json')
     parser.add_argument('--apply', action='store_true')
     parser.add_argument('--scheduled', action='store_true')
-    parser.add_argument('--budget-seconds', type=int, default=14400, help='取得から再試行までの予算。既定4時間')
+    parser.add_argument('--budget-seconds', type=int, default=19800, help='取得から再試行までの予算。既定5時間30分')
     parser.add_argument('--max-attempts', type=int, choices=range(1, 4), default=3)
     parser.add_argument('--output', default='artifacts/monthly.json')
     args = parser.parse_args()

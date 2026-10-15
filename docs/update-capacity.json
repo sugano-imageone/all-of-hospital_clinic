@@ -12,7 +12,7 @@
   },
   "estimated_first_pass_seconds": 4034.9,
   "estimated_three_passes_with_download_seconds": 13904.7,
-  "run_budget_seconds": 14400,
+  "run_budget_seconds": 19800,
   "target_day_seconds": 86400,
   "production_bulk_performance_verified": false,
   "prefectures": [
@@ -298,5 +298,7 @@
       "record_count": 432,
       "estimated_seconds": 18.2
     }
-  ]
+  ],
+  "capacity_records": 130026,
+  "capacity_three_passes_with_download_seconds": 17898.3
 }
