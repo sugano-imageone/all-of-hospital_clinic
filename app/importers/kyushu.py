@@ -13,7 +13,7 @@ from openpyxl import load_workbook
 import xlrd
 from app.domain import PREFECTURES, REGIONS, BED_LABELS, classify, institution_code, normalize
 
-VERSION = 'code-content-v2'
+VERSION = 'code-content-v3'
 MAX_SIZE = 40 * 1024 * 1024
 DATES = re.compile(r'(令和|平成|昭和|令|平|昭)\s*(元|\d+)\s*[年.]\s*(\d+)\s*[月.]\s*(\d+)\s*日?')
 
@@ -88,9 +88,13 @@ def parse_block(block, pref, source):
         pending = None
     if pending: ambiguous_beds = True
     total = sum(bed_values.values()) if bed_values and not ambiguous_beds else None
-    explicit = text(9)
-    if explicit == '総合病院': explicit = '病院'
+    # Remarks such as 地域支援 can precede a wrapped 病院 label.
+    kinds={('病院' if normalize(row[9])=='総合病院' else normalize(row[9]))
+           for _,row in block if normalize(row[9]) in ['病院','総合病院','診療所']}
+    explicit = next(iter(kinds)) if len(kinds)==1 else None
     classification = classify(total, explicit, bed_values.get('psychiatric'))
+    classification_conflict=classification['needs_review'] or len(kinds)>1
+    if classification_conflict: classification['needs_review']=True
     # Absence of a psychiatric row alone is not proof of zero psychiatric beds.
     if ambiguous_beds: classification['needs_review'] = True
     statuses = {normalize(row[9]) for _,row in block if normalize(row[9]) in ['現存','休止','廃止','辞退','取消']}
@@ -110,7 +114,9 @@ def parse_block(block, pref, source):
         'owner':text(5),'owner_type':owner_group(text(5)),'manager':text(6),
         'departments':departments,'total_beds':total,
         **{f'{key}_beds':bed_values.get(key) for key in BED_LABELS},
-        **classification,'status':'確認中' if classification['needs_review'] else status,
+        # Unknown bed notation is a data-quality flag, not a facility closure or
+        # unknown operating status. Numeric kind/bed conflicts remain held.
+        **classification,'status':'確認中' if classification_conflict else status,
         'designation_date':japanese_date(first[7]),'renewal_date':renewal[-1] if renewal else None,
         'change_reason':' / '.join(reasons) or None,'opening_classification':'判定保留',
         'reference_date':source['reference_date'],'file_created_date':source['file_created_date'],
@@ -118,7 +124,8 @@ def parse_block(block, pref, source):
         'raw':{'sheet':source['sheet'],'start_row':block[0][0],
                'rows':[{'row':i,'cells':list(row[:10])} for i,row in block],
                'bed_interpretation':'Blank categories remain NULL; unresolved bed labels make total NULL',
-               'explicit_kind':explicit,'bed_text':raw_bed_text},
+               'explicit_kind':explicit,'source_status':status,
+               'classification_conflict':classification_conflict,'bed_text':raw_bed_text},
     }
 
 def parse_workbook(blob, filename, pref, retrieved_at=None, *, bureau=None, allow_missing_prefecture=False, _sheets=None):

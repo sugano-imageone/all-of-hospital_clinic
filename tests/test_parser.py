@@ -1,7 +1,7 @@
 from io import BytesIO
 from zipfile import ZipFile
 import pytest
-from openpyxl import Workbook
+from openpyxl import Workbook,load_workbook
 from app.importers.kyushu import parse_workbook,parse_archive
 
 def blob(category='医科',bed_rows=None,code='021,003,9'):
@@ -57,3 +57,38 @@ def test_medical_counterpart_annex_is_reported_without_prefixing_dental_code(tmp
     assert exclusions[0]['publication_category']=='医科併設'
     assert exclusions[0]['primary_rows']==1
     assert exclusions[0]['filename']=='annex.xlsx'
+
+@pytest.mark.parametrize('status',['現存','休止'])
+def test_unknown_bed_label_keeps_explicit_facility_status(status):
+    book=load_workbook(BytesIO(blob()))
+    sheet=book.active
+    sheet.cell(12,9,'一般')
+    sheet.cell(12,10,'診療所')
+    sheet.cell(13,9,'内')
+    sheet.cell(13,10,status)
+    out=BytesIO();book.save(out)
+    records,_=parse_workbook(out.getvalue(),'main.xlsx',40)
+    row=records[0]
+    assert row['kind']=='診療所' and row['total_beds'] is None
+    assert row['needs_review'] is True and row['status']==status
+    assert row['raw']['source_status']==status
+
+def test_wrapped_hospital_kind_is_read_from_continuation_row():
+    book=load_workbook(BytesIO(blob()))
+    sheet=book.active
+    sheet.cell(12,10,'地域支援')
+    sheet.cell(13,10,'病院')
+    sheet.append(['','','','','','','','','','現存'])
+    out=BytesIO();book.save(out)
+    records,_=parse_workbook(out.getvalue(),'main.xlsx',40)
+    assert records[0]['kind']=='病院' and records[0]['status']=='現存'
+
+def test_explicit_numeric_kind_conflict_remains_held():
+    book=load_workbook(BytesIO(blob()))
+    sheet=book.active
+    sheet.cell(12,9,'一般 2')
+    sheet.cell(13,9,'内')
+    out=BytesIO();book.save(out)
+    records,_=parse_workbook(out.getvalue(),'main.xlsx',40)
+    assert records[0]['total_beds']==2
+    assert records[0]['needs_review'] and records[0]['status']=='確認中'

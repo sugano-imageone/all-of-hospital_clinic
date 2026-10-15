@@ -106,3 +106,15 @@ def test_same_name_and_same_seven_digit_suffix_do_not_merge_facilities(db):
     assert db.execute('select code,name from medical_institutions order by code').fetchall()==[
         ('4010000001','Integration Hospital'),('4110000001','Integration Hospital')]
     assert db.execute('select count(*) from source_imports').fetchone()[0]==2
+
+def test_bed_quality_review_can_restore_source_status_without_new_opening(db):
+    original={**record(),'kind':'診療所','total_beds':None,'general_beds':None,
+              'status':'確認中','needs_review':True}
+    import_data(db,source(),[original])
+    identity=db.execute('select id from medical_institutions').fetchone()[0]
+    revised={**original,'status':'現存'}
+    import_data(db,{**source(),'parser_version':'status-v3'},[revised])
+    assert db.execute('select id,status,needs_review,total_beds from medical_institutions').fetchone()==(
+        identity,'現存',True,None)
+    assert db.execute("select count(*) from institution_changes where event_type='reclassified'").fetchone()[0]==1
+    assert db.execute("select count(*) from institution_changes where event_type in ('new_designation','changed','closure_confirmed')").fetchone()[0]==0
