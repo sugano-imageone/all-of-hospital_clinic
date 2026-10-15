@@ -8,6 +8,9 @@ from app.domain import PREFECTURES, summarize
 from app.importers.kyushu import parse_archive
 from app.exports import workbook_bytes
 
+MAX_BATCH_RECORDS = 200
+# Leave room for the RPC envelope below a 512 KiB JSON request.
+MAX_BATCH_BYTES = 512 * 1024 - 4096
 def parse_batch(directory,output):
     records,sources,inspection=[],[],[]
     output=Path(output);output.mkdir(parents=True,exist_ok=True)
@@ -34,8 +37,8 @@ def snapshot_batches(data):
     batch=[];size=2
     for row in data:
         row_size=len(json.dumps(row,ensure_ascii=False,separators=(',',':')).encode())+1
-        if row_size>2*1024*1024: raise ValueError('個票が送信上限を超えています')
-        if batch and (len(batch)>=500 or size+row_size>2*1024*1024):
+        if row_size>MAX_BATCH_BYTES: raise ValueError('個票が送信上限を超えています')
+        if batch and (len(batch)>=MAX_BATCH_RECORDS or size+row_size>MAX_BATCH_BYTES):
             yield batch;batch=[];size=2
         batch.append(row);size+=row_size
     if batch: yield batch
@@ -48,7 +51,7 @@ def apply_snapshot(db,records,source,*,deadline=None):
             from fastapi import HTTPException
             raise HTTPException(503,'当日の実行時間予算不足')
     remaining()
-    if len(data)>2000 or len(encoded)>4*1024*1024:
+    if len(data)>MAX_BATCH_RECORDS or len(encoded)>MAX_BATCH_BYTES:
         batches=list(snapshot_batches(data))
         upload=db.rpc('begin_snapshot_upload',{'p_source':source,
             'p_payload_sha256':hashlib.sha256(encoded).hexdigest(),'p_batches':len(batches)})

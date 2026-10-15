@@ -92,3 +92,17 @@ def test_explicit_numeric_kind_conflict_remains_held():
     records,_=parse_workbook(out.getvalue(),'main.xlsx',40)
     assert records[0]['total_beds']==2
     assert records[0]['needs_review'] and records[0]['status']=='確認中'
+
+
+def test_iruma_user_classification_preserves_source_and_uses_clinic():
+    from app.importers.kyushu import parse_block
+    block=[(13036,['3245','280,200,7','自衛隊入間病院','〒358-0001入間市向陽台2-1-4','','','','令4.5.1','一般 2','病院']),
+           (13037,['','','','','','','','','内','現存'])]
+    source={'bureau':'関東信越厚生局','sheet':'Sheet1','reference_date':'2026-10-01','file_created_date':'2026-10-01','retrieved_at':'2026-10-15T00:00:00Z','filename':'saitama.xlsx'}
+    row=parse_block(block,11,source)
+    assert row['code']=='1112802007' and row['kind']=='診療所'
+    assert row['status']=='現存' and row['clinic_beds']=='有床' and row['total_beds']==2
+    assert row['needs_review'] is False and row['raw']['explicit_kind']=='病院'
+    assert row['raw']['classification_override']['kind']=='診療所'
+    block[0][1][8]='一般 20'
+    with pytest.raises(ValueError,match='前提が変更'):parse_block(block,11,source)

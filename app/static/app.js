@@ -32,7 +32,7 @@ async function runSearch(newQuery=true){
 }
 async function loadDashboard(){
  const d=await (await api('/api/dashboard')).json();dashboardData=d;
- $('#coverage').textContent=`取得済み ${d.collected.length} / 47 都道府県：${d.collected.join('、')||'なし'}。通常集計から除外：確認中 ${(d.status_counts?.['確認中']||0).toLocaleString()} 件、休止 ${(d.status_counts?.['休止']||0).toLocaleString()} 件。${d.note}`;
+ $('#coverage').textContent=`取得済み ${d.collected.length} / 47 都道府県：${d.collected.join('、')||'なし'}。通常集計から除外：確認中 ${(d.status_counts?.['確認中']||0).toLocaleString()} 件、休止 ${(d.status_counts?.['休止']||0).toLocaleString()} 件。病床等の情報要確認 ${(d.quality_review_count||0).toLocaleString()} 件（現存集計の対象を含む）。${d.note}`;
  $('#source-note').textContent=`未収集：${d.missing.join('、')||'なし'}。取得元ごとの公表基準日は下表をご確認ください。`;
  $('#stats').replaceChildren();for(const [name,n] of [['現存施設',d.total],['病院',d.kind['病院']||0],['診療所',d.kind['診療所']||0],['取得済み都道府県',d.collected.length]]){const el=document.createElement('div');el.className='stat';el.textContent=name;const num=document.createElement('strong');num.textContent=n.toLocaleString();el.append(num);$('#stats').append(el);}
  $('#charts').replaceChildren();

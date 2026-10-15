@@ -114,7 +114,7 @@ def monthly_counts(changes):
 @app.get('/api/dashboard')
 def dashboard(auth:Auth):
     db,_=auth
-    fields='code,prefecture,kind,status,clinic_beds,total_beds,psychiatric_class,owner_type'
+    fields='code,prefecture,kind,status,clinic_beds,total_beds,psychiatric_class,owner_type,needs_review'
     records=db.all('medical_institutions',[('select',fields),('order','code.asc')])
     sources=db.rpc('source_metadata',{})
     monthly=db.rpc('monthly_change_counts',{})
@@ -123,6 +123,7 @@ def dashboard(auth:Auth):
     return {**summarize(records),'collected':collected,'missing':[p for p in PREFECTURES.values() if p not in collected],
             'status_counts':dict(Counter(r['status'] for r in records)),
             'review_by_prefecture':dict(Counter(r['prefecture'] for r in records if r['status']=='確認中')),
+            'quality_review_count':sum(bool(r.get('needs_review')) for r in records),
             'sources':sources,'monthly':monthly,
             'note':'集計は現存のみ。対象は保険医療機関の通常医科主一覧です。保険指定のない施設は含みません。新規指定は観測・根拠のある差分のみ。初回取込は月次新規に数えません。'}
 

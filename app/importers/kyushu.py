@@ -92,7 +92,13 @@ def parse_block(block, pref, source):
     kinds={('病院' if normalize(row[9])=='総合病院' else normalize(row[9]))
            for _,row in block if normalize(row[9]) in ['病院','総合病院','診療所']}
     explicit = next(iter(kinds)) if len(kinds)==1 else None
-    classification = classify(total, explicit, bed_values.get('psychiatric'))
+    code = institution_code(text(1),pref)
+    override = None
+    if code == '1112802007':
+        if text(2) != '自衛隊入間病院' or explicit != '病院' or total != 2:
+            raise ValueError('個別区分判定の前提が変更されました。再確認が必要です')
+        override = {'kind':'診療所','basis':'2026-10-15 ユーザー指定：法律上は診療所として扱う','source_kind':explicit}
+    classification = classify(total, override['kind'] if override else explicit, bed_values.get('psychiatric'))
     classification_conflict=classification['needs_review'] or len(kinds)>1
     if classification_conflict: classification['needs_review']=True
     # Absence of a psychiatric row alone is not proof of zero psychiatric beds.
@@ -125,7 +131,8 @@ def parse_block(block, pref, source):
                'rows':[{'row':i,'cells':list(row[:10])} for i,row in block],
                'bed_interpretation':'Blank categories remain NULL; unresolved bed labels make total NULL',
                'explicit_kind':explicit,'source_status':status,
-               'classification_conflict':classification_conflict,'bed_text':raw_bed_text},
+               'classification_conflict':classification_conflict,'bed_text':raw_bed_text,
+               **({'classification_override':override} if override else {})},
     }
 
 def parse_workbook(blob, filename, pref, retrieved_at=None, *, bureau=None, allow_missing_prefecture=False, _sheets=None):
@@ -168,6 +175,8 @@ def parse_workbook(blob, filename, pref, retrieved_at=None, *, bureau=None, allo
         parsed = [parse_block(b,pref,source) for b in blocks]
         if len(set(r['code'] for r in parsed)) != len(parsed): raise ValueError('医科施設コード重複')
         if any(not r['name'] or not r['address'] for r in parsed): raise ValueError('必須情報欠落')
+        if any(r['raw'].get('classification_override') for r in parsed):
+            source['parser_version'] = VERSION + '-kind1'
         source['record_count'] = len(parsed)
         results.extend(parsed); sources.append(source)
     return results,sources

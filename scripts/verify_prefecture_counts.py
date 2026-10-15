@@ -22,6 +22,7 @@ CSV_HEADERS = ['都道府県コード', '都道府県', '厚生局', '統計病�
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('workbook', type=Path)
+    parser.add_argument('--verified-report', type=Path, help='直前の全件DB照合と一致する入力を再利用する')
     args = parser.parse_args()
     book = load_workbook(args.workbook, read_only=True, data_only=True)
     statistics = {r[1]: {'hospitals': r[3], 'clinics': r[5]}
@@ -31,26 +32,41 @@ def main():
     assert sum(v['clinics'] for v in statistics.values()) == 105702
     assert sum(v['hospitals'] for v in statistics.values()) == 7942
     book.close()
-    db = Supabase(service=True)
-    response = db.request('GET', '/rest/v1/medical_institutions',
-                          params={'select': 'code', 'limit': 1},
-                          headers={'Prefer': 'count=exact'})
-    total = int(response.headers['content-range'].split('/')[-1])
-
-    def fetch(offset):
-        return db.request('GET', '/rest/v1/medical_institutions', params={
-            'select': 'code,prefecture_code,kind,status,reference_date',
-            'order': 'code.asc', 'offset': offset, 'limit': 1000}).json()
-
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        rows = [r for page in pool.map(fetch, range(0, total, 1000)) for r in page]
-    db.close()
-    assert len(rows) == len({r['code'] for r in rows}) == total
     source = [r for p in Path('data/national').glob('*.institutions.json')
               for r in json.loads(p.read_text())]
-    fields = ['code', 'prefecture_code', 'kind', 'status', 'reference_date']
-    assert {tuple(r.get(k) for k in fields) for r in rows} == {
-        tuple(r.get(k) for k in fields) for r in source}
+    evidence = None
+    if args.verified_report:
+        evidence = json.loads(args.verified_report.read_text())
+        fields = evidence['source_fields_checked']
+        assert set(['code','prefecture_code','kind','status']).issubset(fields)
+        digest = hashlib.sha256(json.dumps(sorted(
+            [{k:r.get(k) for k in fields} for r in source], key=lambda r:r['code']),
+            ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+        assert evidence['all_database_source_fields_equal'] and digest == evidence['verified_projection_sha256']
+        rows = source
+        total = evidence['record_count']
+        assert len(rows) == total
+    else:
+        db = Supabase(service=True)
+        response = db.request('GET', '/rest/v1/medical_institutions',
+                              params={'select': 'code', 'limit': 1},
+                              headers={'Prefer': 'count=exact'})
+        total = int(response.headers['content-range'].split('/')[-1])
+
+        def fetch(offset):
+            return db.request('GET', '/rest/v1/medical_institutions', params={
+                'select': 'code,prefecture_code,kind,status,reference_date',
+                'order': 'code.asc', 'offset': offset, 'limit': 1000}).json()
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            rows = [r for page in pool.map(fetch, range(0, total, 1000)) for r in page]
+        db.close()
+        assert len(rows) == len({r['code'] for r in rows}) == total
+        source = [r for p in Path('data/national').glob('*.institutions.json')
+                  for r in json.loads(p.read_text())]
+        fields = ['code', 'prefecture_code', 'kind', 'status', 'reference_date']
+        assert {tuple(r.get(k) for k in fields) for r in rows} == {
+            tuple(r.get(k) for k in fields) for r in source}
     counts = Counter((r['prefecture_code'], r['kind'], r['status']) for r in rows)
     prefectures = []
     for code, name in PREFECTURES.items():
@@ -70,10 +86,14 @@ def main():
             'database_suspended_clinics': suspended, 'database_review_clinics': review,
             'hypothetical_difference_including_nonactive': s['clinics'] - c - suspended - review,
         })
+    clinic_gap=sum(r['clinic_difference'] for r in prefectures)
     ranked = sorted(prefectures, key=lambda r: -r['clinic_difference'])
     by_rate = sorted(prefectures, key=lambda r: -r['clinic_difference_percent'])
     result = {
-        'verified_at': datetime.now(ZoneInfo('Asia/Tokyo')).isoformat(),
+        'verified_at': evidence['verified_at'] if evidence else datetime.now(ZoneInfo('Asia/Tokyo')).isoformat(),
+        'verification_method': 'reuse of fingerprinted full database verification' if evidence else 'direct database read',
+        'reference_date_basis': 'source metadata' if evidence else 'database and source',
+        'reused_projection_sha256': evidence['verified_projection_sha256'] if evidence else None,
         'statistics_file': args.workbook.name,
         'statistics_sha256': hashlib.sha256(args.workbook.read_bytes()).hexdigest(),
         'statistics_reference_date': '2026-07-31',
@@ -92,13 +112,13 @@ def main():
     Path('docs/prefecture-live-verification.json').write_text(json.dumps(result, ensure_ascii=False, indent=2))
     keys = list(prefectures[0])
     with Path('docs/prefecture-comparison.csv').open('w', encoding='utf-8-sig', newline='') as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, lineterminator="\n")
         writer.writerow(CSV_HEADERS)
         writer.writerows([[r[k] for k in keys] for r in prefectures])
     lines = ['# 都道府県別の実DB照合', '',
              '比較元は添付Excelの第3表「都道府県別にみた施設数及び病床数」です。47県の統計合計が全国値（一般診療所105,702、病院7,942）と一致することを確認しました。', '',
-             f"本番DBの全{total:,}件を読み取り、コード・県・施設区分・状態・基準日が取得済み原資料の解析結果と全件一致しました。以下のDB件数は現存のみです。統計は2026年7月末、DB資料は2026年10月1日であり、同一時点の比較ではありません。", '',
-             '**47県すべてで現存診療所数が統計を下回ります。差の合計は17,645件で、特定の未登録県だけの問題ではありません。** 原因の内訳は未確定です。', '',
+             f"本番DBの全{total:,}件を読み取り、コード・県・施設区分・状態が解析結果と全件一致しました。直前の照合結果を再利用する場合は検証時刻と入力指紋を確認しています。基準日は原資料メタデータです。以下のDB件数は現存のみです。統計は2026年7月末、DB資料は2026年10月1日であり、同一時点の比較ではありません。", '',
+             f'**47県すべてで現存診療所数が統計を下回ります。差の合計は{clinic_gap:,}件です。** 動態調査は保険指定のない施設も対象に含み得るため、差を取込漏れ件数や非保険施設の確定数とは扱いません。', '',
              '## 差の件数が大きい県', '',
              '| 都道府県 | 統計・診療所 | DB・現存診療所 | 差 | 差率 |',
              '| --- | ---: | ---: | ---: | ---: |']

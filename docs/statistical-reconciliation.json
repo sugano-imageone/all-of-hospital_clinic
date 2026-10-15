@@ -5,18 +5,17 @@
   "master_reference_dates": [
     "2026-10-01"
   ],
-  "verified_at": "2026-10-15T12:53:22.872008+09:00",
+  "verified_at": "2026-10-15T13:25:12.413899+09:00",
   "statistics_clinics": 105702,
-  "master_active_clinics": 88057,
-  "clinic_difference": 17645,
-  "clinic_difference_percent": 16.69,
+  "master_active_clinics": 88797,
+  "clinic_difference": 16905,
+  "clinic_difference_percent": 15.99,
   "statistics_hospitals": 7942,
-  "master_active_hospitals": 7902,
-  "hospital_difference": 40,
+  "master_active_hospitals": 7933,
+  "hospital_difference": 9,
   "clinic_status_counts": {
-    "現存": 88057,
-    "確認中": 750,
-    "休止": 695
+    "現存": 88797,
+    "休止": 706
   },
   "all_selected_primary_rows_match": true,
   "code_identity_audit": {
@@ -85,9 +84,9 @@
       "master_active_hospitals": 87,
       "hospital_difference": 0,
       "statistics_clinics": 818,
-      "master_active_clinics": 591,
-      "clinic_difference": 227,
-      "clinic_difference_percent": 27.75
+      "master_active_clinics": 614,
+      "clinic_difference": 204,
+      "clinic_difference_percent": 24.94
     },
     {
       "prefecture_code": 3,
@@ -96,20 +95,20 @@
       "master_active_hospitals": 86,
       "hospital_difference": 0,
       "statistics_clinics": 880,
-      "master_active_clinics": 650,
-      "clinic_difference": 230,
-      "clinic_difference_percent": 26.14
+      "master_active_clinics": 653,
+      "clinic_difference": 227,
+      "clinic_difference_percent": 25.8
     },
     {
       "prefecture_code": 4,
       "prefecture": "宮城県",
       "statistics_hospitals": 133,
-      "master_active_hospitals": 134,
-      "hospital_difference": -1,
+      "master_active_hospitals": 135,
+      "hospital_difference": -2,
       "statistics_clinics": 1718,
-      "master_active_clinics": 1382,
-      "clinic_difference": 336,
-      "clinic_difference_percent": 19.56
+      "master_active_clinics": 1412,
+      "clinic_difference": 306,
+      "clinic_difference_percent": 17.81
     },
     {
       "prefecture_code": 5,
@@ -118,9 +117,9 @@
       "master_active_hospitals": 64,
       "hospital_difference": 0,
       "statistics_clinics": 761,
-      "master_active_clinics": 547,
-      "clinic_difference": 214,
-      "clinic_difference_percent": 28.12
+      "master_active_clinics": 555,
+      "clinic_difference": 206,
+      "clinic_difference_percent": 27.07
     },
     {
       "prefecture_code": 6,
@@ -129,9 +128,9 @@
       "master_active_hospitals": 66,
       "hospital_difference": 0,
       "statistics_clinics": 854,
-      "master_active_clinics": 667,
-      "clinic_difference": 187,
-      "clinic_difference_percent": 21.9
+      "master_active_clinics": 671,
+      "clinic_difference": 183,
+      "clinic_difference_percent": 21.43
     },
     {
       "prefecture_code": 7,
@@ -140,20 +139,20 @@
       "master_active_hospitals": 118,
       "hospital_difference": 0,
       "statistics_clinics": 1312,
-      "master_active_clinics": 1018,
-      "clinic_difference": 294,
-      "clinic_difference_percent": 22.41
+      "master_active_clinics": 1021,
+      "clinic_difference": 291,
+      "clinic_difference_percent": 22.18
     },
     {
       "prefecture_code": 8,
       "prefecture": "茨城県",
       "statistics_hospitals": 169,
-      "master_active_hospitals": 168,
-      "hospital_difference": 1,
+      "master_active_hospitals": 169,
+      "hospital_difference": 0,
       "statistics_clinics": 1753,
-      "master_active_clinics": 1372,
-      "clinic_difference": 381,
-      "clinic_difference_percent": 21.73
+      "master_active_clinics": 1384,
+      "clinic_difference": 369,
+      "clinic_difference_percent": 21.05
     },
     {
       "prefecture_code": 9,
@@ -170,23 +169,23 @@
       "prefecture_code": 10,
       "prefecture": "群馬県",
       "statistics_hospitals": 125,
-      "master_active_hospitals": 123,
-      "hospital_difference": 2,
+      "master_active_hospitals": 124,
+      "hospital_difference": 1,
       "statistics_clinics": 1523,
-      "master_active_clinics": 1251,
-      "clinic_difference": 272,
-      "clinic_difference_percent": 17.86
+      "master_active_clinics": 1259,
+      "clinic_difference": 264,
+      "clinic_difference_percent": 17.33
     },
     {
       "prefecture_code": 11,
       "prefecture": "埼玉県",
       "statistics_hospitals": 340,
-      "master_active_hospitals": 338,
-      "hospital_difference": 2,
+      "master_active_hospitals": 339,
+      "hospital_difference": 1,
       "statistics_clinics": 4673,
-      "master_active_clinics": 3960,
-      "clinic_difference": 713,
-      "clinic_difference_percent": 15.26
+      "master_active_clinics": 3989,
+      "clinic_difference": 684,
+      "clinic_difference_percent": 14.64
     },
     {
       "prefecture_code": 12,
@@ -195,9 +194,9 @@
       "master_active_hospitals": 284,
       "hospital_difference": -1,
       "statistics_clinics": 4045,
-      "master_active_clinics": 3398,
-      "clinic_difference": 647,
-      "clinic_difference_percent": 16.0
+      "master_active_clinics": 3414,
+      "clinic_difference": 631,
+      "clinic_difference_percent": 15.6
     },
     {
       "prefecture_code": 13,
@@ -206,9 +205,9 @@
       "master_active_hospitals": 617,
       "hospital_difference": 4,
       "statistics_clinics": 15595,
-      "master_active_clinics": 13242,
-      "clinic_difference": 2353,
-      "clinic_difference_percent": 15.09
+      "master_active_clinics": 13288,
+      "clinic_difference": 2307,
+      "clinic_difference_percent": 14.79
     },
     {
       "prefecture_code": 14,
@@ -217,20 +216,20 @@
       "master_active_hospitals": 328,
       "hospital_difference": 2,
       "statistics_clinics": 7320,
-      "master_active_clinics": 6430,
-      "clinic_difference": 890,
-      "clinic_difference_percent": 12.16
+      "master_active_clinics": 6478,
+      "clinic_difference": 842,
+      "clinic_difference_percent": 11.5
     },
     {
       "prefecture_code": 15,
       "prefecture": "新潟県",
       "statistics_hospitals": 113,
-      "master_active_hospitals": 111,
-      "hospital_difference": 2,
+      "master_active_hospitals": 112,
+      "hospital_difference": 1,
       "statistics_clinics": 1617,
-      "master_active_clinics": 1201,
-      "clinic_difference": 416,
-      "clinic_difference_percent": 25.73
+      "master_active_clinics": 1205,
+      "clinic_difference": 412,
+      "clinic_difference_percent": 25.48
     },
     {
       "prefecture_code": 16,
@@ -239,9 +238,9 @@
       "master_active_hospitals": 103,
       "hospital_difference": -1,
       "statistics_clinics": 722,
-      "master_active_clinics": 579,
-      "clinic_difference": 143,
-      "clinic_difference_percent": 19.81
+      "master_active_clinics": 582,
+      "clinic_difference": 140,
+      "clinic_difference_percent": 19.39
     },
     {
       "prefecture_code": 17,
@@ -250,9 +249,9 @@
       "master_active_hospitals": 89,
       "hospital_difference": -1,
       "statistics_clinics": 868,
-      "master_active_clinics": 684,
-      "clinic_difference": 184,
-      "clinic_difference_percent": 21.2
+      "master_active_clinics": 687,
+      "clinic_difference": 181,
+      "clinic_difference_percent": 20.85
     },
     {
       "prefecture_code": 18,
@@ -261,9 +260,9 @@
       "master_active_hospitals": 67,
       "hospital_difference": 0,
       "statistics_clinics": 568,
-      "master_active_clinics": 434,
-      "clinic_difference": 134,
-      "clinic_difference_percent": 23.59
+      "master_active_clinics": 441,
+      "clinic_difference": 127,
+      "clinic_difference_percent": 22.36
     },
     {
       "prefecture_code": 19,
@@ -272,20 +271,20 @@
       "master_active_hospitals": 59,
       "hospital_difference": 0,
       "statistics_clinics": 724,
-      "master_active_clinics": 577,
-      "clinic_difference": 147,
-      "clinic_difference_percent": 20.3
+      "master_active_clinics": 578,
+      "clinic_difference": 146,
+      "clinic_difference_percent": 20.17
     },
     {
       "prefecture_code": 20,
       "prefecture": "長野県",
       "statistics_hospitals": 120,
-      "master_active_hospitals": 118,
-      "hospital_difference": 2,
+      "master_active_hospitals": 119,
+      "hospital_difference": 1,
       "statistics_clinics": 1568,
-      "master_active_clinics": 1262,
-      "clinic_difference": 306,
-      "clinic_difference_percent": 19.52
+      "master_active_clinics": 1266,
+      "clinic_difference": 302,
+      "clinic_difference_percent": 19.26
     },
     {
       "prefecture_code": 21,
@@ -305,38 +304,38 @@
       "master_active_hospitals": 167,
       "hospital_difference": 0,
       "statistics_clinics": 2714,
-      "master_active_clinics": 2227,
-      "clinic_difference": 487,
-      "clinic_difference_percent": 17.94
+      "master_active_clinics": 2248,
+      "clinic_difference": 466,
+      "clinic_difference_percent": 17.17
     },
     {
       "prefecture_code": 23,
       "prefecture": "愛知県",
       "statistics_hospitals": 302,
-      "master_active_hospitals": 300,
-      "hospital_difference": 2,
+      "master_active_hospitals": 301,
+      "hospital_difference": 1,
       "statistics_clinics": 5820,
-      "master_active_clinics": 4854,
-      "clinic_difference": 966,
-      "clinic_difference_percent": 16.6
+      "master_active_clinics": 4900,
+      "clinic_difference": 920,
+      "clinic_difference_percent": 15.81
     },
     {
       "prefecture_code": 24,
       "prefecture": "三重県",
       "statistics_hospitals": 92,
-      "master_active_hospitals": 91,
-      "hospital_difference": 1,
+      "master_active_hospitals": 92,
+      "hospital_difference": 0,
       "statistics_clinics": 1458,
-      "master_active_clinics": 1197,
-      "clinic_difference": 261,
-      "clinic_difference_percent": 17.9
+      "master_active_clinics": 1207,
+      "clinic_difference": 251,
+      "clinic_difference_percent": 17.22
     },
     {
       "prefecture_code": 25,
       "prefecture": "滋賀県",
       "statistics_hospitals": 57,
-      "master_active_hospitals": 56,
-      "hospital_difference": 1,
+      "master_active_hospitals": 57,
+      "hospital_difference": 0,
       "statistics_clinics": 1143,
       "master_active_clinics": 933,
       "clinic_difference": 210,
@@ -349,31 +348,31 @@
       "master_active_hospitals": 159,
       "hospital_difference": -1,
       "statistics_clinics": 2514,
-      "master_active_clinics": 2185,
-      "clinic_difference": 329,
-      "clinic_difference_percent": 13.09
+      "master_active_clinics": 2187,
+      "clinic_difference": 327,
+      "clinic_difference_percent": 13.01
     },
     {
       "prefecture_code": 27,
       "prefecture": "大阪府",
       "statistics_hospitals": 496,
-      "master_active_hospitals": 489,
-      "hospital_difference": 7,
+      "master_active_hospitals": 491,
+      "hospital_difference": 5,
       "statistics_clinics": 9128,
-      "master_active_clinics": 8290,
-      "clinic_difference": 838,
-      "clinic_difference_percent": 9.18
+      "master_active_clinics": 8317,
+      "clinic_difference": 811,
+      "clinic_difference_percent": 8.88
     },
     {
       "prefecture_code": 28,
       "prefecture": "兵庫県",
       "statistics_hospitals": 335,
-      "master_active_hospitals": 336,
-      "hospital_difference": -1,
+      "master_active_hospitals": 337,
+      "hospital_difference": -2,
       "statistics_clinics": 5269,
-      "master_active_clinics": 4555,
-      "clinic_difference": 714,
-      "clinic_difference_percent": 13.55
+      "master_active_clinics": 4633,
+      "clinic_difference": 636,
+      "clinic_difference_percent": 12.07
     },
     {
       "prefecture_code": 29,
@@ -393,9 +392,9 @@
       "master_active_hospitals": 81,
       "hospital_difference": 0,
       "statistics_clinics": 963,
-      "master_active_clinics": 832,
-      "clinic_difference": 131,
-      "clinic_difference_percent": 13.6
+      "master_active_clinics": 847,
+      "clinic_difference": 116,
+      "clinic_difference_percent": 12.05
     },
     {
       "prefecture_code": 31,
@@ -415,9 +414,9 @@
       "master_active_hospitals": 46,
       "hospital_difference": 0,
       "statistics_clinics": 676,
-      "master_active_clinics": 520,
-      "clinic_difference": 156,
-      "clinic_difference_percent": 23.08
+      "master_active_clinics": 530,
+      "clinic_difference": 146,
+      "clinic_difference_percent": 21.6
     },
     {
       "prefecture_code": 33,
@@ -426,9 +425,9 @@
       "master_active_hospitals": 154,
       "hospital_difference": 0,
       "statistics_clinics": 1557,
-      "master_active_clinics": 1228,
-      "clinic_difference": 329,
-      "clinic_difference_percent": 21.13
+      "master_active_clinics": 1240,
+      "clinic_difference": 317,
+      "clinic_difference_percent": 20.36
     },
     {
       "prefecture_code": 34,
@@ -437,20 +436,20 @@
       "master_active_hospitals": 224,
       "hospital_difference": 2,
       "statistics_clinics": 2506,
-      "master_active_clinics": 2106,
-      "clinic_difference": 400,
-      "clinic_difference_percent": 15.96
+      "master_active_clinics": 2118,
+      "clinic_difference": 388,
+      "clinic_difference_percent": 15.48
     },
     {
       "prefecture_code": 35,
       "prefecture": "山口県",
       "statistics_hospitals": 135,
-      "master_active_hospitals": 134,
-      "hospital_difference": 1,
+      "master_active_hospitals": 135,
+      "hospital_difference": 0,
       "statistics_clinics": 1166,
-      "master_active_clinics": 933,
-      "clinic_difference": 233,
-      "clinic_difference_percent": 19.98
+      "master_active_clinics": 942,
+      "clinic_difference": 224,
+      "clinic_difference_percent": 19.21
     },
     {
       "prefecture_code": 36,
@@ -459,53 +458,53 @@
       "master_active_hospitals": 101,
       "hospital_difference": 0,
       "statistics_clinics": 654,
-      "master_active_clinics": 506,
-      "clinic_difference": 148,
-      "clinic_difference_percent": 22.63
+      "master_active_clinics": 531,
+      "clinic_difference": 123,
+      "clinic_difference_percent": 18.81
     },
     {
       "prefecture_code": 37,
       "prefecture": "香川県",
       "statistics_hospitals": 84,
-      "master_active_hospitals": 83,
-      "hospital_difference": 1,
+      "master_active_hospitals": 84,
+      "hospital_difference": 0,
       "statistics_clinics": 811,
-      "master_active_clinics": 657,
-      "clinic_difference": 154,
-      "clinic_difference_percent": 18.99
+      "master_active_clinics": 662,
+      "clinic_difference": 149,
+      "clinic_difference_percent": 18.37
     },
     {
       "prefecture_code": 38,
       "prefecture": "愛媛県",
       "statistics_hospitals": 130,
-      "master_active_hospitals": 129,
-      "hospital_difference": 1,
+      "master_active_hospitals": 130,
+      "hospital_difference": 0,
       "statistics_clinics": 1128,
-      "master_active_clinics": 917,
-      "clinic_difference": 211,
-      "clinic_difference_percent": 18.71
+      "master_active_clinics": 918,
+      "clinic_difference": 210,
+      "clinic_difference_percent": 18.62
     },
     {
       "prefecture_code": 39,
       "prefecture": "高知県",
       "statistics_hospitals": 117,
-      "master_active_hospitals": 114,
-      "hospital_difference": 3,
+      "master_active_hospitals": 117,
+      "hospital_difference": 0,
       "statistics_clinics": 489,
-      "master_active_clinics": 358,
-      "clinic_difference": 131,
-      "clinic_difference_percent": 26.79
+      "master_active_clinics": 382,
+      "clinic_difference": 107,
+      "clinic_difference_percent": 21.88
     },
     {
       "prefecture_code": 40,
       "prefecture": "福岡県",
       "statistics_hospitals": 440,
-      "master_active_hospitals": 432,
-      "hospital_difference": 8,
+      "master_active_hospitals": 438,
+      "hospital_difference": 2,
       "statistics_clinics": 4828,
-      "master_active_clinics": 4016,
-      "clinic_difference": 812,
-      "clinic_difference_percent": 16.82
+      "master_active_clinics": 4082,
+      "clinic_difference": 746,
+      "clinic_difference_percent": 15.45
     },
     {
       "prefecture_code": 41,
@@ -525,20 +524,20 @@
       "master_active_hospitals": 141,
       "hospital_difference": 0,
       "statistics_clinics": 1244,
-      "master_active_clinics": 998,
-      "clinic_difference": 246,
-      "clinic_difference_percent": 19.77
+      "master_active_clinics": 1003,
+      "clinic_difference": 241,
+      "clinic_difference_percent": 19.37
     },
     {
       "prefecture_code": 43,
       "prefecture": "熊本県",
       "statistics_hospitals": 199,
-      "master_active_hospitals": 192,
-      "hospital_difference": 7,
+      "master_active_hospitals": 198,
+      "hospital_difference": 1,
       "statistics_clinics": 1431,
-      "master_active_clinics": 1079,
-      "clinic_difference": 352,
-      "clinic_difference_percent": 24.6
+      "master_active_clinics": 1150,
+      "clinic_difference": 281,
+      "clinic_difference_percent": 19.64
     },
     {
       "prefecture_code": 44,
@@ -547,20 +546,20 @@
       "master_active_hospitals": 149,
       "hospital_difference": -1,
       "statistics_clinics": 918,
-      "master_active_clinics": 751,
-      "clinic_difference": 167,
-      "clinic_difference_percent": 18.19
+      "master_active_clinics": 754,
+      "clinic_difference": 164,
+      "clinic_difference_percent": 17.86
     },
     {
       "prefecture_code": 45,
       "prefecture": "宮崎県",
       "statistics_hospitals": 126,
-      "master_active_hospitals": 125,
-      "hospital_difference": 1,
+      "master_active_hospitals": 126,
+      "hospital_difference": 0,
       "statistics_clinics": 887,
-      "master_active_clinics": 680,
-      "clinic_difference": 207,
-      "clinic_difference_percent": 23.34
+      "master_active_clinics": 696,
+      "clinic_difference": 191,
+      "clinic_difference_percent": 21.53
     },
     {
       "prefecture_code": 46,
@@ -569,9 +568,9 @@
       "master_active_hospitals": 225,
       "hospital_difference": -1,
       "statistics_clinics": 1321,
-      "master_active_clinics": 1006,
-      "clinic_difference": 315,
-      "clinic_difference_percent": 23.85
+      "master_active_clinics": 1030,
+      "clinic_difference": 291,
+      "clinic_difference_percent": 22.03
     },
     {
       "prefecture_code": 47,
@@ -580,12 +579,9 @@
       "master_active_hospitals": 89,
       "hospital_difference": 2,
       "statistics_clinics": 952,
-      "master_active_clinics": 814,
-      "clinic_difference": 138,
-      "clinic_difference_percent": 14.5
+      "master_active_clinics": 820,
+      "clinic_difference": 132,
+      "clinic_difference_percent": 13.87
     }
-  ],
-  "scope_decision": "ユーザー指定により保険医療機関の通常医科主一覧を対象とし、非保険施設は対象外",
-  "scope_evidence": "survey-scope.md",
-  "official_pdf_audit": "official-pdf-code-audit.json"
+  ]
 }

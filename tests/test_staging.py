@@ -1,4 +1,4 @@
-import hashlib,json
+import hashlib,json,httpx
 import psycopg
 import pytest
 from psycopg.types.json import Jsonb
@@ -68,4 +68,8 @@ def test_upload_batches_bound_record_count_and_utf8_bytes():
     rows=[{'name':'医療機関'*100,'raw':'x'*5000,'id':i} for i in range(1200)]
     batches=list(snapshot_batches(rows))
     assert sum(len(b) for b in batches)==1200
-    assert all(len(b)<=500 and len(json.dumps(b,ensure_ascii=False,separators=(',',':')).encode())<=2*1024*1024 for b in batches)
+    assert all(len(b)<=200 for b in batches)
+    assert all(len(httpx.Request('POST','https://example.invalid/',json={
+        'p_upload_id':'11111111-1111-1111-1111-111111111111',
+        'p_batch_number':i,'p_records':batch}).content)<512*1024
+        for i,batch in enumerate(batches))

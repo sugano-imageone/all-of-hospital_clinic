@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-15",
+  "record_count": 97457,
+  "statuses": {
+    "現存": 96730,
+    "休止": 727
+  },
+  "active_kind_counts": {
+    "診療所": 88797,
+    "病院": 7933
+  },
+  "quality_review_count": 781,
+  "all_database_source_fields_equal": true,
+  "new_designation_events": 0,
+  "reported_change_events": 0,
+  "reclassified_events": 782,
+  "scope": "保険医療機関・通常医科主一覧",
+  "prefectures": 47,
+  "bureaus": 8,
+  "public_web_hosting": false,
+  "monthly_schedule_enabled": false
+}

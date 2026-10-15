@@ -10,8 +10,8 @@
   "quoted_text": "関東信越厚生局管内の保険医療機関は、病院２，３５１施設、医科診療所３３，７４９施設、歯科診療所２７，１５１施設、薬局２２，８６３施設が指定を受けています。",
   "insured_medical_clinics": 33749,
   "current_master_reference_date": "2026-10-01",
-  "current_master_active_clinics": 33864,
+  "current_master_active_clinics": 34032,
   "dynamic_statistics_reference_date": "2026-07-31",
   "dynamic_statistics_clinics": 40291,
-  "interpretation": "公式の保険指定診療所数も動態調査より少ない。比較母集団の差を示す重要な手掛かり。ただし基準日相違があり、全国17,645件の内訳や施設単位の原因を確定するものではない。開設者別の掲載除外は断定しない。"
+  "interpretation": "公式の保険指定診療所数も動態調査より少ない。比較母集団の差を示す重要な手掛かり。ただし基準日相違があり、全国16,905件の内訳や施設単位の原因を確定するものではない。開設者別の掲載除外は断定しない。"
 }

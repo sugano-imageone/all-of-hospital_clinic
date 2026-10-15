@@ -1,17 +1,17 @@
 {
-  "scope": "検証済み主一覧。全国網羅性は別途確認中",
+  "scope": "公式PDF・Excelとコード照合済みの保険医科主一覧",
   "record_count": 97457,
   "prefecture_count": 47,
   "model": {
     "fallback_seconds_per_record": 0.025,
     "safety_factor": 1.5,
     "request_overhead_seconds": 2,
-    "upload_batch_records": 500,
-    "upload_batch_max_bytes": 2097152,
+    "upload_batch_records": 200,
+    "upload_batch_max_bytes": 520192,
     "download_parse_reserve_seconds": 1800
   },
-  "estimated_first_pass_seconds": 4034.9,
-  "estimated_three_passes_with_download_seconds": 13904.7,
+  "estimated_first_pass_seconds": 4858.9,
+  "estimated_three_passes_with_download_seconds": 16376.7,
   "run_budget_seconds": 19800,
   "target_day_seconds": 86400,
   "production_bulk_performance_verified": false,
@@ -20,285 +20,285 @@
       "prefecture_code": 13,
       "prefecture": "東京都",
       "record_count": 13960,
-      "estimated_seconds": 583.5
+      "estimated_seconds": 667.5
     },
     {
       "prefecture_code": 27,
       "prefecture": "大阪府",
       "record_count": 8875,
-      "estimated_seconds": 372.8
+      "estimated_seconds": 426.8
     },
     {
       "prefecture_code": 14,
       "prefecture": "神奈川県",
       "record_count": 6831,
-      "estimated_seconds": 288.2
+      "estimated_seconds": 330.2
     },
     {
       "prefecture_code": 23,
       "prefecture": "愛知県",
       "record_count": 5215,
-      "estimated_seconds": 221.6
+      "estimated_seconds": 253.6
     },
     {
       "prefecture_code": 28,
       "prefecture": "兵庫県",
       "record_count": 5028,
-      "estimated_seconds": 214.6
+      "estimated_seconds": 244.6
     },
     {
       "prefecture_code": 40,
       "prefecture": "福岡県",
       "record_count": 4537,
-      "estimated_seconds": 194.1
+      "estimated_seconds": 220.1
     },
     {
       "prefecture_code": 11,
       "prefecture": "埼玉県",
       "record_count": 4362,
-      "estimated_seconds": 185.6
+      "estimated_seconds": 211.6
     },
     {
       "prefecture_code": 12,
       "prefecture": "千葉県",
       "record_count": 3724,
-      "estimated_seconds": 159.7
+      "estimated_seconds": 181.7
     },
     {
       "prefecture_code": 1,
       "prefecture": "北海道",
       "record_count": 3250,
-      "estimated_seconds": 139.9
+      "estimated_seconds": 159.9
     },
     {
       "prefecture_code": 22,
       "prefecture": "静岡県",
       "record_count": 2438,
-      "estimated_seconds": 105.4
+      "estimated_seconds": 121.4
     },
     {
       "prefecture_code": 34,
       "prefecture": "広島県",
       "record_count": 2381,
-      "estimated_seconds": 103.3
+      "estimated_seconds": 117.3
     },
     {
       "prefecture_code": 26,
       "prefecture": "京都府",
       "record_count": 2379,
-      "estimated_seconds": 103.2
+      "estimated_seconds": 117.2
     },
     {
       "prefecture_code": 8,
       "prefecture": "茨城県",
       "record_count": 1566,
-      "estimated_seconds": 60.7
+      "estimated_seconds": 78.7
     },
     {
       "prefecture_code": 4,
       "prefecture": "宮城県",
       "record_count": 1555,
-      "estimated_seconds": 60.3
+      "estimated_seconds": 78.3
     },
     {
       "prefecture_code": 33,
       "prefecture": "岡山県",
       "record_count": 1409,
-      "estimated_seconds": 54.8
+      "estimated_seconds": 72.8
     },
     {
       "prefecture_code": 20,
       "prefecture": "長野県",
       "record_count": 1395,
-      "estimated_seconds": 54.3
+      "estimated_seconds": 70.3
     },
     {
       "prefecture_code": 10,
       "prefecture": "群馬県",
       "record_count": 1394,
-      "estimated_seconds": 54.3
+      "estimated_seconds": 70.3
     },
     {
       "prefecture_code": 21,
       "prefecture": "岐阜県",
       "record_count": 1381,
-      "estimated_seconds": 53.8
+      "estimated_seconds": 69.8
     },
     {
       "prefecture_code": 43,
       "prefecture": "熊本県",
       "record_count": 1364,
-      "estimated_seconds": 53.2
+      "estimated_seconds": 69.2
     },
     {
       "prefecture_code": 15,
       "prefecture": "新潟県",
       "record_count": 1322,
-      "estimated_seconds": 51.6
+      "estimated_seconds": 67.6
     },
     {
       "prefecture_code": 24,
       "prefecture": "三重県",
       "record_count": 1312,
-      "estimated_seconds": 51.2
+      "estimated_seconds": 67.2
     },
     {
       "prefecture_code": 9,
       "prefecture": "栃木県",
       "record_count": 1286,
-      "estimated_seconds": 50.2
+      "estimated_seconds": 66.2
     },
     {
       "prefecture_code": 46,
       "prefecture": "鹿児島県",
       "record_count": 1271,
-      "estimated_seconds": 49.7
+      "estimated_seconds": 65.7
     },
     {
       "prefecture_code": 7,
       "prefecture": "福島県",
       "record_count": 1166,
-      "estimated_seconds": 45.7
+      "estimated_seconds": 59.7
     },
     {
       "prefecture_code": 42,
       "prefecture": "長崎県",
       "record_count": 1155,
-      "estimated_seconds": 45.3
+      "estimated_seconds": 59.3
     },
     {
       "prefecture_code": 29,
       "prefecture": "奈良県",
       "record_count": 1119,
-      "estimated_seconds": 44.0
+      "estimated_seconds": 58.0
     },
     {
       "prefecture_code": 35,
       "prefecture": "山口県",
       "record_count": 1085,
-      "estimated_seconds": 42.7
+      "estimated_seconds": 56.7
     },
     {
       "prefecture_code": 38,
       "prefecture": "愛媛県",
       "record_count": 1063,
-      "estimated_seconds": 41.9
+      "estimated_seconds": 55.9
     },
     {
       "prefecture_code": 25,
       "prefecture": "滋賀県",
       "record_count": 993,
-      "estimated_seconds": 39.2
+      "estimated_seconds": 51.2
     },
     {
       "prefecture_code": 30,
       "prefecture": "和歌山県",
       "record_count": 941,
-      "estimated_seconds": 37.3
+      "estimated_seconds": 49.3
     },
     {
       "prefecture_code": 47,
       "prefecture": "沖縄県",
       "record_count": 919,
-      "estimated_seconds": 36.5
+      "estimated_seconds": 48.5
     },
     {
       "prefecture_code": 44,
       "prefecture": "大分県",
       "record_count": 915,
-      "estimated_seconds": 36.3
+      "estimated_seconds": 48.3
     },
     {
       "prefecture_code": 45,
       "prefecture": "宮崎県",
       "record_count": 837,
-      "estimated_seconds": 33.4
+      "estimated_seconds": 45.4
     },
     {
       "prefecture_code": 17,
       "prefecture": "石川県",
       "record_count": 783,
-      "estimated_seconds": 31.4
+      "estimated_seconds": 41.4
     },
     {
       "prefecture_code": 37,
       "prefecture": "香川県",
       "record_count": 750,
-      "estimated_seconds": 30.1
+      "estimated_seconds": 40.1
     },
     {
       "prefecture_code": 3,
       "prefecture": "岩手県",
       "record_count": 745,
-      "estimated_seconds": 29.9
+      "estimated_seconds": 39.9
     },
     {
       "prefecture_code": 6,
       "prefecture": "山形県",
       "record_count": 741,
-      "estimated_seconds": 29.8
+      "estimated_seconds": 39.8
     },
     {
       "prefecture_code": 2,
       "prefecture": "青森県",
       "record_count": 703,
-      "estimated_seconds": 28.4
+      "estimated_seconds": 38.4
     },
     {
       "prefecture_code": 16,
       "prefecture": "富山県",
       "record_count": 693,
-      "estimated_seconds": 28.0
+      "estimated_seconds": 38.0
     },
     {
       "prefecture_code": 41,
       "prefecture": "佐賀県",
       "record_count": 663,
-      "estimated_seconds": 26.9
+      "estimated_seconds": 36.9
     },
     {
       "prefecture_code": 36,
       "prefecture": "徳島県",
       "record_count": 654,
-      "estimated_seconds": 26.5
+      "estimated_seconds": 36.5
     },
     {
       "prefecture_code": 19,
       "prefecture": "山梨県",
       "record_count": 644,
-      "estimated_seconds": 26.2
+      "estimated_seconds": 36.2
     },
     {
       "prefecture_code": 5,
       "prefecture": "秋田県",
       "record_count": 625,
-      "estimated_seconds": 25.4
+      "estimated_seconds": 35.4
     },
     {
       "prefecture_code": 32,
       "prefecture": "島根県",
       "record_count": 581,
-      "estimated_seconds": 23.8
+      "estimated_seconds": 31.8
     },
     {
       "prefecture_code": 18,
       "prefecture": "福井県",
       "record_count": 510,
-      "estimated_seconds": 21.1
+      "estimated_seconds": 29.1
     },
     {
       "prefecture_code": 39,
       "prefecture": "高知県",
       "record_count": 505,
-      "estimated_seconds": 20.9
+      "estimated_seconds": 28.9
     },
     {
       "prefecture_code": 31,
       "prefecture": "鳥取県",
       "record_count": 432,
-      "estimated_seconds": 18.2
+      "estimated_seconds": 26.2
     }
   ],
   "capacity_records": 130026,
-  "capacity_three_passes_with_download_seconds": 17898.3
+  "capacity_three_passes_with_download_seconds": 21042.3
 }

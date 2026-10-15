@@ -7,6 +7,7 @@ import math
 import time as clock
 from zoneinfo import ZoneInfo
 from fastapi import HTTPException
+from app.importers.cli import MAX_BATCH_RECORDS, MAX_BATCH_BYTES
 
 JST = ZoneInfo('Asia/Tokyo')
 
@@ -15,6 +16,7 @@ class Task:
     source: dict
     path: Path
     estimated_seconds: float = 0
+    payload_bytes: int | None = None
 
     @property
     def prefecture_code(self):
@@ -37,7 +39,9 @@ def order_tasks(tasks, observations=(), *, fallback_per_record=.025, safety_fact
     for task in tasks:
         per_record = max(samples.get(task.prefecture_code, [fallback_per_record]))
         count = task.source['record_count']
-        requests = math.ceil(count / 500) + 2 if count > 2000 else 1
+        file_bytes=task.payload_bytes if task.payload_bytes is not None else (task.path.stat().st_size if task.path.is_file() else 0)
+        batches=max(math.ceil(count/MAX_BATCH_RECORDS),math.ceil(file_bytes/MAX_BATCH_BYTES))
+        requests = batches + 2 if count>MAX_BATCH_RECORDS or file_bytes>MAX_BATCH_BYTES else 1
         task.estimated_seconds = round(2 * requests + count * per_record * safety_factor, 1)
     return sorted(tasks, key=lambda t: (-t.estimated_seconds, -t.source['record_count'], t.prefecture_code))
 
@@ -109,26 +113,31 @@ def main():
     parser.add_argument('--output', default='artifacts/update-capacity.json')
     args = parser.parse_args()
     tasks = []
+    payload_sizes = {}
+    for path in Path(args.directory).glob('*.institutions.json'):
+        for row in json.loads(path.read_text()):
+            pref = row['prefecture_code']
+            payload_sizes[pref] = payload_sizes.get(pref, 2) + len(json.dumps(row, ensure_ascii=False, separators=(',', ':')).encode()) + 1
     for path in sorted(Path(args.directory).glob('*.sources.json')):
         for source in json.loads(path.read_text()):
-            tasks.append(Task(source, path))
+            tasks.append(Task(source, path, payload_bytes=payload_sizes[source['prefecture_code']]))
     if not tasks or len({t.prefecture_code for t in tasks}) != len(tasks):
         raise ValueError('県別入力が空または重複')
     ordered = order_tasks(tasks)
     first = round(sum(t.estimated_seconds for t in ordered), 1)
     reserve = 1800
-    report = {'scope': '検証済み主一覧。全国網羅性は別途確認中',
+    report = {'scope': '公式PDF・Excelとコード照合済みの保険医科主一覧',
         'record_count': sum(t.source['record_count'] for t in ordered), 'prefecture_count': len(ordered),
         'model': {'fallback_seconds_per_record': .025, 'safety_factor': 1.5,
-                  'request_overhead_seconds': 2, 'upload_batch_records': 500,
-                  'upload_batch_max_bytes': 2*1024*1024, 'download_parse_reserve_seconds': reserve},
+                  'request_overhead_seconds': 2, 'upload_batch_records': MAX_BATCH_RECORDS,
+                  'upload_batch_max_bytes': MAX_BATCH_BYTES, 'download_parse_reserve_seconds': reserve},
         'estimated_first_pass_seconds': first,
         'estimated_three_passes_with_download_seconds': round(first * 3 + reserve, 1),
         'run_budget_seconds': 19800, 'target_day_seconds': 86400,
         'production_bulk_performance_verified': False,
         'prefectures': [{'prefecture_code': t.prefecture_code, 'prefecture': t.source['prefecture'],
                          'record_count': t.source['record_count'], 'estimated_seconds': t.estimated_seconds} for t in ordered]}
-    scaled = [Task({**t.source,'record_count':math.ceil(t.source['record_count']*130000/report['record_count'])},t.path) for t in ordered]
+    scaled = [Task({**t.source,'record_count':math.ceil(t.source['record_count']*130000/report['record_count'])},t.path,payload_bytes=math.ceil(t.payload_bytes*130000/report['record_count'])) for t in ordered]
     capacity_pass = sum(t.estimated_seconds for t in order_tasks(scaled))
     report['capacity_records'] = sum(t.source['record_count'] for t in scaled)
     report['capacity_three_passes_with_download_seconds'] = round(capacity_pass*3+reserve,1)

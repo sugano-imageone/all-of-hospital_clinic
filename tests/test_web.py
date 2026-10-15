@@ -62,3 +62,22 @@ def test_void_postgrest_rpc_handles_204(monkeypatch):
     db=Supabase()
     try:assert db.rpc('record_access',{}) is None
     finally:db.close()
+
+def test_active_clinic_with_bed_review_is_included_in_dashboard(client):
+    class DashboardDB:
+        def all(self,table,params):
+            assert 'needs_review' in dict(params)['select']
+            return [{'code':f'401000000{i}','prefecture':'福岡県','kind':'診療所',
+                     'status':status,'clinic_beds':None,'total_beds':None,
+                     'psychiatric_class':'不明','owner_type':'未分類','needs_review':True}
+                    for i,status in enumerate(['現存','休止','確認中'],1)]
+        def rpc(self,name,payload):
+            return [{'prefecture':'福岡県','status':'success'}] if name=='source_metadata' else {}
+        def audit(self,*args):pass
+    app.dependency_overrides[authorized]=lambda:(DashboardDB(),{'role':'user'})
+    response=client.get('/api/dashboard')
+    assert response.status_code==200
+    data=response.json()
+    assert data['total']==1 and data['kind']['診療所']==1
+    assert data['quality_review_count']==3
+    assert data['status_counts']=={'現存':1,'休止':1,'確認中':1}
