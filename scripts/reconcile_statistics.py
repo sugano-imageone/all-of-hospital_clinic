@@ -56,7 +56,7 @@ def main():
     (out/'件数差の分析.html').write_text(doc)
     Path('docs/statistical-reconciliation.md').write_text(f'# 医療施設動態調査との照合\n\n添付`{path.name}`の{period}を比較元にしました。一般診療所{stats_clinics:,}件に対し、当システムの現存診療所は{len(clinics):,}件、差{stats_clinics-len(clinics):,}件です。病院は{stats_hospitals:,}件対{len(hospitals):,}件、差{stats_hospitals-len(hospitals):,}件です。\n\n[県別の数値とコード監査](statistical-reconciliation.json)に記録しています。7桁重複・同名削除・取得済み主一覧内部の行落ち・表示だけの誤りは検証結果から否定しました。\n\n原因は未特定です。開設者別の集計差から掲載除外を断定しません。取得対象の別配布物と、医療法上の一般診療所全数・保険指定一覧の施設単位の照合を続けます。\n')
     with Path('docs/statistical-reconciliation.md').open('a') as f:
-        f.write('\n[一次資料で確認した追加調査・残る接続制限](source-scope-investigation.md)\n')
+        f.write('\n[一次資料で確認した追加調査・残る接続制限](source-scope-investigation.md)\n\n[47都道府県の本番DB直接照合・比較表](prefecture-comparison.md)\n')
     print(json.dumps({k:result[k] for k in ['statistics_period','statistics_clinics','master_active_clinics','clinic_difference','hospital_difference']},ensure_ascii=False))
 
 if __name__=='__main__':main()
