@@ -53,12 +53,13 @@ APP_SECURE_COOKIES=false /workspace/.venvs/hospital/bin/python -m uvicorn app.ma
 ## Supabaseの設定（プロジェクト jnoukmkrtmpgchdpcskc）
 
 1. このプロジェクトの既存5テーブルの列・型・CHECK制約・RLSを確認済みです。接続情報と環境公開も完了しています。
-2. **対象プロジェクトには `sql/010_upgrade_existing.sql` の全文を1回実行します。** [移行の内容と検証](docs/upgrade-existing.md)を参照してください。
+2. **対象プロジェクトへの `sql/010_upgrade_existing.sql` 適用は完了しました。再実行は不要です。** [移行の内容と検証](docs/upgrade-existing.md)を参照してください。
    `001_initial.sql` は適用しません。データ0件と空スキーマは別です。既存テーブルを削除して通す操作はしないでください。
+   大規模県の取込が既定の実行時間制限で取り消されるため、SQL Editorで `sql/011_import_timeout.sql` を実行してください。管理用の `service_role` の制限を90秒にし、一般利用者の設定・RLSは維持します。
 3. 別の空スキーマの場合だけ `001_initial.sql` → `002_import.sql` → `003_update_jobs.sql` → `005_reporting.sql` を順に実行します。
    `tests/bootstrap.sql` はローカルテスト専用のAuthスタブです。Supabaseには絶対に適用しません。
 4. Authenticationで管理者のアカウントを作成・招待します。公開の新規登録は無効にします。
-5. 最初の管理者はSQL Editorから、自分のAuth UUIDを確認して一度だけ昇格します。
+5. 最初の管理者は、作成されたAuthアカウントとユーザー指定のID・メールを照合し、承認・昇格済みです。次のSQLは別環境での初期設定用です。
 
 ```sql
 select id,email from auth.users;

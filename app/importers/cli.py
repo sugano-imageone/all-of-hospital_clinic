@@ -30,7 +30,9 @@ def parse_batch(directory,output):
 
 def apply_snapshot(db,records,source):
     data=[r for r in records if r['source_file']==source['filename'] and r['prefecture_code']==source['prefecture_code']]
-    return db.rpc('import_snapshot',{'p_source':source,'p_records':data})
+    # Keep each prefecture atomic, including the largest snapshots. The service
+    # role's DB timeout is configured separately by sql/011_import_timeout.sql.
+    return db.rpc('import_snapshot',{'p_source':source,'p_records':data},timeout=110)
 
 def main():
     parser=argparse.ArgumentParser(description='九州8県の提供ZIPを検証し、必要時のみDB登録')

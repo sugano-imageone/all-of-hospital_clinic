@@ -55,8 +55,9 @@ class Supabase:
             # Never include upstream response bodies, tokens or raw DB errors in browser/log output.
             raise HTTPException(r.status_code if r.status_code in [401,403] else 502,'認証またはデータ処理に失敗しました')
         return r
-    def rpc(self,name,payload):
-        response=self.request('POST',f'/rest/v1/rpc/{name}',json=payload)
+    def rpc(self,name,payload,*,timeout=None):
+        response=self.request('POST',f'/rest/v1/rpc/{name}',json=payload,
+                              **({'timeout':timeout} if timeout is not None else {}))
         return response.json() if response.content else None
     def all(self,table,params=None):
         result=[]
