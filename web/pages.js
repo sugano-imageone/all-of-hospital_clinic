@@ -35,7 +35,9 @@ function searchParams(q){
  const direction=q.direction==='desc'?'desc':'asc';
  const p=new URLSearchParams({kind:'eq.'+(q.kind==='診療所'?'診療所':'病院'),status:q.include_suspended?'in.(現存,休止)':'eq.現存',order:sort+'.'+direction+'.nullslast,code.asc'});
  if(q.prefectures?.length)p.set('prefecture','in.('+q.prefectures.map(literal).join(',')+')');
- for(const k of ['bureau','owner_type','clinic_beds','psychiatric_class','code'])if(q[k])p.set(k,'eq.'+literal(q[k]));
+ // Standalone eq values must not be wrapped in PostgREST in-list quotes.
+ // URLSearchParams encodes transport punctuation; quotes here become literal data.
+ for(const k of ['bureau','owner_type','clinic_beds','psychiatric_class','code'])if(q[k])p.set(k,'eq.'+q[k]);
  for(const k of ['municipality','name','owner'])if(q[k]){const value=String(q[k]).replace(/[\\%_*]/g,c=>'\\'+c);p.set(k,'ilike.%'+value+'%');}
  const bed=['total','general','medical','psychiatric','tuberculosis','infectious'].includes(q.bed_type)?q.bed_type:'total';
  for(const [k,op] of [['minimum','gte'],['maximum','lte']])if(q[k]!=null){if(!Number.isInteger(q[k])||q[k]<0||q[k]>100000)fail(400,'病床数を確認してください');p.append(bed+'_beds',op+'.'+q[k]);}
