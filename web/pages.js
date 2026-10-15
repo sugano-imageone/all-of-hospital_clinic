@@ -67,6 +67,12 @@ function summary(records){
  return result;
 }
 function currentSources(rows){const found=new Map();for(const r of rows){const old=found.get(r.prefecture_code);if(!old||Number(r.id)>Number(old.id))found.set(r.prefecture_code,r);}return [...found.values()].sort((a,b)=>a.prefecture_code-b.prefecture_code);}
+async function dashboardRows(){
+ const records=[];let next=1;
+ async function worker(){while(next<=47){const code=next++;const p=new URLSearchParams({prefecture_code:'eq.'+code,select:'prefecture,kind,status,clinic_beds,total_beds,psychiatric_class,owner_type,needs_review',order:'code.asc'});records.push(...await allRows('medical_institutions',p));}}
+ // Indexed prefecture-sized requests avoid a national exact count and large offsets.
+ await Promise.all([worker(),worker()]);return records;
+}
 async function audit(action,details={}){await rpc('record_access',{p_action:action,p_details:details});}
 function csv(rows){const safe=v=>{let t=String(v??'');if(/^[\s]*[=+\-@\t\r]/.test(t))t="'"+t;return '"'+t.replaceAll('"','""')+'"';};return '\ufeff'+[config.columns.map(c=>safe(c[1])).join(','),...rows.map(r=>config.columns.map(c=>safe(r[c[0]])).join(','))].join('\r\n');}
 function xml(value){return String(value??'').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');}
@@ -111,8 +117,7 @@ window.fetch=async function(url,options={}){
    const p=searchParams(q);p.set('select',publicFields);p.set('offset',String(((q.page||1)-1)*50));p.set('limit','50');const r=await remote('/rest/v1/medical_institutions?'+p,{headers:{Prefer:'count=exact'}}),items=await r.json();const total=Number(r.headers.get('content-range')?.split('/')[1]);await audit('search',{count:total,filters:q});return json({items,total,page:q.page||1,page_size:50});
   }
   if(url==='/api/dashboard'){
-   const p=new URLSearchParams({select:'prefecture,kind,status,clinic_beds,total_beds,psychiatric_class,owner_type,needs_review',order:'code.asc'});
-   const [rows,rawSources,monthly]=await Promise.all([allRows('medical_institutions',p),rpc('source_metadata'),rpc('monthly_change_counts')]);const sources=currentSources(rawSources),status_counts={};for(const r of rows)status_counts[r.status]=(status_counts[r.status]||0)+1;
+   const [rows,rawSources,monthly]=await Promise.all([dashboardRows(),rpc('source_metadata'),rpc('monthly_change_counts')]);const sources=currentSources(rawSources),status_counts={};for(const r of rows)status_counts[r.status]=(status_counts[r.status]||0)+1;
    return json({...summary(rows),collected:sources.map(r=>r.prefecture),missing:[],status_counts,quality_review_count:rows.filter(r=>r.needs_review).length,sources,monthly,note:'現存のみを集計。保険医療機関の通常医科主一覧。病床数の未記載は0床として扱います。'});
   }
   if(url.startsWith('/api/export/')){

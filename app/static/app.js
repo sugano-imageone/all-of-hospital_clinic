@@ -1,5 +1,5 @@
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-let page=1,total=0,lastQuery=null,dashboardData=null,currentUserId=null;
+let page=1,total=0,lastQuery=null,dashboardData=null,currentUserId=null,dashboardLoading=null;
 const message=t=>{$('#message').textContent=t||'';};
 async function api(url,options={},retry=true){
  const response=await fetch(url,options);
@@ -31,6 +31,12 @@ async function runSearch(newQuery=true){
  }catch(e){message(e.message);}
 }
 async function loadDashboard(){
+ if(dashboardData)return;
+ if(dashboardLoading)return dashboardLoading;
+ dashboardLoading=renderDashboard().finally(()=>{dashboardLoading=null;});
+ return dashboardLoading;
+}
+async function renderDashboard(){
  const d=await (await api('/api/dashboard')).json();dashboardData=d;
  $('#coverage').textContent=`取得済み ${d.collected.length} / 47 都道府県：${d.collected.join('、')||'なし'}。通常集計から除外：確認中 ${(d.status_counts?.['確認中']||0).toLocaleString()} 件、休止 ${(d.status_counts?.['休止']||0).toLocaleString()} 件。病床等の情報要確認 ${(d.quality_review_count||0).toLocaleString()} 件（現存集計の対象を含む）。${d.note}`;
  $('#source-note').textContent=`未収集：${d.missing.join('、')||'なし'}。取得元ごとの公表基準日は下表をご確認ください。`;
@@ -46,7 +52,7 @@ async function loadMembers(){
  for(const m of members){const row=document.createElement('div');row.className='member';const id=document.createElement('code');id.textContent=m.email||m.user_id;const role=document.createElement('select');for(const r of (m.role==='master'?['master']:['user','admin'])){const o=new Option(r==='master'?'マスター':r==='admin'?'管理者':'閲覧者',r);role.add(o);}role.value=m.role;const label=document.createElement('label');label.className='inline';const check=document.createElement('input');check.type='checkbox';check.checked=m.approved;label.append(check,document.createTextNode('利用を承認'));const save=document.createElement('button');save.textContent='保存';if(m.user_id===currentUserId||m.role==='master'){role.disabled=true;check.disabled=true;save.disabled=true;}save.onclick=async()=>{try{await post('/api/admin/members',{user_id:m.user_id,role:role.value,approved:check.checked});message('承認状態を更新しました');}catch(e){message(e.message);}};row.append(id,role,label,save);$('#members').append(row);}
 }
 async function loadSession(){
- try{const user=await(await api('/api/me')).json();currentUserId=user.user_id;$('#login-panel').hidden=true;$('#workspace').hidden=false;$('#account').textContent=user.email||'';const out=document.createElement('button');out.className='secondary';out.textContent='ログアウト';out.onclick=async()=>{try{await api('/auth/logout',{method:'POST'});location.reload();}catch(e){message(e.message);}};$('#account').append(out);$('#admin-nav').hidden=!['admin','master'].includes(user.role);const siteLink=$('#site-settings-link');if(siteLink)siteLink.hidden=user.role!=='master';await loadDashboard();message(user.password_change_required?'仮パスワードでログインしています。「パスワード変更」からご自身のパスワードに変更してください':'');}
+ try{const user=await(await api('/api/me')).json();currentUserId=user.user_id;$('#login-panel').hidden=true;$('#workspace').hidden=false;$('#account').textContent=user.email||'';const out=document.createElement('button');out.className='secondary';out.textContent='ログアウト';out.onclick=async()=>{try{await api('/auth/logout',{method:'POST'});location.reload();}catch(e){message(e.message);}};$('#account').append(out);$('#admin-nav').hidden=!['admin','master'].includes(user.role);const siteLink=$('#site-settings-link');if(siteLink)siteLink.hidden=user.role!=='master';message(user.password_change_required?'仮パスワードでログインしています。「パスワード変更」からご自身のパスワードに変更してください':'');}
  catch(e){$('#login-panel').hidden=false;$('#workspace').hidden=true;if(!e.message.includes('ログイン'))message(e.message);}
 }
 $('#login').onsubmit=async e=>{e.preventDefault();message('ログイン中…');try{await api('/auth/login',{method:'POST',body:new FormData(e.target)});$('#login').reset();await loadSession();}catch(e){message(e.message);}};
