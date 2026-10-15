@@ -10,6 +10,8 @@ FastAPI / Supabase Auth・PostgreSQL / 日本語Web画面 / Microsoft 365用Exce
 
 病床数の未記載項目は、ユーザー指定により全国で0床へ統一しています。[方針と元表記の保持](docs/bed-zero-policy.md)を参照してください。
 
+GitHub Pages 用のログイン版も実装済みです。マスター／管理者／閲覧者、メールアドレスIDによるユーザー追加、ログイン案内メモのコピー・保存、本人のパスワード変更に対応します。**公開には [初回設定](docs/github-pages-login.md) の SQL・Edge Function・Pages 設定が必要です。** GitHub Pages 版はブラウザのセッションストレージと Supabase の RLS を使い、FastAPI 版は HttpOnly Cookie を使います。
+
 ## 機能
 
 - Supabase Authのパスワードログイン、HttpOnlyセッションCookie、トークン更新・ログアウト。
