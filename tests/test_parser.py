@@ -21,7 +21,7 @@ def test_multiline_beds_and_supplemental_dental_code():
     r=records[0]
     assert r['code']=='4010210039' and r['total_beds']==100
     assert r['general_beds']==80 and r['psychiatric_beds']==20
-    assert r['medical_beds'] is None
+    assert r['medical_beds']==0
     assert r['change_reason']=='組織変更' and r['opening_classification']=='判定保留'
     assert r['reference_date']=='2026-10-01' and r['file_created_date']=='2026-10-05'
 
@@ -69,8 +69,8 @@ def test_unknown_bed_label_keeps_explicit_facility_status(status):
     out=BytesIO();book.save(out)
     records,_=parse_workbook(out.getvalue(),'main.xlsx',40)
     row=records[0]
-    assert row['kind']=='診療所' and row['total_beds'] is None
-    assert row['needs_review'] is True and row['status']==status
+    assert row['kind']=='診療所' and row['total_beds']==0
+    assert row['needs_review'] is False and row['status']==status
     assert row['raw']['source_status']==status
 
 def test_wrapped_hospital_kind_is_read_from_continuation_row():
@@ -106,3 +106,31 @@ def test_iruma_user_classification_preserves_source_and_uses_clinic():
     assert row['raw']['classification_override']['kind']=='診療所'
     block[0][1][8]='一般 20'
     with pytest.raises(ValueError,match='前提が変更'):parse_block(block,11,source)
+
+
+@pytest.mark.parametrize('label,amount,field,expected',[
+    ('一般(特例)','82','general_beds',82),
+    ('一般','特定 50','general_beds',50),
+    ('療養','介護 30','medical_beds',30),
+    ('一般(感染)','感II 6','infectious_beds',6),
+])
+def test_reported_wrapped_subtype_is_counted_before_zero_fill(label,amount,field,expected):
+    book=load_workbook(BytesIO(blob()))
+    sheet=book.active;sheet.cell(12,9,label);sheet.cell(13,9,amount)
+    out=BytesIO();book.save(out)
+    records,_=parse_workbook(out.getvalue(),'main.xlsx',40)
+    row=records[0]
+    assert row[field]==expected and row['total_beds']==expected
+    assert all(row[k] is not None for k in ['general_beds','medical_beds','psychiatric_beds','tuberculosis_beds','infectious_beds'])
+    assert row['raw']['rows'][0]['cells'][8]==label
+
+
+def test_all_unreported_beds_use_zero_and_clinic_threshold_without_renaming():
+    book=load_workbook(BytesIO(blob()))
+    sheet=book.active;sheet.cell(12,9,'');sheet.cell(13,9,'内')
+    out=BytesIO();book.save(out)
+    records,_=parse_workbook(out.getvalue(),'main.xlsx',40)
+    row=records[0]
+    assert row['total_beds']==0 and row['kind']=='診療所' and row['clinic_beds']=='無床'
+    assert row['name']=='歯科併設医科病院' and row['status']=='現存'
+    assert row['raw']['explicit_kind']=='病院' and row['raw']['blank_bed_kind_adjustment']

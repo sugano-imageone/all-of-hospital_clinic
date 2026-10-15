@@ -2,7 +2,7 @@
 
 Blank total beds -> 0 / unbedded clinic; >=20 hospital, <=19 clinic;
 all listed institutions -> active. Preserve the original blank and policy provenance.
-Bed-type counts remain unknown. These are operating rules, not source observations.
+Unreported bed-type counts are zero under the nationwide user policy. These are operating rules, not source observations.
 """
 import hashlib
 import re
@@ -35,19 +35,21 @@ def parse_hokkaido(blob,filename,sheet,rows,retrieved_at=None):
           'municipality':city[1] if city else None,'name':normalize(row[10]),'postal_code':'-'.join(postal.groups()) if postal else None,
           'address':address,'phone':normalize(row[17]),'owner':normalize(row[20]),'owner_type':owner_group(normalize(row[20])),
           'manager':normalize(row[23]),'departments':[], 'total_beds':total,
-          **{k+'_beds':None for k in BEDS},**classify(total),
+          **{k+'_beds':0 for k in BEDS},**classify(total,psychiatric=0),
           'status':'現存','needs_review':False,'designation_date':None,'renewal_date':None,
           'change_reason':None,'opening_classification':'判定保留','reference_date':ref,
           'file_created_date':created,'retrieved_at':retrieved_at,'source_file':filename,
           'raw':{'sheet':sheet,'start_row':i,'cells':list(row),
-                 'policy':'hokkaido-user-rule-2026-10-15-v1',
+                 'policy':'hokkaido-user-rule-2026-10-15-v2-zero',
                  'total_beds_origin':'source' if bed else 'user_rule_blank_as_zero',
                  'kind_origin':'user_rule_threshold_20',
                  'status_origin':'user_rule_listed_as_active',
-                 'source_total_beds':int(bed) if bed else None}}
+                 'source_total_beds':int(bed) if bed else None,
+                 'zero_filled_bed_types':list(BEDS),
+                 'bed_interpretation':'User approved 2026-10-15: unreported bed-type counts are zero; source total retained'}}
         records.append(r)
     if not records:raise ValueError('北海道の医科施設なし')
     source={'filename':filename,'sheet':sheet,'prefecture_code':1,'prefecture':'北海道','bureau':'北海道厚生局',
-            'sha256':hashlib.sha256(blob).hexdigest(),'parser_version':'hokkaido-user-rule-2026-10-15-v1',
+            'sha256':hashlib.sha256(blob).hexdigest(),'parser_version':'hokkaido-user-rule-2026-10-15-v2-zero',
             'reference_date':ref,'file_created_date':created,'retrieved_at':retrieved_at,'record_count':len(records)}
     return records,[source]

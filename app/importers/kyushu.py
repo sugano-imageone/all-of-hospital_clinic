@@ -1,6 +1,6 @@
 """Validated adapter for the supplied Kyushu 2026-10 code-content listing.
 
-Unknown layouts fail closed. Blank bed cells remain unknown, never fabricated zero.
+Unknown layouts fail closed. User policy: unreported bed counts are zero; preserve source rows.
 All original nonempty rows are retained for reconciliation.
 """
 import hashlib
@@ -13,7 +13,7 @@ from openpyxl import load_workbook
 import xlrd
 from app.domain import PREFECTURES, REGIONS, BED_LABELS, classify, institution_code, normalize
 
-VERSION = 'code-content-v3'
+VERSION = 'code-content-v4-zero'
 MAX_SIZE = 40 * 1024 * 1024
 DATES = re.compile(r'(令和|平成|昭和|令|平|昭)\s*(元|\d+)\s*[年.]\s*(\d+)\s*[月.]\s*(\d+)\s*日?')
 
@@ -59,7 +59,6 @@ def parse_block(block, pref, source):
     text = lambda col: normalize(first[col])
     bed_values = {}
     pending = None
-    ambiguous_beds = False
     departments = []
     raw_bed_text = []
     labels = {'一般':'general','療養':'medical','精神':'psychiatric','結核':'tuberculosis',
@@ -69,16 +68,16 @@ def parse_block(block, pref, source):
         if not value: continue
         raw_bed_text.append(value)
         # A wrapped label e.g. 一般(感染) + "4" must take precedence over 一般.
-        match = re.fullmatch(r'(一般\(感染\)|一般|療養|精神|結核|感染症?)(?:\s+([\d,]+))?',value)
+        match = re.fullmatch(r'(一般\(感染\)|一般(?:\(特例\))?|療養|精神|結核|感染症?|感I{1,2})(?:\s+([\d,]+))?',value)
         if match:
             label, number = match.groups()
-            key = 'infectious' if '感染' in label else labels[label]
+            key = 'infectious' if '感染' in label or label.startswith('感I') else labels[label.replace('(特例)','')]
             pending = key
             if number is None: continue
-        elif pending and re.fullmatch(r'[\d,]+',value):
-            key, number = pending, value
+        elif pending and (subtype := re.fullmatch(r'(?:(?:特定|介護)\s+)?([\d,]+)',value)):
+            key, number = pending, subtype[1]
         else:
-            if pending: ambiguous_beds = True
+            # An empty bed label has no count: user policy treats it as zero.
             departments.append(value)
             pending = None
             continue
@@ -86,8 +85,9 @@ def parse_block(block, pref, source):
         # Separate subcategories can be printed on multiple rows of the same bed type.
         bed_values[key] = bed_values.get(key,0)+n
         pending = None
-    if pending: ambiguous_beds = True
-    total = sum(bed_values.values()) if bed_values and not ambiguous_beds else None
+    populated_bed_types = set(bed_values)
+    total = sum(bed_values.values())
+    bed_values = {key:bed_values.get(key,0) for key in BED_LABELS}
     # Remarks such as 地域支援 can precede a wrapped 病院 label.
     kinds={('病院' if normalize(row[9])=='総合病院' else normalize(row[9]))
            for _,row in block if normalize(row[9]) in ['病院','総合病院','診療所']}
@@ -98,11 +98,11 @@ def parse_block(block, pref, source):
         if text(2) != '自衛隊入間病院' or explicit != '病院' or total != 2:
             raise ValueError('個別区分判定の前提が変更されました。再確認が必要です')
         override = {'kind':'診療所','basis':'2026-10-15 ユーザー指定：法律上は診療所として扱う','source_kind':explicit}
-    classification = classify(total, override['kind'] if override else explicit, bed_values.get('psychiatric'))
+    blank_kind_adjustment = explicit == '病院' and not populated_bed_types
+    effective_kind = override['kind'] if override else ('診療所' if blank_kind_adjustment else explicit)
+    classification = classify(total, effective_kind, bed_values['psychiatric'])
     classification_conflict=classification['needs_review'] or len(kinds)>1
     if classification_conflict: classification['needs_review']=True
-    # Absence of a psychiatric row alone is not proof of zero psychiatric beds.
-    if ambiguous_beds: classification['needs_review'] = True
     statuses = {normalize(row[9]) for _,row in block if normalize(row[9]) in ['現存','休止','廃止','辞退','取消']}
     status = next(iter(statuses)) if len(statuses)==1 else '確認中'
     reasons = [normalize(row[7]) for _,row in block[1:] if normalize(row[7]) and not japanese_date(row[7])]
@@ -129,7 +129,9 @@ def parse_block(block, pref, source):
         'retrieved_at':source['retrieved_at'],'source_file':source['filename'],
         'raw':{'sheet':source['sheet'],'start_row':block[0][0],
                'rows':[{'row':i,'cells':list(row[:10])} for i,row in block],
-               'bed_interpretation':'Blank categories remain NULL; unresolved bed labels make total NULL',
+               'bed_interpretation':'User approved 2026-10-15: unreported bed counts are zero; total is sum of reported categories',
+               'zero_filled_bed_types':sorted(set(BED_LABELS)-populated_bed_types),
+               'blank_bed_kind_adjustment':blank_kind_adjustment,
                'explicit_kind':explicit,'source_status':status,
                'classification_conflict':classification_conflict,'bed_text':raw_bed_text,
                **({'classification_override':override} if override else {})},

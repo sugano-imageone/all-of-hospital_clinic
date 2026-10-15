@@ -1,6 +1,6 @@
 from app.importers.hokkaido import parse_hokkaido
 
-def test_approved_user_policy_keeps_source_blank_and_bed_types_unknown():
+def test_approved_user_policy_keeps_source_blank_and_zero_fills_bed_types():
     rows=[[None]*34 for _ in range(9)]
     rows[1][14]='郡市区別医療機関一覧表';rows[3][3]='令和8年10月1日現在 医科';rows[3][24]='令和8年10月1日作成'
     for i,beds in [(7,None),(8,'20')]:
@@ -10,4 +10,4 @@ def test_approved_user_policy_keeps_source_blank_and_bed_types_unknown():
     assert records[0]['raw']['source_total_beds'] is None
     assert records[0]['raw']['total_beds_origin']=='user_rule_blank_as_zero'
     assert records[1]['total_beds']==20 and records[1]['kind']=='病院'
-    assert all(r['status']=='現存' and r['psychiatric_beds'] is None for r in records)
+    assert all(r['status']=='現存' and r['psychiatric_beds']==0 for r in records)
