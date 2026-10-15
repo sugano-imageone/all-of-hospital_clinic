@@ -6,12 +6,18 @@ import pytest
 import psycopg
 from psycopg.types.json import Jsonb
 
-@pytest.fixture
-def db():
-    url=os.getenv('TEST_DATABASE_URL')
-    if not url: pytest.skip('TEST_DATABASE_URL is not configured (isolated DB required)')
+@pytest.fixture(params=['canonical','existing'])
+def db(request):
+    profile=request.param
+    url=os.getenv('TEST_DATABASE_URL' if profile=='canonical' else 'TEST_EXISTING_DATABASE_URL')
+    if not url: pytest.skip(f'Isolated {profile} database is not configured')
     with psycopg.connect(url) as connection:
-        try: yield connection
+        try:
+            if profile=='existing':
+                from tests.restore_existing import restore
+                from tests.test_existing_migration import migrate
+                restore(connection);migrate(connection)
+            yield connection
         finally: connection.rollback()
 
 def source(sha='a',day='2026-10-01',count=1):
@@ -35,7 +41,8 @@ def test_atomic_import_idempotence_no_false_new_opening(db):
     assert import_data(db,source(),[record()])['status']=='success'
     assert import_data(db,source(),[record()])['status']=='unchanged'
     assert db.execute("select count(*) from institution_changes where event_type='new_designation'").fetchone()[0]==0
-    assert db.execute('select count(*) from institution_beds').fetchone()[0]==5
+    history=db.execute("select to_regclass('public.institution_bed_history')").fetchone()[0]
+    assert db.execute('select count(*) from '+('institution_bed_history' if history else 'institution_beds')).fetchone()[0]==5
     assert db.execute("select medical_beds from medical_institutions where code='4010000001'").fetchone()[0] is None
     bad=record('4020000002')
     with pytest.raises(psycopg.Error):

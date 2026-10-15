@@ -1,0 +1,734 @@
+{
+  "tables": [
+    {
+      "name": "app_members",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "default": "'viewer'::text",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": "true",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "app_members_pkey",
+          "definition": "CREATE UNIQUE INDEX app_members_pkey ON public.app_members USING btree (user_id)"
+        }
+      ],
+      "policies": [
+        {
+          "name": "members_read_self",
+          "roles": [
+            "authenticated"
+          ],
+          "using": "(user_id = ( SELECT auth.uid() AS uid))",
+          "command": "SELECT",
+          "permissive": "PERMISSIVE",
+          "with_check": null
+        }
+      ],
+      "triggers": [],
+      "rls_forced": false,
+      "constraints": [
+        {
+          "name": "app_members_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (user_id)"
+        },
+        {
+          "name": "app_members_role_check",
+          "type": "c",
+          "definition": "CHECK (role = ANY (ARRAY['admin'::text, 'viewer'::text]))"
+        },
+        {
+          "name": "app_members_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        }
+      ],
+      "rls_enabled": true
+    },
+    {
+      "name": "institution_beds",
+      "columns": [
+        {
+          "name": "institution_id",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "total_beds",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "general_beds",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "long_term_care_beds",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "psychiatric_beds",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "tuberculosis_beds",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "infectious_disease_beds",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "clinic_bed_type",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "psychiatric_category",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "institution_beds_pkey",
+          "definition": "CREATE UNIQUE INDEX institution_beds_pkey ON public.institution_beds USING btree (institution_id)"
+        },
+        {
+          "name": "idx_beds_total",
+          "definition": "CREATE INDEX idx_beds_total ON public.institution_beds USING btree (total_beds)"
+        }
+      ],
+      "policies": [
+        {
+          "name": "beds_read_authorized",
+          "roles": [
+            "authenticated"
+          ],
+          "using": "(EXISTS ( SELECT 1\n   FROM medical_institutions m\n  WHERE (m.id = institution_beds.institution_id)))",
+          "command": "SELECT",
+          "permissive": "PERMISSIVE",
+          "with_check": null
+        }
+      ],
+      "triggers": [],
+      "rls_forced": false,
+      "constraints": [
+        {
+          "name": "institution_beds_clinic_bed_type_check",
+          "type": "c",
+          "definition": "CHECK (clinic_bed_type = ANY (ARRAY['有床'::text, '無床'::text]))"
+        },
+        {
+          "name": "institution_beds_general_beds_check",
+          "type": "c",
+          "definition": "CHECK (general_beds IS NULL OR general_beds >= 0)"
+        },
+        {
+          "name": "institution_beds_infectious_disease_beds_check",
+          "type": "c",
+          "definition": "CHECK (infectious_disease_beds IS NULL OR infectious_disease_beds >= 0)"
+        },
+        {
+          "name": "institution_beds_institution_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (institution_id) REFERENCES medical_institutions(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "institution_beds_long_term_care_beds_check",
+          "type": "c",
+          "definition": "CHECK (long_term_care_beds IS NULL OR long_term_care_beds >= 0)"
+        },
+        {
+          "name": "institution_beds_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (institution_id)"
+        },
+        {
+          "name": "institution_beds_psychiatric_beds_check",
+          "type": "c",
+          "definition": "CHECK (psychiatric_beds IS NULL OR psychiatric_beds >= 0)"
+        },
+        {
+          "name": "institution_beds_psychiatric_category_check",
+          "type": "c",
+          "definition": "CHECK (psychiatric_category = ANY (ARRAY['psychiatric_only'::text, 'psychiatric_80_percent'::text, 'mixed'::text, 'unconfirmed'::text]))"
+        },
+        {
+          "name": "institution_beds_total_beds_check",
+          "type": "c",
+          "definition": "CHECK (total_beds IS NULL OR total_beds >= 0)"
+        },
+        {
+          "name": "institution_beds_tuberculosis_beds_check",
+          "type": "c",
+          "definition": "CHECK (tuberculosis_beds IS NULL OR tuberculosis_beds >= 0)"
+        }
+      ],
+      "rls_enabled": true
+    },
+    {
+      "name": "institution_changes",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "default": null,
+          "identity": "a",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "old_medical_code",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "new_medical_code",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "change_type",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "effective_date",
+          "type": "date",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "evidence",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "review_status",
+          "type": "text",
+          "default": "'pending'::text",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "source_import_id",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "institution_changes_pkey",
+          "definition": "CREATE UNIQUE INDEX institution_changes_pkey ON public.institution_changes USING btree (id)"
+        },
+        {
+          "name": "idx_changes_type",
+          "definition": "CREATE INDEX idx_changes_type ON public.institution_changes USING btree (change_type)"
+        }
+      ],
+      "policies": [
+        {
+          "name": "changes_admin_read",
+          "roles": [
+            "authenticated"
+          ],
+          "using": "(EXISTS ( SELECT 1\n   FROM app_members a\n  WHERE ((a.user_id = ( SELECT auth.uid() AS uid)) AND (a.enabled = true) AND (a.role = 'admin'::text))))",
+          "command": "SELECT",
+          "permissive": "PERMISSIVE",
+          "with_check": null
+        }
+      ],
+      "triggers": [],
+      "rls_forced": false,
+      "constraints": [
+        {
+          "name": "institution_changes_change_type_check",
+          "type": "c",
+          "definition": "CHECK (change_type = ANY (ARRAY['pure_new'::text, 'incorporation'::text, 'succession'::text, 'other_designation'::text, 'abolition'::text, 'bed_change'::text, 'information_change'::text, 'undetermined'::text]))"
+        },
+        {
+          "name": "institution_changes_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "institution_changes_review_status_check",
+          "type": "c",
+          "definition": "CHECK (review_status = ANY (ARRAY['pending'::text, 'confirmed'::text, 'rejected'::text]))"
+        },
+        {
+          "name": "institution_changes_source_import_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (source_import_id) REFERENCES source_imports(id)"
+        }
+      ],
+      "rls_enabled": true
+    },
+    {
+      "name": "medical_institutions",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "insurance_medical_code",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "bureau",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "prefecture",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "municipality",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "institution_name",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "postal_code",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "telephone",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "operator_name",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "operator_type",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "administrator_name",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "departments",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "institution_type",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "designation_date",
+          "type": "date",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'active'::text",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "publication_reference_date",
+          "type": "date",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "retrieved_date",
+          "type": "date",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "source_import_id",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "medical_institutions_pkey",
+          "definition": "CREATE UNIQUE INDEX medical_institutions_pkey ON public.medical_institutions USING btree (id)"
+        },
+        {
+          "name": "medical_institutions_insurance_medical_code_key",
+          "definition": "CREATE UNIQUE INDEX medical_institutions_insurance_medical_code_key ON public.medical_institutions USING btree (insurance_medical_code)"
+        },
+        {
+          "name": "idx_medical_region",
+          "definition": "CREATE INDEX idx_medical_region ON public.medical_institutions USING btree (prefecture)"
+        },
+        {
+          "name": "idx_medical_type_status",
+          "definition": "CREATE INDEX idx_medical_type_status ON public.medical_institutions USING btree (institution_type, status)"
+        },
+        {
+          "name": "idx_medical_name",
+          "definition": "CREATE INDEX idx_medical_name ON public.medical_institutions USING btree (institution_name)"
+        }
+      ],
+      "policies": [
+        {
+          "name": "medical_read_authorized",
+          "roles": [
+            "authenticated"
+          ],
+          "using": "(EXISTS ( SELECT 1\n   FROM app_members a\n  WHERE ((a.user_id = ( SELECT auth.uid() AS uid)) AND (a.enabled = true) AND ((medical_institutions.status = 'active'::text) OR (a.role = 'admin'::text)))))",
+          "command": "SELECT",
+          "permissive": "PERMISSIVE",
+          "with_check": null
+        }
+      ],
+      "triggers": [],
+      "rls_forced": false,
+      "constraints": [
+        {
+          "name": "medical_institutions_institution_type_check",
+          "type": "c",
+          "definition": "CHECK (institution_type = ANY (ARRAY['hospital'::text, 'clinic'::text]))"
+        },
+        {
+          "name": "medical_institutions_insurance_medical_code_check",
+          "type": "c",
+          "definition": "CHECK (insurance_medical_code ~ '^[0-9]{2}1[0-9]{7}$'::text)"
+        },
+        {
+          "name": "medical_institutions_insurance_medical_code_key",
+          "type": "u",
+          "definition": "UNIQUE (insurance_medical_code)"
+        },
+        {
+          "name": "medical_institutions_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "medical_institutions_source_import_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (source_import_id) REFERENCES source_imports(id)"
+        },
+        {
+          "name": "medical_institutions_status_check",
+          "type": "c",
+          "definition": "CHECK (status = ANY (ARRAY['active'::text, 'abolished'::text, 'surrendered'::text, 'cancelled'::text, 'review'::text]))"
+        }
+      ],
+      "rls_enabled": true
+    },
+    {
+      "name": "source_imports",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "default": null,
+          "identity": "a",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "bureau",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "prefecture",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "filename",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "sha256",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "publication_reference_date",
+          "type": "date",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "retrieved_date",
+          "type": "date",
+          "default": "CURRENT_DATE",
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "import_status",
+          "type": "text",
+          "default": "'pending'::text",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "record_count",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "error_message",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "source_imports_pkey",
+          "definition": "CREATE UNIQUE INDEX source_imports_pkey ON public.source_imports USING btree (id)"
+        }
+      ],
+      "policies": [
+        {
+          "name": "imports_admin_read",
+          "roles": [
+            "authenticated"
+          ],
+          "using": "(EXISTS ( SELECT 1\n   FROM app_members a\n  WHERE ((a.user_id = ( SELECT auth.uid() AS uid)) AND (a.enabled = true) AND (a.role = 'admin'::text))))",
+          "command": "SELECT",
+          "permissive": "PERMISSIVE",
+          "with_check": null
+        }
+      ],
+      "triggers": [],
+      "rls_forced": false,
+      "constraints": [
+        {
+          "name": "source_imports_import_status_check",
+          "type": "c",
+          "definition": "CHECK (import_status = ANY (ARRAY['pending'::text, 'completed'::text, 'failed'::text]))"
+        },
+        {
+          "name": "source_imports_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ],
+      "rls_enabled": true
+    }
+  ],
+  "server_version": "17.11"
+}

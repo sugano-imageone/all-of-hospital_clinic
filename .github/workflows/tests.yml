@@ -14,6 +14,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       TEST_DATABASE_URL: postgresql://postgres:test-only@localhost:5432/postgres
+      TEST_EXISTING_DATABASE_URL: postgresql://postgres:test-only@localhost:5432/directory_existing_test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,6 +25,8 @@ jobs:
       - run: python -m pip check
       - run: node --check app/static/app.js
       - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/bootstrap.sql
-      - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f sql/001_initial.sql -f sql/002_import.sql -f sql/003_update_jobs.sql
+      - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f sql/001_initial.sql -f sql/002_import.sql -f sql/003_update_jobs.sql -f sql/005_reporting.sql
+      - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -c 'create database directory_existing_test'
+      - run: psql "$TEST_EXISTING_DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/bootstrap.sql
       - run: python -m pytest -q
       - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/security.sql

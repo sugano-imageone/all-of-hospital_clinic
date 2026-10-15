@@ -116,14 +116,14 @@ def dashboard(auth:Auth):
     db,_=auth
     fields='code,prefecture,kind,status,clinic_beds,total_beds,psychiatric_class,owner_type'
     records=db.all('medical_institutions',[('select',fields),('order','code.asc')])
-    sources=db.all('source_imports',[('select','*'),('order','reference_date.desc,id.asc')])
-    changes=db.all('institution_changes',[('select','event_date,event_type,opening_classification'),('event_type','not.in.(baseline,reclassified)'),('order','id.asc')])
+    sources=db.rpc('source_metadata',{})
+    monthly=db.rpc('monthly_change_counts',{})
     collected=sorted({s['prefecture'] for s in sources if s['status']=='success'})
     db.audit('dashboard')
     return {**summarize(records),'collected':collected,'missing':[p for p in PREFECTURES.values() if p not in collected],
             'status_counts':dict(Counter(r['status'] for r in records)),
             'review_by_prefecture':dict(Counter(r['prefecture'] for r in records if r['status']=='確認中')),
-            'sources':sources,'monthly':monthly_counts(changes),
+            'sources':sources,'monthly':monthly,
             'note':'集計は現存のみ。取得済み県にも未解決・未網羅の施設があり、全国完全収集を意味しません。新規指定は観測・根拠のある差分のみ。初回取込は月次新規に数えません。'}
 
 @app.post('/api/export/{format}')
@@ -136,9 +136,9 @@ def export(format:str,query:Search,auth:Auth):
     db.audit('export_'+format,{'filters':query.model_dump(),'count':len(records)})
     if format=='csv': payload=csv_bytes(records);mime='text/csv; charset=utf-8';name='検索結果.csv'
     else:
-        sources=db.all('source_imports',[('order','reference_date.desc,id.asc')])
-        changes=db.all('institution_changes',[('select','event_date,event_type,opening_classification'),('event_type','not.in.(baseline,reclassified)'),('order','id.asc')])
-        payload=workbook_bytes(records,sources,'現存のみ（全取得県）' if format=='master' else '検索条件に一致。休止を含む' if query.include_suspended else '検索条件に一致。現存のみ',monthly_counts(changes))
+        sources=db.rpc('source_metadata',{})
+        monthly=db.rpc('monthly_change_counts',{})
+        payload=workbook_bytes(records,sources,'現存のみ（全取得県）' if format=='master' else '検索条件に一致。休止を含む' if query.include_suspended else '検索条件に一致。現存のみ',monthly)
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';name='全国医療機関マスター.xlsx' if format=='master' else '検索結果.xlsx'
     return Response(payload,media_type=mime,headers={'Content-Disposition':"attachment; filename*=UTF-8''"+quote(name)})
 

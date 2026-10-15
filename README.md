@@ -3,7 +3,7 @@
 FastAPI / Supabase Auth・PostgreSQL / 日本語Web画面 / Microsoft 365用Excel出力。
 公開リポジトリのコードと、認証・承認が必要なデータ閲覧を分離します。
 
-**実装とローカル検証を進めたMVPです。クラウド環境の公開と本番SupabaseのAPI疎通・既存5テーブルの列確認まで完了しています。既存構造に合わせた追加移行・登録・Auth連携は未完了です。全国版完成ではありません。**
+**実装とローカル検証を進めたMVPです。環境公開・本番Supabase疎通・既存定義確認と、互換移行のローカル検証まで完了しています。本番への移行適用・登録・Auth連携は未完了です。全国版完成ではありません。**
 実データの収集範囲・件数・残件は [検証状況](docs/validation.md) を参照してください。
 
 ## 機能
@@ -52,14 +52,10 @@ APP_SECURE_COOKIES=false /workspace/.venvs/hospital/bin/python -m uvicorn app.ma
 
 ## Supabaseの設定（プロジェクト jnoukmkrtmpgchdpcskc）
 
-1. このプロジェクトには既存の主要5テーブルがあり、列・型と各0件であることをAPIで確認済みです。
-   SQL Editorで **`sql/004_inspect_existing.sql` を実行**し、既存のCHECK制約・RLS・トリガー等を確認します。
-   単一JSONの定義情報だけを返す読み取り専用SQLです。接続キーの登録・環境公開は完了しています。
-2. 既存の主要テーブルがある場合、結果を確認して既存定義に合わせた追加マイグレーションを作成します。
-   **このプロジェクトは空スキーマではないため `001_initial.sql` を適用しません。** データ0件とテーブル未作成は別です。
-   `001_initial.sql` は別の空スキーマ向けの初期定義です。競合時はトランザクション全体が失敗します。
-   既存テーブルを削除して通す操作はしないでください。
-3. 空スキーマと確認できた場合だけ `001_initial.sql` → `002_import.sql` → `003_update_jobs.sql` を順に実行します。
+1. このプロジェクトの既存5テーブルの列・型・CHECK制約・RLSを確認済みです。接続情報と環境公開も完了しています。
+2. **対象プロジェクトには `sql/010_upgrade_existing.sql` の全文を1回実行します。** [移行の内容と検証](docs/upgrade-existing.md)を参照してください。
+   `001_initial.sql` は適用しません。データ0件と空スキーマは別です。既存テーブルを削除して通す操作はしないでください。
+3. 別の空スキーマの場合だけ `001_initial.sql` → `002_import.sql` → `003_update_jobs.sql` → `005_reporting.sql` を順に実行します。
    `tests/bootstrap.sql` はローカルテスト専用のAuthスタブです。Supabaseには絶対に適用しません。
 4. Authenticationで管理者のアカウントを作成・招待します。公開の新規登録は無効にします。
 5. 最初の管理者はSQL Editorから、自分のAuth UUIDを確認して一度だけ昇格します。
@@ -186,11 +182,13 @@ CIではPostgreSQL 17を起動してAuthスタブとSQLを適用し、DB統合�
 
 ```bash
 psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/bootstrap.sql
-psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f sql/001_initial.sql -f sql/002_import.sql -f sql/003_update_jobs.sql
+psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f sql/001_initial.sql -f sql/002_import.sql -f sql/003_update_jobs.sql -f sql/005_reporting.sql
 python -m pytest -q
 psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/security.sql
 ```
 
 クラウドでのSQL検証には隔離Docker DBを使っています。実際のSupabase Auth認証を代替するものではありません。
+既存構造への移行テストには、Authスタブだけを適用した別の空DBを `TEST_EXISTING_DATABASE_URL` に指定します。
+CIは両方のDBを作成して検証します。定義の復元・移行・テスト行は各テストのトランザクションでロールバックします。
 共通のドメイン・取込処理は `app/domain.py` と `app/importers/` に分離しています。
 将来の別ブランド・別Supabaseへの移植時も、実データや認証情報は引き継がず独立構築してください。
