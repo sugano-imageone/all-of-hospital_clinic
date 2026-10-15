@@ -1,8 +1,9 @@
 name: Monthly official medical data update
 on:
   schedule:
-    # JST 20th 04:00, retries JST 21st-25th 04:00. GitHub may delay execution.
-    - cron: '0 19 19-24 * *'
+    # Hourly attempts on JST 20th-25th; worker enforces JST date and midnight budget.
+    # UTC 19th-25th covers the full JST window, with outside-window runs skipped.
+    - cron: '0 * 19-25 * *'
   workflow_dispatch:
     inputs:
       apply:
@@ -17,7 +18,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 300
     # Keep the schedule disabled until all approved sources and DB configuration exist.
     if: github.event_name == 'workflow_dispatch' || vars.ENABLE_MEDICAL_MONTHLY == 'true'
     env:
@@ -39,7 +40,7 @@ jobs:
           args=()
           if [[ "$DO_APPLY" == "true" ]]; then args+=(--apply); fi
           if [[ "$IS_SCHEDULED" == "true" ]]; then args+=(--scheduled); fi
-          python -m app.importers.monthly "${args[@]}"
+          python -m app.importers.monthly --budget-seconds 14400 --max-attempts 3 "${args[@]}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

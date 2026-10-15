@@ -26,6 +26,10 @@ def migrate(db):
     script=re.sub(r'^begin;\s*$', '',script,flags=re.MULTILINE)
     script=re.sub(r'^commit;\s*$', '',script,flags=re.MULTILINE)
     db.execute(script)
+    bulk=(ROOT/'sql/012_bulk_import.sql').read_text()
+    bulk=re.sub(r'^begin;\s*$', '',bulk,flags=re.MULTILINE)
+    bulk=re.sub(r'^commit;\s*$', '',bulk,flags=re.MULTILINE)
+    db.execute(bulk)
 
 def seed(db):
     uid=uuid.UUID('11111111-1111-1111-1111-111111111111')
@@ -89,3 +93,28 @@ def test_unknown_institution_type_does_not_become_psychiatric_classification(exi
     db.execute('update medical_institutions set kind=null where id=%s',(inst,))
     db.execute('update institution_beds set psychiatric_beds=0 where institution_id=%s',(inst,))
     assert db.execute('select psychiatric_class,needs_review from medical_institutions').fetchone()==('不明',False)
+
+
+def test_bulk_import_preserves_manual_classification_and_old_evidence(existing):
+    from tests.test_postgres import record, source, import_data
+    db=existing;migrate(db)
+    rows=[record(f'40100000{i:02d}') for i in range(1,4)]
+    first=import_data(db,source(count=3),rows)
+    assert first['strategy']=='set-based-v1'
+    db.execute("update medical_institutions set opening_classification='事業承継等' where code=%s",(rows[0]['code'],))
+    later=[{**r,'reference_date':'2026-11-01','total_beds':120} for r in rows]
+    second=import_data(db,source('b','2026-11-01',3),later)
+    assert db.execute('select count(*) from institution_bed_history').fetchone()[0]==30
+    assert db.execute('select count(*) from institution_beds where total_beds=120').fetchone()[0]==3
+    event=db.execute("select before_data->>'total_beds',after_data->>'total_beds',opening_classification from institution_changes where source_import_id=%s and new_medical_code=%s",(second['source_import_id'],rows[0]['code'])).fetchone()
+    assert event==('100','120','事業承継等')
+    assert db.execute('select to_regclass(\'pg_temp.directory_import_work\')').fetchone()[0] is None
+
+
+def test_bulk_duplicate_input_rolls_back_entire_snapshot(existing):
+    from tests.test_postgres import record, source, import_data
+    db=existing;migrate(db)
+    with pytest.raises(psycopg.Error):
+        with db.transaction(): import_data(db,source(count=2),[record(),record()])
+    assert db.execute('select count(*) from medical_institutions').fetchone()[0]==0
+    assert db.execute('select count(*) from source_imports').fetchone()[0]==0
