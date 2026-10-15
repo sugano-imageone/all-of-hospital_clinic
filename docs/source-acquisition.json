@@ -1,0 +1,225 @@
+[
+  {
+    "bureau": "北海道厚生局",
+    "file": "hokkaido.xlsx",
+    "downloaded": true,
+    "record_count": 3250,
+    "prefectures": [
+      1
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/hokkaido/000502796.xlsx"
+  },
+  {
+    "bureau": "東北厚生局",
+    "file": "tohoku.xlsx",
+    "downloaded": true,
+    "record_count": 5535,
+    "prefectures": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/tohoku/shitei-touhoku-ika-r0810.xlsx"
+  },
+  {
+    "bureau": "関東信越厚生局",
+    "file": "kanto.zip",
+    "downloaded": true,
+    "record_count": 36484,
+    "prefectures": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      19,
+      20
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shitei_ika_r0810-1.zip"
+  },
+  {
+    "bureau": "東海北陸厚生局",
+    "file": "tokai.zip",
+    "downloaded": true,
+    "record_count": 11822,
+    "prefectures": [
+      16,
+      17,
+      21,
+      22,
+      23,
+      24
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-01-01.zip"
+  },
+  {
+    "bureau": "近畿厚生局",
+    "file": "kinki.zip",
+    "downloaded": true,
+    "record_count": 19845,
+    "prefectures": [
+      18,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30
+    ],
+    "errors": [
+      {
+        "file": "2026.10_kikanzentai_ika/2026.10_kikanzentai_hyogo_ikaheisetu.xlsx",
+        "sheet": "Sheet1",
+        "error": "未対応の表形式: 2026.10_kikanzentai_ika/2026.10_kikanzentai_hyogo_ikaheisetu.xlsx/Sheet1"
+      },
+      {
+        "file": "2026.10_kikanzentai_ika/2026.10_kikanzentai_kyoto_ikaheisetu.xlsx",
+        "sheet": "Sheet1",
+        "error": "未対応の表形式: 2026.10_kikanzentai_ika/2026.10_kikanzentai_kyoto_ikaheisetu.xlsx/Sheet1"
+      },
+      {
+        "file": "2026.10_kikanzentai_ika/2026.10_kikanzentai_nara_ikaheisetu.xlsx",
+        "sheet": "Sheet1",
+        "error": "未対応の表形式: 2026.10_kikanzentai_ika/2026.10_kikanzentai_nara_ikaheisetu.xlsx/Sheet1"
+      },
+      {
+        "file": "2026.10_kikanzentai_ika/2026.10_kikanzentai_osaka_ikaheisetu.xlsx",
+        "sheet": "Sheet1",
+        "error": "未対応の表形式: 2026.10_kikanzentai_ika/2026.10_kikanzentai_osaka_ikaheisetu.xlsx/Sheet1"
+      },
+      {
+        "file": "2026.10_kikanzentai_ika/2026.10_kikanzentai_wakayama_ikaheisetu.xlsx",
+        "sheet": "Sheet1",
+        "error": "未対応の表形式: 2026.10_kikanzentai_ika/2026.10_kikanzentai_wakayama_ikaheisetu.xlsx/Sheet1"
+      }
+    ],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_kikanzentai_ika.zip"
+  },
+  {
+    "bureau": "中国四国厚生局",
+    "file": "chugoku.zip",
+    "downloaded": true,
+    "record_count": 5888,
+    "prefectures": [
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000503425.zip"
+  },
+  {
+    "bureau": "四国厚生支局",
+    "file": "shikoku.zip",
+    "downloaded": true,
+    "record_count": 2972,
+    "prefectures": [
+      36,
+      37,
+      38,
+      39
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/shikoku/000502918.zip"
+  },
+  {
+    "bureau": "九州厚生局",
+    "file": "kyushu-40.zip",
+    "downloaded": true,
+    "record_count": 4537,
+    "prefectures": [
+      40
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000504004.zip"
+  },
+  {
+    "bureau": "九州厚生局",
+    "file": "kyushu-41.zip",
+    "downloaded": true,
+    "record_count": 663,
+    "prefectures": [
+      41
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000504005.zip"
+  },
+  {
+    "bureau": "九州厚生局",
+    "file": "kyushu-42.zip",
+    "downloaded": true,
+    "record_count": 1155,
+    "prefectures": [
+      42
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000504006.zip"
+  },
+  {
+    "bureau": "九州厚生局",
+    "file": "kyushu-43.zip",
+    "downloaded": true,
+    "record_count": 1364,
+    "prefectures": [
+      43
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000504007.zip"
+  },
+  {
+    "bureau": "九州厚生局",
+    "file": "kyushu-44.zip",
+    "downloaded": true,
+    "record_count": 915,
+    "prefectures": [
+      44
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000504008.zip"
+  },
+  {
+    "bureau": "九州厚生局",
+    "file": "kyushu-45.zip",
+    "downloaded": true,
+    "record_count": 837,
+    "prefectures": [
+      45
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000504009.zip"
+  },
+  {
+    "bureau": "九州厚生局",
+    "file": "kyushu-46.zip",
+    "downloaded": true,
+    "record_count": 1271,
+    "prefectures": [
+      46
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000504010.zip"
+  },
+  {
+    "bureau": "九州厚生局",
+    "file": "kyushu-47.zip",
+    "downloaded": true,
+    "record_count": 919,
+    "prefectures": [
+      47
+    ],
+    "errors": [],
+    "source_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000504011.zip"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "description": "2026-10-15に全8厚生局の実ファイルを取得検証。北海道は同日ユーザー指定（空欄0床・20床閾値・全掲載現存）を適用。リンクは毎回公式現行一覧から解決し内容を検証する。近畿医科併設の確認とSupabase接続検証が終わるまで自動更新は有効化しない。",
+  "sources": [
+    {"bureau":"北海道厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
+    {"bureau":"東北厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
+    {"bureau":"関東信越厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
+    {"bureau":"東海北陸厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
+    {"bureau":"近畿厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
+    {"bureau":"中国四国厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
+    {"bureau":"四国厚生支局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
+    {"bureau":"九州厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"}
+  ]
+}

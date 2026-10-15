@@ -1,0 +1,49 @@
+name: Monthly official medical data update
+on:
+  schedule:
+    # JST 20th 04:00, retries JST 21st-25th 04:00. GitHub may delay execution.
+    - cron: '0 19 19-24 * *'
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: '検証済みmanifestとDB移行を確認済みの場合のみ実DBへ登録'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: medical-monthly-update
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # Keep the schedule disabled until all approved sources and DB configuration exist.
+    if: github.event_name == 'workflow_dispatch' || vars.ENABLE_MEDICAL_MONTHLY == 'true'
+    env:
+      SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+      DO_APPLY: ${{ github.event_name == 'schedule' || inputs.apply }}
+      IS_SCHEDULED: ${{ github.event_name == 'schedule' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements.lock
+      - name: Validate and import; retry failed bureaus only
+        shell: bash
+        run: |
+          args=()
+          if [[ "$DO_APPLY" == "true" ]]; then args+=(--apply); fi
+          if [[ "$IS_SCHEDULED" == "true" ]]; then args+=(--scheduled); fi
+          python -m app.importers.monthly "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: monthly-update-result
+          path: artifacts/monthly.json
+          if-no-files-found: warn
+          retention-days: 90
