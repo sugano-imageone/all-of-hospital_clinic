@@ -1,0 +1,46 @@
+{
+  "source_rows": 97457,
+  "source_unique_10_digit_codes": 97457,
+  "source_unique_7_digit_suffixes": 90582,
+  "source_7_digit_duplicate_excess": 6875,
+  "database_rows": 97457,
+  "database_unique_10_digit_codes": 97457,
+  "database_unique_7_digit_suffixes": 90582,
+  "source_database_10_digit_sets_equal": true,
+  "missing_source_codes_in_database": 0,
+  "unexpected_database_codes": 0,
+  "database_read_seconds": 8.7,
+  "example_7_digit_suffix": "0210047",
+  "example_facilities": [
+    {
+      "code": "0810210047",
+      "name": "株式会社 日立製作所 日立総合病院",
+      "prefecture": "茨城県"
+    },
+    {
+      "code": "1110210047",
+      "name": "前川クリニック",
+      "prefecture": "埼玉県"
+    },
+    {
+      "code": "1210210047",
+      "name": "社会医療法人社団菊田会 習志野第一病院",
+      "prefecture": "千葉県"
+    },
+    {
+      "code": "1410210047",
+      "name": "消化器内科 横浜むらきクリニック",
+      "prefecture": "神奈川県"
+    },
+    {
+      "code": "4010210047",
+      "name": "医療法人 土器医院",
+      "prefecture": "福岡県"
+    },
+    {
+      "code": "2410210047",
+      "name": "三重呼吸器アレルギー・内科クリニック",
+      "prefecture": "三重県"
+    }
+  ]
+}

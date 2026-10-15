@@ -96,3 +96,13 @@ def test_parser_revision_is_not_a_source_reported_change(db):
     import_data(db,src,[{**record(),'total_beds':120}])
     assert db.execute("select count(*) from institution_changes where event_type='reclassified'").fetchone()[0]==1
     assert db.execute("select count(*) from institution_changes where event_type='changed'").fetchone()[0]==0
+
+
+def test_same_name_and_same_seven_digit_suffix_do_not_merge_facilities(db):
+    first=record('4010000001')
+    second={**record('4110000001'),'prefecture_code':41,'prefecture':'佐賀県'}
+    import_data(db,source(),[first])
+    import_data(db,{**source(),'prefecture_code':41,'prefecture':'佐賀県'},[second])
+    assert db.execute('select code,name from medical_institutions order by code').fetchall()==[
+        ('4010000001','Integration Hospital'),('4110000001','Integration Hospital')]
+    assert db.execute('select count(*) from source_imports').fetchone()[0]==2

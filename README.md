@@ -55,7 +55,7 @@ APP_SECURE_COOKIES=false /workspace/.venvs/hospital/bin/python -m uvicorn app.ma
 1. このプロジェクトの既存5テーブルの列・型・CHECK制約・RLSを確認済みです。接続情報と環境公開も完了しています。
 2. **対象プロジェクトへの `sql/010_upgrade_existing.sql` 適用は完了しました。再実行は不要です。** [移行の内容と検証](docs/upgrade-existing.md)を参照してください。
    `001_initial.sql` は適用しません。データ0件と空スキーマは別です。既存テーブルを削除して通す操作はしないでください。
-   `011_import_timeout.sql` の90秒設定と012の適用も完了しています。追加で **`sql/013_staged_upload.sql` の全文**をSQL Editorで実行します。Supabase固有の安全更新チェックへの対応と、小分け送信後の県単位一括確定を含みます。
+   010〜013の本番適用は完了しています。47都道府県の医科主一覧97,457件を登録済みです。再適用は不要です。現存診療所88,057件と動態調査105,702件の差17,645件は未解決です。[件数差の調査](docs/statistical-reconciliation.md)を参照してください。
 3. 別の空スキーマの場合だけ `001_initial.sql` → `002_import.sql` → `003_update_jobs.sql` → `005_reporting.sql` を順に実行します。
    `tests/bootstrap.sql` はローカルテスト専用のAuthスタブです。Supabaseには絶対に適用しません。
 4. Authenticationで管理者のアカウントを作成・招待します。公開の新規登録は無効にします。

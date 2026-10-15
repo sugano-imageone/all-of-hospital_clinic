@@ -1,0 +1,477 @@
+{
+  "scope": "取得済み医科主一覧内部の行数照合。別配布物・全国網羅性の証明ではない",
+  "prefectures": [
+    {
+      "prefecture": "広島県",
+      "prefecture_code": 34,
+      "filename": "医科_34_広島_コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 2381,
+      "parsed_rows": 2381,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "山口県",
+      "prefecture_code": 35,
+      "filename": "医科_35_山口_コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1085,
+      "parsed_rows": 1085,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "岡山県",
+      "prefecture_code": 33,
+      "filename": "医科_33_岡山_コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1409,
+      "parsed_rows": 1409,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "鳥取県",
+      "prefecture_code": 31,
+      "filename": "医科_31_鳥取_コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 432,
+      "parsed_rows": 432,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "島根県",
+      "prefecture_code": 32,
+      "filename": "医科_32_島根_コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 581,
+      "parsed_rows": 581,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "北海道",
+      "prefecture_code": 1,
+      "filename": "hokkaido.xlsx",
+      "sheet": "F450A",
+      "source_primary_rows": 3250,
+      "parsed_rows": 3250,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "茨城県",
+      "prefecture_code": 8,
+      "filename": "shitei_ika_r0810/081コード内容別一覧表（医科）茨城r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1566,
+      "parsed_rows": 1566,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "埼玉県",
+      "prefecture_code": 11,
+      "filename": "shitei_ika_r0810/111コード内容別一覧表（医科）埼玉r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 4362,
+      "parsed_rows": 4362,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "山梨県",
+      "prefecture_code": 19,
+      "filename": "shitei_ika_r0810/191コード内容別一覧表（医科）山梨r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 644,
+      "parsed_rows": 644,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "東京都",
+      "prefecture_code": 13,
+      "filename": "shitei_ika_r0810/131コード内容別一覧表（医科）東京r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 13960,
+      "parsed_rows": 13960,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "栃木県",
+      "prefecture_code": 9,
+      "filename": "shitei_ika_r0810/091コード内容別一覧表（医科）栃木r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1286,
+      "parsed_rows": 1286,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "長野県",
+      "prefecture_code": 20,
+      "filename": "shitei_ika_r0810/201コード内容別一覧表（医科）長野r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1395,
+      "parsed_rows": 1395,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "新潟県",
+      "prefecture_code": 15,
+      "filename": "shitei_ika_r0810/151コード内容別一覧表（医科）新潟r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1322,
+      "parsed_rows": 1322,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "群馬県",
+      "prefecture_code": 10,
+      "filename": "shitei_ika_r0810/101コード内容別一覧表（医科）群馬r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1394,
+      "parsed_rows": 1394,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "千葉県",
+      "prefecture_code": 12,
+      "filename": "shitei_ika_r0810/121コード内容別一覧表（医科）千葉r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 3724,
+      "parsed_rows": 3724,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "神奈川県",
+      "prefecture_code": 14,
+      "filename": "shitei_ika_r0810/141コード内容別一覧表（医科）神奈川r0810.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 6831,
+      "parsed_rows": 6831,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "滋賀県",
+      "prefecture_code": 25,
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_shiga_ika.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 993,
+      "parsed_rows": 993,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "福井県",
+      "prefecture_code": 18,
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_fukui_ika.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 510,
+      "parsed_rows": 510,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "和歌山県",
+      "prefecture_code": 30,
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_wakayama_ika.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 941,
+      "parsed_rows": 941,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "兵庫県",
+      "prefecture_code": 28,
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_hyogo_ika.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 5028,
+      "parsed_rows": 5028,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "奈良県",
+      "prefecture_code": 29,
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_nara_ika.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1119,
+      "parsed_rows": 1119,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "京都府",
+      "prefecture_code": 26,
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_kyoto_ika.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 2379,
+      "parsed_rows": 2379,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "大阪府",
+      "prefecture_code": 27,
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_osaka_ika.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 8875,
+      "parsed_rows": 8875,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "福岡県",
+      "prefecture_code": 40,
+      "filename": "r8_10_ika_fukuoka_02.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 4537,
+      "parsed_rows": 4537,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "佐賀県",
+      "prefecture_code": 41,
+      "filename": "r8_10_saga_ika_02.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 663,
+      "parsed_rows": 663,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "長崎県",
+      "prefecture_code": 42,
+      "filename": "r8_10_nagasaki_ika_02.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1155,
+      "parsed_rows": 1155,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "熊本県",
+      "prefecture_code": 43,
+      "filename": "r8_10_kumamoto_ika_02.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1364,
+      "parsed_rows": 1364,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "大分県",
+      "prefecture_code": 44,
+      "filename": "r8_10_ooita_ika_02.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 915,
+      "parsed_rows": 915,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "宮崎県",
+      "prefecture_code": 45,
+      "filename": "r8_10_miyazaki_ika_02.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 837,
+      "parsed_rows": 837,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "鹿児島県",
+      "prefecture_code": 46,
+      "filename": "r8_10_kagoshima_ika_02.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1271,
+      "parsed_rows": 1271,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "沖縄県",
+      "prefecture_code": 47,
+      "filename": "r8_10_okinawa_ika_02.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 919,
+      "parsed_rows": 919,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "愛媛県",
+      "prefecture_code": 38,
+      "filename": "01_07 愛媛 医科 コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1063,
+      "parsed_rows": 1063,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "徳島県",
+      "prefecture_code": 36,
+      "filename": "01_04_徳島 医科 コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 654,
+      "parsed_rows": 654,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "高知県",
+      "prefecture_code": 39,
+      "filename": "01_10 高知 医科 コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 505,
+      "parsed_rows": 505,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "香川県",
+      "prefecture_code": 37,
+      "filename": "01_01_香川 医科 コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 750,
+      "parsed_rows": 750,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "青森県",
+      "prefecture_code": 2,
+      "filename": "tohoku.xlsx",
+      "sheet": "青森県",
+      "source_primary_rows": 703,
+      "parsed_rows": 703,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "岩手県",
+      "prefecture_code": 3,
+      "filename": "tohoku.xlsx",
+      "sheet": "岩手県",
+      "source_primary_rows": 745,
+      "parsed_rows": 745,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "宮城県",
+      "prefecture_code": 4,
+      "filename": "tohoku.xlsx",
+      "sheet": "宮城県",
+      "source_primary_rows": 1555,
+      "parsed_rows": 1555,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "秋田県",
+      "prefecture_code": 5,
+      "filename": "tohoku.xlsx",
+      "sheet": "秋田県",
+      "source_primary_rows": 625,
+      "parsed_rows": 625,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "山形県",
+      "prefecture_code": 6,
+      "filename": "tohoku.xlsx",
+      "sheet": "山形県",
+      "source_primary_rows": 741,
+      "parsed_rows": 741,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "福島県",
+      "prefecture_code": 7,
+      "filename": "tohoku.xlsx",
+      "sheet": "福島県",
+      "source_primary_rows": 1166,
+      "parsed_rows": 1166,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "静岡県",
+      "prefecture_code": 22,
+      "filename": "2610　コード内容別医療機関一覧表（医科）\\2610（静岡医科）コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 2438,
+      "parsed_rows": 2438,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "愛知県",
+      "prefecture_code": 23,
+      "filename": "2610　コード内容別医療機関一覧表（医科）\\2610（愛知医科）コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 5215,
+      "parsed_rows": 5215,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "石川県",
+      "prefecture_code": 17,
+      "filename": "2610　コード内容別医療機関一覧表（医科）\\2610（石川医科）コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 783,
+      "parsed_rows": 783,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "富山県",
+      "prefecture_code": 16,
+      "filename": "2610　コード内容別医療機関一覧表（医科）\\2610（富山医科）コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 693,
+      "parsed_rows": 693,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "岐阜県",
+      "prefecture_code": 21,
+      "filename": "2610　コード内容別医療機関一覧表（医科）\\2610（岐阜医科）コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1381,
+      "parsed_rows": 1381,
+      "count_match": true,
+      "file_hash_match": true
+    },
+    {
+      "prefecture": "三重県",
+      "prefecture_code": 24,
+      "filename": "2610　コード内容別医療機関一覧表（医科）\\2610（三重医科）コード内容別医療機関一覧表.xlsx",
+      "sheet": "Sheet1",
+      "source_primary_rows": 1312,
+      "parsed_rows": 1312,
+      "count_match": true,
+      "file_hash_match": true
+    }
+  ],
+  "source_primary_rows": 97457,
+  "all_match": true
+}
