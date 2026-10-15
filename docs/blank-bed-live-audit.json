@@ -1,0 +1,11 @@
+{
+  "active_clinics": 88057,
+  "active_clinics_null_beds": 80732,
+  "active_clinics_nonnull_beds": 7325,
+  "active_clinics_zero_beds": 2437,
+  "all_null_kind": 2,
+  "active_null_kind": 0,
+  "nonhokkaido_active_clinics_null_beds": 80732,
+  "verified_at": "2026-10-15T12:29:25.255869+09:00",
+  "conclusion": "病床数NULLの現存診療所80,732件は、現存診療所88,057件に含まれる。NULLを0へ変更しても診療所総数は増えない。病床範囲・無床フィルターの検索件数には影響する。"
+}
