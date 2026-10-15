@@ -20,7 +20,7 @@ from app.importers.planning import Task, order_tasks, run_tasks, time_budget
 from app.store import Supabase
 
 
-def prepare_tasks(bureau, entries, directory, now):
+def prepare_tasks(bureau, entries, directory, now,*,scope_exclusions=None):
     """Validate every source in a bureau before making any of its writes eligible."""
     if len(entries) != 1 or entries[0].get('resolver') != 'official-current-v1' or entries[0].get('scope') != 'full-medical':
         raise ValueError('検証済みの全件配布元resolverが未登録')
@@ -38,7 +38,10 @@ def prepare_tasks(bureau, entries, directory, now):
             for src in meta:
                 src.update(prefecture=PREFECTURES[prefs[i]], source_url=url)
         else:
-            data, meta, errors = parse_region(path, bureau, now.isoformat(), url)
+            excluded=[]
+            data, meta, errors = parse_region(path, bureau, now.isoformat(), url,excluded_sources=excluded)
+            if scope_exclusions is not None:
+                scope_exclusions.extend({'bureau':bureau,'source_url':url,**entry} for entry in excluded)
             if errors:
                 raise ValueError('未解決のファイル構造。既存データを維持')
         records.extend(data)
@@ -79,6 +82,7 @@ def main():
     manifest = json.loads(Path(args.manifest).read_text())['sources']
     db = Supabase(service=True) if args.apply else None
     results, plan, attempts, outcomes = {}, [], [], []
+    scope_exclusions=[]
     persisted, persistence_errors = {}, []
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -87,6 +91,7 @@ def main():
         output.write_text(json.dumps({'month': month, 'apply': args.apply, 'queue_unit': 'prefecture',
             'budget_seconds': args.budget_seconds, 'elapsed_seconds': round(time.monotonic() - started, 1),
             'plan': plan, 'attempts': attempts, 'prefectures': outcomes, 'results': list(results.values()),
+            'scope_exclusions':scope_exclusions,
             'persistence_errors': persistence_errors}, ensure_ascii=False, indent=2))
 
     def progress(rows):
@@ -128,7 +133,8 @@ def main():
                 try:
                     if deadline - time.monotonic() < 120:
                         raise ValueError('当日の時間予算不足')
-                    tasks.extend(prepare_tasks(bureau, [s for s in manifest if s['bureau'] == bureau], directory, now))
+                    tasks.extend(prepare_tasks(bureau, [s for s in manifest if s['bureau'] == bureau], directory, now,
+                                               scope_exclusions=scope_exclusions))
                 except Exception as exc:
                     result = {'bureau': bureau, 'status': 'failed', 'completed': [],
                               'errors': [type(exc).__name__ + ': 取得・解析・公表月・県の検証に失敗。直前データを維持']}

@@ -1,0 +1,848 @@
+{
+  "month": "2026-10-01",
+  "apply": false,
+  "queue_unit": "prefecture",
+  "elapsed_seconds": 141.8,
+  "scope_exclusions": [
+    {
+      "bureau": "近畿厚生局",
+      "source_url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_kikanzentai_ika.zip",
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_hyogo_ikaheisetu.xlsx",
+      "sheet": "Sheet1",
+      "publication_category": "医科併設",
+      "primary_rows": 4,
+      "sha256": "1e744a40ebd50f7d657f725b456e7537706137c098fa4ea7d3c3df0e3267362f",
+      "reason": "医科主一覧の対象外。別表を医科の独立施設として加算しない"
+    },
+    {
+      "bureau": "近畿厚生局",
+      "source_url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_kikanzentai_ika.zip",
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_kyoto_ikaheisetu.xlsx",
+      "sheet": "Sheet1",
+      "publication_category": "医科併設",
+      "primary_rows": 1,
+      "sha256": "43473dec74d5b86099050c4c0018bf8cacdad452e58d2876152d9015c49ac3d9",
+      "reason": "医科主一覧の対象外。別表を医科の独立施設として加算しない"
+    },
+    {
+      "bureau": "近畿厚生局",
+      "source_url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_kikanzentai_ika.zip",
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_nara_ikaheisetu.xlsx",
+      "sheet": "Sheet1",
+      "publication_category": "医科併設",
+      "primary_rows": 1,
+      "sha256": "ffd769d5bd29746f613e05ff3b49af0207b3844def3032f35ed2a950d7872588",
+      "reason": "医科主一覧の対象外。別表を医科の独立施設として加算しない"
+    },
+    {
+      "bureau": "近畿厚生局",
+      "source_url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_kikanzentai_ika.zip",
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_osaka_ikaheisetu.xlsx",
+      "sheet": "Sheet1",
+      "publication_category": "医科併設",
+      "primary_rows": 21,
+      "sha256": "aae26650e226206945e3625ebb427f8a9556bb25cdf2607337d40a5cb8779dd5",
+      "reason": "医科主一覧の対象外。別表を医科の独立施設として加算しない"
+    },
+    {
+      "bureau": "近畿厚生局",
+      "source_url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_kikanzentai_ika.zip",
+      "filename": "2026.10_kikanzentai_ika/2026.10_kikanzentai_wakayama_ikaheisetu.xlsx",
+      "sheet": "Sheet1",
+      "publication_category": "医科併設",
+      "primary_rows": 2,
+      "sha256": "db992c63bd7f3b1afc152bd46da30d6549b4a1c4a2e9dab12998a8b4316443e9",
+      "reason": "医科主一覧の対象外。別表を医科の独立施設として加算しない"
+    }
+  ],
+  "bureaus": [
+    {
+      "bureau": "関東信越厚生局",
+      "status": "success"
+    },
+    {
+      "bureau": "近畿厚生局",
+      "status": "success"
+    },
+    {
+      "bureau": "東海北陸厚生局",
+      "status": "success"
+    },
+    {
+      "bureau": "九州厚生局",
+      "status": "success"
+    },
+    {
+      "bureau": "北海道厚生局",
+      "status": "success"
+    },
+    {
+      "bureau": "中国四国厚生局",
+      "status": "success"
+    },
+    {
+      "bureau": "東北厚生局",
+      "status": "success"
+    },
+    {
+      "bureau": "四国厚生支局",
+      "status": "success"
+    }
+  ],
+  "prefectures": [
+    {
+      "prefecture_code": 13,
+      "prefecture": "東京都",
+      "bureau": "関東信越厚生局",
+      "count": 13960,
+      "attempt": 1,
+      "estimated_seconds": 583.5,
+      "sha256": "faac415756cc9f7524650963e4ffe1b20acbd3ac7ca2e66a5acdb31f98f8ebc9",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 13960
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 27,
+      "prefecture": "大阪府",
+      "bureau": "近畿厚生局",
+      "count": 8875,
+      "attempt": 1,
+      "estimated_seconds": 372.8,
+      "sha256": "aaa90592d8b0c6275e6a3a3edf8cd41cccfcb4e00f17bd21cc3c4edbd4cad20f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 8875
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 14,
+      "prefecture": "神奈川県",
+      "bureau": "関東信越厚生局",
+      "count": 6831,
+      "attempt": 1,
+      "estimated_seconds": 288.2,
+      "sha256": "c4db2c7d8b610253190997984c9bc5a5204e284f46e5c1fe13a744ffdeaa685a",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 6831
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 23,
+      "prefecture": "愛知県",
+      "bureau": "東海北陸厚生局",
+      "count": 5215,
+      "attempt": 1,
+      "estimated_seconds": 221.6,
+      "sha256": "69f2f2fd76ee3cdcfb40837d985a6a938689629990e3d6d342b4fc5f8ae96770",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 5215
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 28,
+      "prefecture": "兵庫県",
+      "bureau": "近畿厚生局",
+      "count": 5028,
+      "attempt": 1,
+      "estimated_seconds": 214.6,
+      "sha256": "51b3df067439386376c3c2298a55d02944bd2491c7bcd855284d18058096bdec",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 5028
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 40,
+      "prefecture": "福岡県",
+      "bureau": "九州厚生局",
+      "count": 4537,
+      "attempt": 1,
+      "estimated_seconds": 194.1,
+      "sha256": "7348bc8913a12c225dea0166897781b9d80ef5f07311f479c28bcb812923be66",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 4537
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 11,
+      "prefecture": "埼玉県",
+      "bureau": "関東信越厚生局",
+      "count": 4362,
+      "attempt": 1,
+      "estimated_seconds": 185.6,
+      "sha256": "7d15ba2e1dac655ec669f2d74606b9300cf18dd276ba7fe0dbf7cf59a9892b18",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 4362
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 12,
+      "prefecture": "千葉県",
+      "bureau": "関東信越厚生局",
+      "count": 3724,
+      "attempt": 1,
+      "estimated_seconds": 159.7,
+      "sha256": "45cd83ffb11016c72874710c0b6904035f416b2a2adb690e4f02bcf834dde423",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 3724
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 1,
+      "prefecture": "北海道",
+      "bureau": "北海道厚生局",
+      "count": 3250,
+      "attempt": 1,
+      "estimated_seconds": 139.9,
+      "sha256": "db608ad4d71aed938b36ed36c34aa8db0801b09495a006a204c08ee27ff637e0",
+      "parser_version": "hokkaido-user-rule-2026-10-15-v1",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 3250
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 22,
+      "prefecture": "静岡県",
+      "bureau": "東海北陸厚生局",
+      "count": 2438,
+      "attempt": 1,
+      "estimated_seconds": 105.4,
+      "sha256": "61bf4fdb26e2bc1673f948a346ab0b714f993646b198d46c637f4c285ba1cade",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 2438
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 34,
+      "prefecture": "広島県",
+      "bureau": "中国四国厚生局",
+      "count": 2381,
+      "attempt": 1,
+      "estimated_seconds": 103.3,
+      "sha256": "ba1498a77bca09ba5b8a2b89ab6c01f44f4a5c0378ec80a56d4087331424a451",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 2381
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 26,
+      "prefecture": "京都府",
+      "bureau": "近畿厚生局",
+      "count": 2379,
+      "attempt": 1,
+      "estimated_seconds": 103.2,
+      "sha256": "c0c1de273e1733738b4cc9ea433a43e2d2616e3e34b36b4cd04c514f909d1886",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 2379
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 8,
+      "prefecture": "茨城県",
+      "bureau": "関東信越厚生局",
+      "count": 1566,
+      "attempt": 1,
+      "estimated_seconds": 60.7,
+      "sha256": "0991980f50c595a2c2c54ae5e9973bf0137c0283609c2c788a990fc7a4c9c818",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1566
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 4,
+      "prefecture": "宮城県",
+      "bureau": "東北厚生局",
+      "count": 1555,
+      "attempt": 1,
+      "estimated_seconds": 60.3,
+      "sha256": "95ef1d05dca851bd773db7a490367916e515534133c3392ccb1df2b739d82c9f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1555
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 33,
+      "prefecture": "岡山県",
+      "bureau": "中国四国厚生局",
+      "count": 1409,
+      "attempt": 1,
+      "estimated_seconds": 54.8,
+      "sha256": "c453c633852faca7347d3456444d20e7aa98c5556595bd0e1da4d9fe09bbf9a9",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1409
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 20,
+      "prefecture": "長野県",
+      "bureau": "関東信越厚生局",
+      "count": 1395,
+      "attempt": 1,
+      "estimated_seconds": 54.3,
+      "sha256": "51e45a76d3c6a09c336010b131af9d11b868b2093a19f425e31a1433977a0593",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1395
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 10,
+      "prefecture": "群馬県",
+      "bureau": "関東信越厚生局",
+      "count": 1394,
+      "attempt": 1,
+      "estimated_seconds": 54.3,
+      "sha256": "fbc07f7ce85a69c26ae9037419a9b71a4215e5a1526f8ad662eede8c480192d4",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1394
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 21,
+      "prefecture": "岐阜県",
+      "bureau": "東海北陸厚生局",
+      "count": 1381,
+      "attempt": 1,
+      "estimated_seconds": 53.8,
+      "sha256": "36649e29629fc4dafabd006297d558017ec51ae9dd484030c594527d00d04032",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1381
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 43,
+      "prefecture": "熊本県",
+      "bureau": "九州厚生局",
+      "count": 1364,
+      "attempt": 1,
+      "estimated_seconds": 53.2,
+      "sha256": "9483d0b922c080fc2461ca81a3e4df440d06f3f03ee2a7ad57beb5d08858998b",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1364
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 15,
+      "prefecture": "新潟県",
+      "bureau": "関東信越厚生局",
+      "count": 1322,
+      "attempt": 1,
+      "estimated_seconds": 51.6,
+      "sha256": "c0ca653701afaffcedc3569a614beac3e6569b762f5391f2917fca10dc90c8b4",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1322
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 24,
+      "prefecture": "三重県",
+      "bureau": "東海北陸厚生局",
+      "count": 1312,
+      "attempt": 1,
+      "estimated_seconds": 51.2,
+      "sha256": "1d15544cd46158fd6ee5f107ce29c341a9dca0f80a623e1413cf7cc1412d5566",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1312
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 9,
+      "prefecture": "栃木県",
+      "bureau": "関東信越厚生局",
+      "count": 1286,
+      "attempt": 1,
+      "estimated_seconds": 50.2,
+      "sha256": "57fbbea31231e8f7a8be2e13f169ecb31339de7c431ee1e26387e98860a56a85",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1286
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 46,
+      "prefecture": "鹿児島県",
+      "bureau": "九州厚生局",
+      "count": 1271,
+      "attempt": 1,
+      "estimated_seconds": 49.7,
+      "sha256": "ebfda3d5396540ab4b13572d23398bf5f8a180087ccdd1d6aa3e0fbaf0cd7574",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1271
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 7,
+      "prefecture": "福島県",
+      "bureau": "東北厚生局",
+      "count": 1166,
+      "attempt": 1,
+      "estimated_seconds": 45.7,
+      "sha256": "95ef1d05dca851bd773db7a490367916e515534133c3392ccb1df2b739d82c9f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1166
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 42,
+      "prefecture": "長崎県",
+      "bureau": "九州厚生局",
+      "count": 1155,
+      "attempt": 1,
+      "estimated_seconds": 45.3,
+      "sha256": "f7f4acb1846959efb08ae1efde921993df41a936cff85fbefe67dedfaf199f80",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1155
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 29,
+      "prefecture": "奈良県",
+      "bureau": "近畿厚生局",
+      "count": 1119,
+      "attempt": 1,
+      "estimated_seconds": 44.0,
+      "sha256": "a021c5904b25c1f84b8dc3aa80205b6cbc76a62731c552703babe76440d8e434",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1119
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 35,
+      "prefecture": "山口県",
+      "bureau": "中国四国厚生局",
+      "count": 1085,
+      "attempt": 1,
+      "estimated_seconds": 42.7,
+      "sha256": "81362b6a99032c950327d8b6e41fcb383a495285430e83d6b914b66446e1a8de",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1085
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 38,
+      "prefecture": "愛媛県",
+      "bureau": "四国厚生支局",
+      "count": 1063,
+      "attempt": 1,
+      "estimated_seconds": 41.9,
+      "sha256": "0e8226571123f6b4d4263b83e5d6c71b1dee8679ad0185f6c6d68fffb94e6873",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 1063
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 25,
+      "prefecture": "滋賀県",
+      "bureau": "近畿厚生局",
+      "count": 993,
+      "attempt": 1,
+      "estimated_seconds": 39.2,
+      "sha256": "1ff0b977d81e59be52eb9558dd53436171e91ea9332baf843792308ce689a61f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 993
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 30,
+      "prefecture": "和歌山県",
+      "bureau": "近畿厚生局",
+      "count": 941,
+      "attempt": 1,
+      "estimated_seconds": 37.3,
+      "sha256": "c8f3882d50add299a1bd2bbff471420178e66382f8915804f21e9bd5c64df5fc",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 941
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 47,
+      "prefecture": "沖縄県",
+      "bureau": "九州厚生局",
+      "count": 919,
+      "attempt": 1,
+      "estimated_seconds": 36.5,
+      "sha256": "03962f32afeb268c749de9882d2032f184092f9b774d4719304862a0cfc9bc7f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 919
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 44,
+      "prefecture": "大分県",
+      "bureau": "九州厚生局",
+      "count": 915,
+      "attempt": 1,
+      "estimated_seconds": 36.3,
+      "sha256": "3c633b178f83355496e1194d065657feadda3a09c83aa837ab4ee1e49cc0286c",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 915
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 45,
+      "prefecture": "宮崎県",
+      "bureau": "九州厚生局",
+      "count": 837,
+      "attempt": 1,
+      "estimated_seconds": 33.4,
+      "sha256": "3c75c10b93aa2420c609ab4c9c9df28e81d58cded06b6c196a5bb8cbd852be68",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 837
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 17,
+      "prefecture": "石川県",
+      "bureau": "東海北陸厚生局",
+      "count": 783,
+      "attempt": 1,
+      "estimated_seconds": 31.4,
+      "sha256": "15d017fad63bb9ddd5f12bdcbb19ac1b650fd406b7653da0ba7a3d3c92f6d803",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 783
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 37,
+      "prefecture": "香川県",
+      "bureau": "四国厚生支局",
+      "count": 750,
+      "attempt": 1,
+      "estimated_seconds": 30.1,
+      "sha256": "fb699652385736377d390802114f5e11a2c1e5009ac04f8235c63f5b05a2bedd",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 750
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 3,
+      "prefecture": "岩手県",
+      "bureau": "東北厚生局",
+      "count": 745,
+      "attempt": 1,
+      "estimated_seconds": 29.9,
+      "sha256": "95ef1d05dca851bd773db7a490367916e515534133c3392ccb1df2b739d82c9f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 745
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 6,
+      "prefecture": "山形県",
+      "bureau": "東北厚生局",
+      "count": 741,
+      "attempt": 1,
+      "estimated_seconds": 29.8,
+      "sha256": "95ef1d05dca851bd773db7a490367916e515534133c3392ccb1df2b739d82c9f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 741
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 2,
+      "prefecture": "青森県",
+      "bureau": "東北厚生局",
+      "count": 703,
+      "attempt": 1,
+      "estimated_seconds": 28.4,
+      "sha256": "95ef1d05dca851bd773db7a490367916e515534133c3392ccb1df2b739d82c9f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 703
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 16,
+      "prefecture": "富山県",
+      "bureau": "東海北陸厚生局",
+      "count": 693,
+      "attempt": 1,
+      "estimated_seconds": 28.0,
+      "sha256": "402f307d34227a751150edab9e5fc234d87c2b7cd97e5c1314f69f03110bde17",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 693
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 41,
+      "prefecture": "佐賀県",
+      "bureau": "九州厚生局",
+      "count": 663,
+      "attempt": 1,
+      "estimated_seconds": 26.9,
+      "sha256": "91c68bc20cad5a76699cba6bef7956951fa4d94ced3ff9f425609a45701f5bf3",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 663
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 36,
+      "prefecture": "徳島県",
+      "bureau": "四国厚生支局",
+      "count": 654,
+      "attempt": 1,
+      "estimated_seconds": 26.5,
+      "sha256": "3b8eaf6765c45d4e66a8e589cda4c891174a86848507584fbc883fbe275271dc",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 654
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 19,
+      "prefecture": "山梨県",
+      "bureau": "関東信越厚生局",
+      "count": 644,
+      "attempt": 1,
+      "estimated_seconds": 26.2,
+      "sha256": "378a91faddce227f7b3998964206b8b9b9fbe64beb151f27f4bd70ccd84dd331",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 644
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 5,
+      "prefecture": "秋田県",
+      "bureau": "東北厚生局",
+      "count": 625,
+      "attempt": 1,
+      "estimated_seconds": 25.4,
+      "sha256": "95ef1d05dca851bd773db7a490367916e515534133c3392ccb1df2b739d82c9f",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 625
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 32,
+      "prefecture": "島根県",
+      "bureau": "中国四国厚生局",
+      "count": 581,
+      "attempt": 1,
+      "estimated_seconds": 23.8,
+      "sha256": "883dc4fd642b99909b28ecc52ef53e02a03a832898b9a28b4c362d8f563929a7",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 581
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 18,
+      "prefecture": "福井県",
+      "bureau": "近畿厚生局",
+      "count": 510,
+      "attempt": 1,
+      "estimated_seconds": 21.1,
+      "sha256": "c38bccf920e819f72d3d9488ee634dc1c7b43f67bf6571b9a1c26c6586a270f0",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 510
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 39,
+      "prefecture": "高知県",
+      "bureau": "四国厚生支局",
+      "count": 505,
+      "attempt": 1,
+      "estimated_seconds": 20.9,
+      "sha256": "3d4b6395aeb349faa9828f182608a1d4e26d310e6e08658130015477c25acb86",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 505
+      },
+      "seconds": 0.0
+    },
+    {
+      "prefecture_code": 31,
+      "prefecture": "鳥取県",
+      "bureau": "中国四国厚生局",
+      "count": 432,
+      "attempt": 1,
+      "estimated_seconds": 18.2,
+      "sha256": "66abc99a806c7cfe0826d47f5de6ef4230050157cc747c0bd58f298cfe3dc8ed",
+      "parser_version": "code-content-v2",
+      "status": "validated",
+      "result": {
+        "status": "validated",
+        "count": 432
+      },
+      "seconds": 0.0
+    }
+  ],
+  "total_records": 97457,
+  "notes": "実配布物の再取得・解析・47県別キューのdry run。本番DBへの書込は行っていない。定期実行の有効化とは別。"
+}

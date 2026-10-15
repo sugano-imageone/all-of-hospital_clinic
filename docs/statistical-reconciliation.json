@@ -5,7 +5,7 @@
   "master_reference_dates": [
     "2026-10-01"
   ],
-  "verified_at": "2026-10-15T11:40:29.005994+09:00",
+  "verified_at": "2026-10-15T12:53:22.872008+09:00",
   "statistics_clinics": 105702,
   "master_active_clinics": 88057,
   "clinic_difference": 17645,
@@ -65,7 +65,7 @@
       }
     ]
   },
-  "cause": "未特定。取得済み主一覧の行落ち・名称や7桁での重複排除・表示だけの誤りは確認結果から否定。別配布物・対象範囲を施設コード単位で追加確認する。",
+  "cause": "対象範囲の相違を確認。動態調査は医療法上の届出、DBは保険指定医科主一覧。差の全件を非保険施設の確定数や取込漏れ件数とは扱わない。",
   "prefectures": [
     {
       "prefecture_code": 1,
@@ -584,5 +584,8 @@
       "clinic_difference": 138,
       "clinic_difference_percent": 14.5
     }
-  ]
+  ],
+  "scope_decision": "ユーザー指定により保険医療機関の通常医科主一覧を対象とし、非保険施設は対象外",
+  "scope_evidence": "survey-scope.md",
+  "official_pdf_audit": "official-pdf-code-audit.json"
 }

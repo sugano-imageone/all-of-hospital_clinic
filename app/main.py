@@ -124,7 +124,7 @@ def dashboard(auth:Auth):
             'status_counts':dict(Counter(r['status'] for r in records)),
             'review_by_prefecture':dict(Counter(r['prefecture'] for r in records if r['status']=='確認中')),
             'sources':sources,'monthly':monthly,
-            'note':'集計は現存のみ。取得済み県にも未解決・未網羅の施設があり、全国完全収集を意味しません。新規指定は観測・根拠のある差分のみ。初回取込は月次新規に数えません。'}
+            'note':'集計は現存のみ。対象は保険医療機関の通常医科主一覧です。保険指定のない施設は含みません。新規指定は観測・根拠のある差分のみ。初回取込は月次新規に数えません。'}
 
 @app.post('/api/export/{format}')
 def export(format:str,query:Search,auth:Auth):

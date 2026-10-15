@@ -1,0 +1,24 @@
+{
+  "method": "関東信越の一般診療所総数と独立した公表保険指定診療所数の差率を全国へ外挿した参考試算。全国の非保険施設実数ではない",
+  "population": "一般診療所のみ。病院・歯科診療所は推計対象外",
+  "reference_region": "関東信越厚生局管内10都県",
+  "region_total_clinics": 40291,
+  "region_total_reference_date": "2026-07-31",
+  "region_insured_clinics": 33749,
+  "region_insured_reference_date": "2026-03-31",
+  "region_difference": 6542,
+  "region_difference_rate": 0.1623687672184855,
+  "national_total_clinics": 105702,
+  "national_extrapolated_reference_estimate": 17163,
+  "national_database_gap_for_comparison_only": 17645,
+  "independent_of_database_counts_in_calculation": true,
+  "region_insured_source": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/000498885.pdf#page=83",
+  "national_and_regional_total_source": "ユーザー提供 geppou0807.xlsx 第3表",
+  "limitations": [
+    "対象時点が4か月異なる",
+    "地域差を反映しない外挿",
+    "公表保険指定数と動態調査の休止等の扱いを完全には統一していない",
+    "この数値を施設単位の照合済み非保険施設数としない"
+  ],
+  "verified_at": "2026-10-15T12:50:09.187234+09:00"
+}

@@ -1,13 +1,53 @@
 {
-  "description": "2026-10-15に全8厚生局の実ファイルを取得検証。北海道は同日ユーザー指定（空欄0床・20床閾値・全掲載現存）を適用。リンクは毎回公式現行一覧から解決し内容を検証する。近畿医科併設の確認とSupabase接続検証が終わるまで自動更新は有効化しない。",
+  "description": "収録対象は厚生局公表の保険医療機関・通常医科主一覧。動態調査の非保険施設は対象外。全8厚生局・47県の公式PDFとExcelの97,457コードが一致。医科併設別表の歯科主コードは独立医科施設へ変換せず、更新レポートに別記する。北海道はユーザー指定ルールを適用。定期実行は受入確認と実行環境の設定後に有効化する。",
   "sources": [
-    {"bureau":"北海道厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
-    {"bureau":"東北厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
-    {"bureau":"関東信越厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
-    {"bureau":"東海北陸厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
-    {"bureau":"近畿厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
-    {"bureau":"中国四国厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
-    {"bureau":"四国厚生支局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"},
-    {"bureau":"九州厚生局","resolver":"official-current-v1","adapter":"official-region-v1","scope":"full-medical"}
+    {
+      "bureau": "北海道厚生局",
+      "resolver": "official-current-v1",
+      "adapter": "official-region-v1",
+      "scope": "full-medical"
+    },
+    {
+      "bureau": "東北厚生局",
+      "resolver": "official-current-v1",
+      "adapter": "official-region-v1",
+      "scope": "full-medical"
+    },
+    {
+      "bureau": "関東信越厚生局",
+      "resolver": "official-current-v1",
+      "adapter": "official-region-v1",
+      "scope": "full-medical"
+    },
+    {
+      "bureau": "東海北陸厚生局",
+      "resolver": "official-current-v1",
+      "adapter": "official-region-v1",
+      "scope": "full-medical"
+    },
+    {
+      "bureau": "近畿厚生局",
+      "resolver": "official-current-v1",
+      "adapter": "official-region-v1",
+      "scope": "full-medical"
+    },
+    {
+      "bureau": "中国四国厚生局",
+      "resolver": "official-current-v1",
+      "adapter": "official-region-v1",
+      "scope": "full-medical"
+    },
+    {
+      "bureau": "四国厚生支局",
+      "resolver": "official-current-v1",
+      "adapter": "official-region-v1",
+      "scope": "full-medical"
+    },
+    {
+      "bureau": "九州厚生局",
+      "resolver": "official-current-v1",
+      "adapter": "official-region-v1",
+      "scope": "full-medical"
+    }
   ]
 }

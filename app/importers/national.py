@@ -23,7 +23,7 @@ def identify_prefecture(filename,sheet,rows,bureau):
         if m and int(m[1]) in REGIONS[bureau]: return int(m[1]),True
     raise ValueError('内容から都道府県を特定できません')
 
-def parse_region(path,bureau,retrieved_at=None,source_url=None):
+def parse_region(path,bureau,retrieved_at=None,source_url=None,*,excluded_sources=None):
     path=Path(path);blob=path.read_bytes()
     if len(blob)>MAX_SIZE: raise ValueError('配布ファイルサイズ超過')
     if path.suffix=='.zip':
@@ -35,6 +35,19 @@ def parse_region(path,bureau,retrieved_at=None,source_url=None):
     for filename,data in files:
         for sheet,rows in workbook_rows(data,filename):
             header=' '.join(normalize(v) for r in rows[:11] for v in r)
+            category=re.search(r'現在\s+(医科併設|歯科併設|歯科|薬局)\s',header)
+            if category:
+                # 医科併設 primary codes occur in the dental main lists (75/75
+                # audited rows). 歯科併設 medical primary codes already occur in
+                # the medical main lists (744/744 audited rows). Neither annex
+                # should create additional independent medical main-list rows.
+                if excluded_sources is not None:
+                    excluded_sources.append({'filename':filename,'sheet':sheet,
+                        'publication_category':category[1],
+                        'primary_rows':sum(bool(r) and normalize(r[0]).isdigit() for r in rows),
+                        'sha256':hashlib.sha256(data).hexdigest(),
+                        'reason':'通常医科主一覧とは別表。主一覧へ独立施設として加算しない'})
+                continue
             if '歯科' in header and not re.search(r'現在\s+医科\s',header):continue
             try:
                 if bureau=='北海道厚生局':

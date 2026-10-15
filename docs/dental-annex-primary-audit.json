@@ -1,0 +1,485 @@
+{
+  "scope": "別表「医科併設」の主コードが歯科主一覧にあることの照合。括弧の医科コードは医科独立施設として加算しない",
+  "regions": [
+    {
+      "region": "kanto",
+      "dental_main_codes": 27284,
+      "annex_primary_rows": 43,
+      "annex_primaries_found_in_dental_main": 43,
+      "entries": [
+        {
+          "prefecture_code": 8,
+          "name": "三友歯科耳鼻咽喉科",
+          "printed_primary_seven": "2131288",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 8,
+          "name": "原田医院歯科内科",
+          "printed_primary_seven": "0630968",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 8,
+          "name": "医療法人社団洋光会 協和ガーデンクリニック",
+          "printed_primary_seven": "4430886",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "グレースデンタルメディカルクリニック 大宮分院",
+          "printed_primary_seven": "6530786",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "コンパス内科歯科クリニック大宮",
+          "printed_primary_seven": "6531628",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "吉見医科歯科クリニック",
+          "printed_primary_seven": "6503742",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "シンポ歯科クリニック浦和",
+          "printed_primary_seven": "6530141",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "ティーエム歯科医院",
+          "printed_primary_seven": "6509657",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "グレースデンタルメディカルクリニック 埼玉分院",
+          "printed_primary_seven": "0404368",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "あやクリニック 歯科・皮ふ科",
+          "printed_primary_seven": "0404467",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "医療法人 栄宏会 28CliniC野上歯科医院",
+          "printed_primary_seven": "3101342",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "医療法人 宗樹会 太田歯科",
+          "printed_primary_seven": "3101359",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "グレースデンタルメディカルクリニック 埼玉東分院",
+          "printed_primary_seven": "0602631",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 11,
+          "name": "伊勢医科歯科クリニック",
+          "printed_primary_seven": "2901056",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 12,
+          "name": "医療法人社団史祥会 房総メディカルクリニック",
+          "printed_primary_seven": "1031194",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 12,
+          "name": "柏五味歯科内科リウマチクリニック",
+          "printed_primary_seven": "2136216",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 12,
+          "name": "グレースデンタルメディカルクリニック 千葉分院",
+          "printed_primary_seven": "2331668",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 12,
+          "name": "グレースデンタルメディカルクリニック 北総分院",
+          "printed_primary_seven": "4730487",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "鶴見大学歯学部附属病院",
+          "printed_primary_seven": "0101691",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "神奈川歯科大学附属横浜クリニック",
+          "printed_primary_seven": "0243352",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "誠敬会クリニック",
+          "printed_primary_seven": "0342048",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "矯正歯科横浜スマイルコンセプト",
+          "printed_primary_seven": "0330308",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "石川医院",
+          "printed_primary_seven": "0342121",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "保土ケ谷クリニック",
+          "printed_primary_seven": "0601732",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "医療法人社団 木原会 木原歯科・内科医院",
+          "printed_primary_seven": "1043314",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "グレースデンタルメディカルクリニック 横浜分院",
+          "printed_primary_seven": "3330289",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "山手台クリニック",
+          "printed_primary_seven": "3640885",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "コンパス内科歯科クリニック都筑センター南",
+          "printed_primary_seven": "3830395",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "川崎駅D&Dクリニック歯科皮膚科",
+          "printed_primary_seven": "5030523",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "小林整形外科歯科医院",
+          "printed_primary_seven": "5043211",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "アイリスデンタル・メディカル",
+          "printed_primary_seven": "2630952",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "神奈川歯科大学附属病院",
+          "printed_primary_seven": "1930361",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "三浦しらとり園診療所",
+          "printed_primary_seven": "9803206",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "グレースデンタルメディカルクリニック 鎌倉分院",
+          "printed_primary_seven": "2130474",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "コンパス内科歯科クリニック藤沢湘南台",
+          "printed_primary_seven": "2230001",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "グレースデンタルメディカルクリニック 湘南分院",
+          "printed_primary_seven": "2230373",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "町田医科歯科診療所",
+          "printed_primary_seven": "2342699",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "グレースデンタルメディカルクリニック小田原分院",
+          "printed_primary_seven": "2330454",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "セントルカ眼科歯科クリニック",
+          "printed_primary_seven": "3030236",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "セントゼビアクリニック",
+          "printed_primary_seven": "3030392",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 14,
+          "name": "さつかわ医院",
+          "printed_primary_seven": "4200291",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 15,
+          "name": "日本歯科大学新潟病院",
+          "printed_primary_seven": "0131224",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 15,
+          "name": "上所歯科耳鼻科",
+          "printed_primary_seven": "7131771",
+          "in_dental_main": true
+        }
+      ],
+      "dental_main_url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shitei_shika_r0810.zip",
+      "dental_main_sha256": "6d9d224148d899eee5b21e53ba92628a607dd9fcbd913dbffe16a1c2289fb7c8"
+    },
+    {
+      "region": "tohoku",
+      "dental_main_codes": 3541,
+      "annex_primary_rows": 3,
+      "annex_primaries_found_in_dental_main": 3,
+      "entries": [
+        {
+          "prefecture_code": 4,
+          "name": "セルプロケアデンタルクリニック漢方内科",
+          "printed_primary_seven": "5135231",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 4,
+          "name": "国家公務員共済組合連合会東北公済病院 仙台合同庁舎診療所",
+          "printed_primary_seven": "5135447",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 4,
+          "name": "仙台市秋保診療所",
+          "printed_primary_seven": "5430566",
+          "in_dental_main": true
+        }
+      ],
+      "dental_main_url": "https://kouseikyoku.mhlw.go.jp/tohoku/shitei-touhoku-shika-r0810.xlsx",
+      "dental_main_sha256": "fc17d7ca02dce0f765a2c9b23f60d378be7ab5488989cc82cbf85a865a0ad9b6"
+    },
+    {
+      "region": "kinki",
+      "dental_main_codes": 11268,
+      "annex_primary_rows": 29,
+      "annex_primaries_found_in_dental_main": 29,
+      "entries": [
+        {
+          "prefecture_code": 28,
+          "name": "Wデンタルクリニック",
+          "printed_primary_seven": "2202879",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 28,
+          "name": "おおにしクリニック",
+          "printed_primary_seven": "3400639",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 28,
+          "name": "しらさぎクリニック",
+          "printed_primary_seven": "4006773",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 28,
+          "name": "エミ内科歯科クリニック",
+          "printed_primary_seven": "4100568",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 26,
+          "name": "西村歯科・内科往診クリニック",
+          "printed_primary_seven": "4001651",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 29,
+          "name": "西奈良メディカルクリニック",
+          "printed_primary_seven": "0101536",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人美和会 平成野田クリニック",
+          "printed_primary_seven": "0202047",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "髙橋内科歯科クリニック",
+          "printed_primary_seven": "0600463",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人UDC うえだ歯科クリニック",
+          "printed_primary_seven": "1401762",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人HAL 小倉診療所HAL歯科",
+          "printed_primary_seven": "1604910",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "うえほんまち かづクリニック 歯科口腔外科・糖尿病内分泌内科",
+          "printed_primary_seven": "1702763",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人蓮華友愛会 れんげクリニック",
+          "printed_primary_seven": "1803314",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "うさぎクリニック",
+          "printed_primary_seven": "2004326",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "岡歯科医院 桃谷おとなこども歯科・矯正歯科",
+          "printed_primary_seven": "2203191",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療福祉生活協同組合おおさか 淡路皮膚科歯科診療所",
+          "printed_primary_seven": "3003574",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "気づき医科歯科クリニック",
+          "printed_primary_seven": "3004218",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "はにかむ歯科クリニック",
+          "printed_primary_seven": "4108679",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人 喜和会 中村歯科メディカルクリニック",
+          "printed_primary_seven": "4202456",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人好正会 川上歯科医院",
+          "printed_primary_seven": "5006971",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人光洋会 ヒロデンタルクリニック",
+          "printed_primary_seven": "5007821",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "みらい内科歯科クリニック",
+          "printed_primary_seven": "5503878",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "ひらのクリニック",
+          "printed_primary_seven": "5804714",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人昭節会 みずき医科歯科クリニック",
+          "printed_primary_seven": "6360757",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "大阪歯科大学附属病院",
+          "printed_primary_seven": "9400105",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "医療法人MO会 尾﨑クリニック",
+          "printed_primary_seven": "9406391",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "大河内歯科医院",
+          "printed_primary_seven": "9500052",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 27,
+          "name": "大阪大学歯学部附属病院",
+          "printed_primary_seven": "9900021",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 30,
+          "name": "三木町歯科・内科",
+          "printed_primary_seven": "0105195",
+          "in_dental_main": true
+        },
+        {
+          "prefecture_code": 30,
+          "name": "松平ハタ医科歯科クリニック",
+          "printed_primary_seven": "0110328",
+          "in_dental_main": true
+        }
+      ],
+      "dental_main_url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_kikanzentai_sika.zip",
+      "dental_main_sha256": "f0d2580af82c375b1ae6c2a300fbf4db92aca1c476d5a4b3e98844259d07462b"
+    }
+  ]
+}

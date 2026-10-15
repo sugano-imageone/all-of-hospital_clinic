@@ -41,3 +41,19 @@ def test_pharmacy_is_not_parsed(tmp_path):
         z.writestr('ika.xlsx',blob());z.writestr('yakkyoku.xlsx',b'not-an-excel-file')
     records,_=parse_archive(path,40)
     assert len(records)==1
+
+def test_medical_counterpart_annex_is_reported_without_prefixing_dental_code(tmp_path):
+    from app.importers.national import parse_region
+    path=tmp_path/'medical.zip'
+    with ZipFile(path,'w') as z:
+        z.writestr('main.xlsx',blob())
+        z.writestr('annex.xlsx',blob('医科併設',code='033,864,6'))
+    exclusions=[]
+    records,sources,errors=parse_region(path,'九州厚生局',excluded_sources=exclusions)
+    assert errors==[]
+    assert [r['code'] for r in records]==['4010210039']
+    assert len(sources)==1
+    assert len(exclusions)==1
+    assert exclusions[0]['publication_category']=='医科併設'
+    assert exclusions[0]['primary_rows']==1
+    assert exclusions[0]['filename']=='annex.xlsx'
