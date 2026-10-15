@@ -145,7 +145,7 @@ def main():
             def apply(task):
                 if not db:
                     return {'status': 'validated', 'count': task.source['record_count']}
-                return apply_snapshot(db, json.loads(task.path.read_text()), task.source)
+                return apply_snapshot(db, json.loads(task.path.read_text()), task.source, deadline=deadline)
             outcomes, attempts = run_tasks(ordered, apply, deadline=deadline, max_attempts=args.max_attempts,
                 completed_keys=completed, progress=progress)
     finally:

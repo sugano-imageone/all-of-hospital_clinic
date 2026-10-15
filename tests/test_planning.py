@@ -85,7 +85,7 @@ def test_monthly_worker_globally_orders_47_prefectures_and_persists_progress(mon
         def close(self): pass
     monkeypatch.setattr(monthly, 'Supabase', DB)
     monkeypatch.setattr(monthly, 'prepare_tasks', lambda bureau, *args: [t for t in tasks if t.source['bureau'] == bureau])
-    monkeypatch.setattr(monthly, 'apply_snapshot', lambda db, records, src: calls.append(src['prefecture_code']) or {'status': 'success', 'count': src['record_count']})
+    monkeypatch.setattr(monthly, 'apply_snapshot', lambda db, records, src, **kwargs: calls.append(src['prefecture_code']) or {'status': 'success', 'count': src['record_count']})
     output = tmp_path / 'report.json'
     monkeypatch.setattr('sys.argv', ['monthly', '--apply', '--output', str(output)])
     monthly.main()

@@ -1,6 +1,8 @@
 """Local validation never writes to Supabase unless --apply is explicit."""
 import argparse
 import json
+import hashlib
+import time
 from pathlib import Path
 from app.domain import PREFECTURES, summarize
 from app.importers.kyushu import parse_archive
@@ -28,10 +30,38 @@ def parse_batch(directory,output):
     (output/'全国医療機関マスター.xlsx').write_bytes(workbook_bytes(eligible,sources,'九州8県・ローカル検証。現存のみ。Supabase未登録。'))
     return records,sources,inspection
 
-def apply_snapshot(db,records,source):
+def snapshot_batches(data):
+    batch=[];size=2
+    for row in data:
+        row_size=len(json.dumps(row,ensure_ascii=False,separators=(',',':')).encode())+1
+        if row_size>2*1024*1024: raise ValueError('個票が送信上限を超えています')
+        if batch and (len(batch)>=500 or size+row_size>2*1024*1024):
+            yield batch;batch=[];size=2
+        batch.append(row);size+=row_size
+    if batch: yield batch
+
+def apply_snapshot(db,records,source,*,deadline=None):
     data=[r for r in records if r['source_file']==source['filename'] and r['prefecture_code']==source['prefecture_code']]
-    # Keep each prefecture atomic, including the largest snapshots. The service
-    # role's DB timeout is configured separately by sql/011_import_timeout.sql.
+    encoded=json.dumps(data,ensure_ascii=False,separators=(',',':'),sort_keys=True).encode()
+    def remaining():
+        if deadline is not None and deadline-time.monotonic()<120:
+            from fastapi import HTTPException
+            raise HTTPException(503,'当日の実行時間予算不足')
+    remaining()
+    if len(data)>2000 or len(encoded)>4*1024*1024:
+        batches=list(snapshot_batches(data))
+        upload=db.rpc('begin_snapshot_upload',{'p_source':source,
+            'p_payload_sha256':hashlib.sha256(encoded).hexdigest(),'p_batches':len(batches)})
+        if upload['status']=='unchanged': return upload
+        done=set(upload['uploaded_batches'])
+        for index,batch in enumerate(batches):
+            remaining()
+            if index not in done:
+                db.rpc('upload_snapshot_batch',{'p_upload_id':upload['upload_id'],
+                    'p_batch_number':index,'p_records':batch})
+        remaining()
+        return db.rpc('finish_snapshot_upload',{'p_upload_id':upload['upload_id']},timeout=110)
+    # Only bounded requests go directly to the atomic import RPC.
     return db.rpc('import_snapshot',{'p_source':source,'p_records':data},timeout=110)
 
 def main():

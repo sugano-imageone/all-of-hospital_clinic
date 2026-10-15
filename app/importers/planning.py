@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from datetime import datetime, time, timedelta
 from pathlib import Path
 import json
+import math
 import time as clock
 from zoneinfo import ZoneInfo
 from fastapi import HTTPException
@@ -35,7 +36,9 @@ def order_tasks(tasks, observations=(), *, fallback_per_record=.025, safety_fact
             values.append(row['seconds'] / row['count'])
     for task in tasks:
         per_record = max(samples.get(task.prefecture_code, [fallback_per_record]))
-        task.estimated_seconds = round(2 + task.source['record_count'] * per_record * safety_factor, 1)
+        count = task.source['record_count']
+        requests = math.ceil(count / 500) + 2 if count > 2000 else 1
+        task.estimated_seconds = round(2 * requests + count * per_record * safety_factor, 1)
     return sorted(tasks, key=lambda t: (-t.estimated_seconds, -t.source['record_count'], t.prefecture_code))
 
 
@@ -117,7 +120,8 @@ def main():
     report = {'scope': '検証済み主一覧。全国網羅性は別途確認中',
         'record_count': sum(t.source['record_count'] for t in ordered), 'prefecture_count': len(ordered),
         'model': {'fallback_seconds_per_record': .025, 'safety_factor': 1.5,
-                  'request_overhead_seconds': 2, 'download_parse_reserve_seconds': reserve},
+                  'request_overhead_seconds': 2, 'upload_batch_records': 500,
+                  'upload_batch_max_bytes': 2*1024*1024, 'download_parse_reserve_seconds': reserve},
         'estimated_first_pass_seconds': first,
         'estimated_three_passes_with_download_seconds': round(first * 3 + reserve, 1),
         'run_budget_seconds': 14400, 'target_day_seconds': 86400,

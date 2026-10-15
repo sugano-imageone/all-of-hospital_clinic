@@ -55,7 +55,7 @@ APP_SECURE_COOKIES=false /workspace/.venvs/hospital/bin/python -m uvicorn app.ma
 1. このプロジェクトの既存5テーブルの列・型・CHECK制約・RLSを確認済みです。接続情報と環境公開も完了しています。
 2. **対象プロジェクトへの `sql/010_upgrade_existing.sql` 適用は完了しました。再実行は不要です。** [移行の内容と検証](docs/upgrade-existing.md)を参照してください。
    `001_initial.sql` は適用しません。データ0件と空スキーマは別です。既存テーブルを削除して通す操作はしないでください。
-   大規模県の取込が既定の実行時間制限で取り消されるため、SQL Editorで `sql/011_import_timeout.sql` を実行してください。管理用の `service_role` の制限を90秒にし、一般利用者の設定・RLSは維持します。
+   `011_import_timeout.sql` の90秒設定と012の適用も完了しています。追加で **`sql/013_staged_upload.sql` の全文**をSQL Editorで実行します。Supabase固有の安全更新チェックへの対応と、小分け送信後の県単位一括確定を含みます。
 3. 別の空スキーマの場合だけ `001_initial.sql` → `002_import.sql` → `003_update_jobs.sql` → `005_reporting.sql` を順に実行します。
    `tests/bootstrap.sql` はローカルテスト専用のAuthスタブです。Supabaseには絶対に適用しません。
 4. Authenticationで管理者のアカウントを作成・招待します。公開の新規登録は無効にします。
@@ -84,6 +84,9 @@ Authユーザー作成時は利用者レコードが未承認で追加されま�
 自分自身の権限変更はRPCで拒否します。アクセス履歴は管理者だけが閲覧できます。
 
 ## 九州8県の提供ZIP
+
+社内確認用の検索デモ・Excel・説明資料は [レビュー用パッケージ](docs/review-package.md) を参照してください。
+県別の取込順、同日再試行、4時間予算は [同日更新の設計](docs/same-day-updates.md) にまとめています。
 
 ```bash
 /workspace/.venvs/hospital/bin/python -m app.importers.inspect --input /workspace/attachments

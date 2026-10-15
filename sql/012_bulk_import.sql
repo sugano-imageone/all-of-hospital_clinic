@@ -102,7 +102,8 @@ begin
    or coalesce(((w.new_row).psychiatric_beds>(w.new_row).total_beds),false),
  new_row.status=case when (w.new_row).status in ('現存','休止') and (w.new_row).total_beds is not null and
     (((w.new_row).kind='病院' and (w.new_row).total_beds<20) or ((w.new_row).kind='診療所' and (w.new_row).total_beds>=20) or (w.new_row).psychiatric_beds>(w.new_row).total_beds)
-    then '確認中' else (w.new_row).status end;
+    then '確認中' else (w.new_row).status end
+ where (w.new_row).source_import_id=s.id;
 
  insert into public.medical_institutions select (w.new_row).* from pg_temp.directory_import_work w
  on conflict(code) do update set

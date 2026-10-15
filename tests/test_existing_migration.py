@@ -26,7 +26,7 @@ def migrate(db):
     script=re.sub(r'^begin;\s*$', '',script,flags=re.MULTILINE)
     script=re.sub(r'^commit;\s*$', '',script,flags=re.MULTILINE)
     db.execute(script)
-    bulk=(ROOT/'sql/012_bulk_import.sql').read_text()
+    bulk=(ROOT/'sql/013_staged_upload.sql').read_text()
     bulk=re.sub(r'^begin;\s*$', '',bulk,flags=re.MULTILINE)
     bulk=re.sub(r'^commit;\s*$', '',bulk,flags=re.MULTILINE)
     db.execute(bulk)
