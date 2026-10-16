@@ -1,5 +1,5 @@
 """Build a data-free GitHub Pages client; publishable key only, never service keys."""
-import argparse,base64,html,json,os,shutil
+import argparse,base64,hashlib,html,json,os,shutil
 from urllib.parse import urlsplit
 from pathlib import Path
 from jinja2 import Environment,FileSystemLoader,select_autoescape
@@ -33,8 +33,13 @@ def main():
  assert 'id="member-create"' in page
  page=page.replace('Auth のアカウント作成・招待は Supabase ダッシュボードで行ってください。本人の権限はこの画面から変更できません。','ユーザー追加と利用承認・権限変更は管理者のみ行えます。自分自身の権限は変更できません。')
  page=page.replace('承認された利用者のみ閲覧・出力できます。','管理者が登録・承認したアカウントでログインしてください。')
+ page=page.replace('<p class="muted">アカウントの発行・利用承認は管理者へご依頼ください。</p>', '<button id="connection-check" type="button" class="secondary">接続を確認</button><p id="connection-check-result" role="status"></p><p class="muted">アカウントの発行・利用承認は管理者へご依頼ください。</p>')
  page=page.replace('</nav>','<button type="button" class="nav" data-tab="password-panel">パスワード変更</button></nav>')
  page=page.replace('</div></main>','<section id="password-panel" class="tab card" hidden><h2>パスワード変更</h2><p>仮パスワードでログインした場合は、ご自身のパスワードに変更してください。</p><form id="password-change" class="fields"><label>新しいパスワード（12文字以上）<input name="password" type="password" minlength="12" maxlength="72" required autocomplete="new-password"></label><label>新しいパスワード（確認）<input name="confirmation" type="password" minlength="12" maxlength="72" required autocomplete="new-password"></label><button type="submit">パスワードを変更</button></form></section></div></main>')
+ # Keep paired client files in sync after a release, even if older JS is cached.
+ for filename,source in [('app.js','app/static/app.js'),('pages.js','web/pages.js'),('style.css','app/static/style.css')]:
+  revision=hashlib.sha256(Path(source).read_bytes()).hexdigest()[:12]
+  page=page.replace('./static/'+filename+'"','./static/'+filename+'?v='+revision+'"')
  (output/'index.html').write_text(page);(output/'.nojekyll').write_text('')
  for name in ['app.js','style.css']:shutil.copy2(Path('app/static')/name,static/name)
  shutil.copy2('web/pages.js',static/'pages.js');shutil.copy2('web/node_modules/jszip/dist/jszip.min.js',static/'jszip.min.js');shutil.copy2('web/node_modules/jszip/LICENSE.markdown',output/'JSZip-LICENSE.txt')

@@ -8,27 +8,32 @@ try{session=JSON.parse(sessionStorage.getItem(storageKey)||'null');}catch{sessio
 function save(value){session=value;if(value)sessionStorage.setItem(storageKey,JSON.stringify(value));else sessionStorage.removeItem(storageKey);}
 function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}});}
 function fail(status,message){const e=new Error(message);e.status=status;throw e;}
+async function network(path,options={}){
+ try{return await nativeFetch(config.url+path,{...options,signal:options.signal||AbortSignal.timeout(20000)});}
+ catch(e){if(e.name==='TimeoutError'||e.name==='AbortError')fail(504,'接続に20秒以上かかっています。時間をおいて再試行するか「接続を確認」を押してください');fail(503,'認証・データサーバーとの通信に失敗しました。「接続を確認」で通信状況を確認してください。APIの再設定は不要です');}
+}
 async function refresh(){
  if(!session?.refresh_token)fail(401,'ログインが必要です');
- if(!refreshing)refreshing=(async()=>{const r=await nativeFetch(config.url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:config.key,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token}),cache:'no-store'});if(!r.ok){save(null);fail(401,'再ログインしてください');}save(await r.json());})().finally(()=>{refreshing=null;});
+ if(!refreshing)refreshing=(async()=>{const r=await network('/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:config.key,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token}),cache:'no-store'});if(!r.ok){save(null);fail(401,'再ログインしてください');}save(await r.json());})().finally(()=>{refreshing=null;});
  return refreshing;
 }
 async function remote(path,options={},retry=true){
  const headers={apikey:config.key,...(session?{Authorization:'Bearer '+session.access_token}:{}),...options.headers};
- const r=await nativeFetch(config.url+path,{...options,headers,cache:'no-store'});
+ const r=await network(path,{...options,headers,cache:'no-store'});
  if(r.status===401&&session&&retry&&!path.startsWith('/auth/v1/token')){await refresh();return remote(path,options,false);}
  if(!r.ok)fail(r.status===401?401:r.status===403?403:502,r.status===401?'メールアドレス・パスワードを確認してください':r.status===403?'利用権限がありません':'データの取得・登録に失敗しました。時間をおいて再度お試しください');
  return r;
 }
 const rpc=async(name,payload={})=>{const r=await remote('/rest/v1/rpc/'+name,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});return r.status===204?null:r.json();};
-async function member(){
+async function member(authenticatedUser=null){
  if(!session)fail(401,'ログインが必要です');
- const user=await(await remote('/auth/v1/user')).json();
+ const user=authenticatedUser||await(await remote('/auth/v1/user')).json();
  const q=new URLSearchParams({user_id:'eq.'+user.id,select:'user_id,role,approved'});
  const rows=await(await remote('/rest/v1/app_members?'+q)).json();
  if(!rows[0]?.approved)fail(403,'管理者の利用承認が必要です');
  return {...user,...rows[0]};
 }
+const profile=me=>({email:me.email,role:me.role,user_id:me.id,password_change_required:!!me.user_metadata?.password_change_required});
 function literal(value){return '"'+String(value).replaceAll('\\','\\\\').replaceAll('"','\\"')+'"';}
 function searchParams(q){
  const sort=['code','name','prefecture','total_beds','reference_date'].includes(q.sort)?q.sort:'code';
@@ -102,12 +107,17 @@ window.fetch=async function(url,options={}){
  try{
   if(url==='/auth/login'){
    const form=options.body;save(null);
-   const r=await remote('/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:form.get('email'),password:form.get('password')})},false);save(await r.json());
-   try{await member();}catch(e){save(null);throw e;}return json({ok:true});
+   document.getElementById('message').textContent='メールアドレス・パスワードを認証しています…';
+   const r=await remote('/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:form.get('email'),password:form.get('password')})},false);const tokens=await r.json();save(tokens);
+   document.getElementById('message').textContent='利用権限を確認しています…';
+   try{return json({ok:true,user:profile(await member(tokens.user))});}catch(e){save(null);throw e;}
+  }
+  if(url==='/api/connection-check'){
+   const start=performance.now();await remote('/auth/v1/health',{},false);return json({ok:true,seconds:Math.round((performance.now()-start)/10)/100});
   }
   if(url==='/auth/refresh'){await refresh();return json({ok:true});}
   if(url==='/auth/logout'){try{if(session)await remote('/auth/v1/logout',{method:'POST'});}finally{save(null);}return json({ok:true});}
-  const me=await member();if(url==='/api/me')return json({email:me.email,role:me.role,user_id:me.id,password_change_required:!!me.user_metadata?.password_change_required});
+  const me=await member();if(url==='/api/me')return json(profile(me));
   const q=options.body?JSON.parse(options.body):{};
   if(url==='/auth/password'){
    if(typeof q.password!=='string'||q.password.length<12||new TextEncoder().encode(q.password).length>72)fail(400,'パスワードは12文字以上、72バイト以下で設定してください');
@@ -137,6 +147,10 @@ window.fetch=async function(url,options={}){
   }
   fail(404,'操作が見つかりません');
  }catch(e){return json({detail:e.message||'接続に失敗しました。再度お試しください'},e.status||503);}
+};
+const connectionCheck=document.getElementById('connection-check');if(connectionCheck)connectionCheck.onclick=async()=>{
+ connectionCheck.disabled=true;const output=document.getElementById('connection-check-result');output.textContent='認証サーバーへの接続を確認しています…';
+ try{const r=await window.fetch('/api/connection-check');const result=await r.json();if(!r.ok)throw Error(result.detail);output.textContent='認証サーバーへ接続できました（'+result.seconds+'秒）。ログインを再試行してください';}catch(e){output.textContent=e.message;}finally{connectionCheck.disabled=false;}
 };
 const form=document.getElementById('member-create');
 const memoPanel=document.getElementById('registration-memo'),memoText=document.getElementById('registration-memo-text');
