@@ -1,0 +1,422 @@
+[
+  {
+    "key": "chugokushikoku",
+    "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000502057.zip",
+    "http_status": 200,
+    "bytes": 8463225,
+    "sha256": "fb7d392e4ec10f381e7a6ffd46b2687792e46746235b79c79d87d1293c89834c",
+    "content_type": "application/zip",
+    "last_modified": "Sun, 27 Sep 2026 23:30:41 GMT",
+    "members": [
+      {
+        "name": "35_山口_届出受理医療機関名簿.xlsx",
+        "size": 2116014
+      },
+      {
+        "name": "31_鳥取_届出受理医療機関名簿.xlsx",
+        "size": 896360
+      },
+      {
+        "name": "32_島根_届出受理医療機関名簿.xlsx",
+        "size": 1102247
+      },
+      {
+        "name": "33_岡山_届出受理医療機関名簿.xlsx",
+        "size": 3073650
+      },
+      {
+        "name": "34_広島_届出受理医療機関名簿.xlsx",
+        "size": 4653608
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "hokkaido",
+    "url": "https://kouseikyoku.mhlw.go.jp/hokkaido/000502821.xlsx",
+    "http_status": 200,
+    "bytes": 3529369,
+    "sha256": "7bbb2a43bc518d82e3899088393a2b66df93d06b884e5fd774df45e511cb6557",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "last_modified": "Thu, 08 Oct 2026 23:30:41 GMT",
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kantoshinetsu",
+    "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_ika_r0810.zip",
+    "http_status": 200,
+    "bytes": 22009912,
+    "sha256": "1daa11ebf13a3558fab7c0e02e724c3d1e676143db26c5e5d8707dadc59307d9",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 15 Oct 2026 01:00:12 GMT",
+    "members": [
+      {
+        "name": "shisetsu_ika_r0810/",
+        "size": 0
+      },
+      {
+        "name": "shisetsu_ika_r0810/08届出受理医療機関名簿（医科）茨城r0810.xlsx",
+        "size": 1771471
+      },
+      {
+        "name": "shisetsu_ika_r0810/09届出受理医療機関名簿（医科）栃木r0810.xlsx",
+        "size": 1097283
+      },
+      {
+        "name": "shisetsu_ika_r0810/10届出受理医療機関名簿（医科）群馬r0810.xlsx",
+        "size": 1625802
+      },
+      {
+        "name": "shisetsu_ika_r0810/11届出受理医療機関名簿（医科）埼玉r0810.xlsx",
+        "size": 3562144
+      },
+      {
+        "name": "shisetsu_ika_r0810/12届出受理医療機関名簿（医科）千葉r0810.xlsx",
+        "size": 3679140
+      },
+      {
+        "name": "shisetsu_ika_r0810/13届出受理医療機関名簿（医科）東京r0810.xlsx",
+        "size": 9518450
+      },
+      {
+        "name": "shisetsu_ika_r0810/14届出受理医療機関名簿（医科）神奈川r0810.xlsx",
+        "size": 5021154
+      },
+      {
+        "name": "shisetsu_ika_r0810/15届出受理医療機関名簿（医科）新潟r0810.xlsx",
+        "size": 1413139
+      },
+      {
+        "name": "shisetsu_ika_r0810/19届出受理医療機関名簿（医科）山梨r0810.xlsx",
+        "size": 503913
+      },
+      {
+        "name": "shisetsu_ika_r0810/20届出受理医療機関名簿（医科）長野r0810.xlsx",
+        "size": 1758524
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kinki",
+    "url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_sisetukijun_ika.zip",
+    "http_status": 200,
+    "bytes": 13136566,
+    "sha256": "2a3ace4da98d9c2e0af0e0802c7b2c77d19805deae36f4133a8cfb51b13d8c4e",
+    "content_type": "application/zip",
+    "last_modified": "Sun, 04 Oct 2026 15:01:35 GMT",
+    "members": [
+      {
+        "name": "2026.10_sisetukijun_ika/",
+        "size": 0
+      },
+      {
+        "name": "2026.10_sisetukijun_ika/2026.10_sisetukijun_fukui_ika.xlsx",
+        "size": 559650
+      },
+      {
+        "name": "2026.10_sisetukijun_ika/2026.10_sisetukijun_hyogo_ika.xlsx",
+        "size": 5269709
+      },
+      {
+        "name": "2026.10_sisetukijun_ika/2026.10_sisetukijun_kyoto_ika.xlsx",
+        "size": 2046936
+      },
+      {
+        "name": "2026.10_sisetukijun_ika/2026.10_sisetukijun_nara_ika.xlsx",
+        "size": 1166631
+      },
+      {
+        "name": "2026.10_sisetukijun_ika/2026.10_sisetukijun_osaka_ika.xlsx",
+        "size": 7142907
+      },
+      {
+        "name": "2026.10_sisetukijun_ika/2026.10_sisetukijun_shiga_ika.xlsx",
+        "size": 940247
+      },
+      {
+        "name": "2026.10_sisetukijun_ika/2026.10_sisetukijun_wakayama_ika.xlsx",
+        "size": 1015383
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kyushu-41",
+    "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503831.zip",
+    "http_status": 200,
+    "bytes": 1312021,
+    "sha256": "57296ef9918f03441a0cd9031786b96420d5099c9d102db222a247c3d33df711",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 08 Oct 2026 23:32:28 GMT",
+    "members": [
+      {
+        "name": "r8_10_shisetsu_saga_ika_02.xlsx",
+        "size": 1102454
+      },
+      {
+        "name": "r8_10_shisetsu_saga_shika_02.xlsx",
+        "size": 405170
+      },
+      {
+        "name": "r8_10_shisetsu_saga_yakkyoku_02.xlsx",
+        "size": 324296
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kyushu-42",
+    "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503832.zip",
+    "http_status": 200,
+    "bytes": 2008689,
+    "sha256": "2c0354c9f4759c36a1d5a4b445a5321046d8bd3a290b7e21a20f488e0b4397b8",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 08 Oct 2026 23:32:27 GMT",
+    "members": [
+      {
+        "name": "r8_10_shisetsu_nagasaki_ika_02.xlsx",
+        "size": 1716316
+      },
+      {
+        "name": "r8_10_shisetsu_nagasaki_shika_02.xlsx",
+        "size": 643275
+      },
+      {
+        "name": "r8_10_shisetsu_nagasaki_yakkyoku_02.xlsx",
+        "size": 421366
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kyushu-43",
+    "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503833.zip",
+    "http_status": 200,
+    "bytes": 2632122,
+    "sha256": "c0ea8d289ff62403b1e73d6b1efa2e1d51ac747a12d22c28a1c9e5af490c6fab",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 08 Oct 2026 23:32:34 GMT",
+    "members": [
+      {
+        "name": "r8_10_shisetsu_kumamoto_ika_02.xlsx",
+        "size": 2255400
+      },
+      {
+        "name": "r8_10_shisetsu_kumamoto_shika_02.xlsx",
+        "size": 865718
+      },
+      {
+        "name": "r8_10_shisetsu_kumamoto_yakkyoku_02.xlsx",
+        "size": 537522
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kyushu-44",
+    "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503834.zip",
+    "http_status": 200,
+    "bytes": 1776902,
+    "sha256": "80b8aa852402c3d0f6a24aa4b2ce12a2e8dd726d57189517861fc5db1bc83cfc",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 08 Oct 2026 23:32:32 GMT",
+    "members": [
+      {
+        "name": "r8_10_shisetsu_ooita_ika_02.xlsx",
+        "size": 1661025
+      },
+      {
+        "name": "r8_10_shisetsu_ooita_shika_02.xlsx",
+        "size": 432030
+      },
+      {
+        "name": "r8_10_shisetsu_ooita_yakkyoku_02.xlsx",
+        "size": 369383
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kyushu-45",
+    "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503835.zip",
+    "http_status": 200,
+    "bytes": 1522925,
+    "sha256": "7f9c7e56fed1d0b1e0ff1cb3c62ae538ecef3981061922fed8b27ded8cb7582b",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 08 Oct 2026 23:32:36 GMT",
+    "members": [
+      {
+        "name": "r8_10_shisetsu_miyazaki_ika_02.xlsx",
+        "size": 1284960
+      },
+      {
+        "name": "r8_10_shisetsu_miyazaki_shika_02.xlsx",
+        "size": 481048
+      },
+      {
+        "name": "r8_10_shisetsu_miyazaki_yakkyoku_02.xlsx",
+        "size": 348332
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kyushu-46",
+    "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503836.zip",
+    "http_status": 200,
+    "bytes": 2482987,
+    "sha256": "2226aed3ecede8cbc975c865e9b5f0c13f418e3566dd2e9cd0a05a2b14e57160",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 08 Oct 2026 23:32:35 GMT",
+    "members": [
+      {
+        "name": "r8_10_shisetsu_kagoshima_ika_02.xlsx",
+        "size": 2269056
+      },
+      {
+        "name": "r8_10_shisetsu_kagoshima_shika_02.xlsx",
+        "size": 689100
+      },
+      {
+        "name": "r8_10_shisetsu_kagoshima_yakkyoku_02.xlsx",
+        "size": 518871
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kyushu-47",
+    "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503837.zip",
+    "http_status": 200,
+    "bytes": 1834856,
+    "sha256": "8517ade3781cd6a1b9d0f8a35ab0c0fbb99aa8f7fd2b44817f6248e34f036c27",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 08 Oct 2026 23:32:29 GMT",
+    "members": [
+      {
+        "name": "r8_10_shisetsu_okinawa_ika_02.xlsx",
+        "size": 1536384
+      },
+      {
+        "name": "r8_10_shisetsu_okinawa_shika_02.xlsx",
+        "size": 532199
+      },
+      {
+        "name": "r8_10_shisetsu_okinawa_yakkyoku_02.xlsx",
+        "size": 402669
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "kyushu",
+    "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503830.zip",
+    "http_status": 200,
+    "bytes": 7610077,
+    "sha256": "ed48c6c8c52c6a2ea7dd6bdc3023b9f9d0fb6b188d4718143fe24c7914740406",
+    "content_type": "application/zip",
+    "last_modified": "Thu, 08 Oct 2026 23:32:26 GMT",
+    "members": [
+      {
+        "name": "r8_10_shisetsu_fukuoka_ika_02.xlsx",
+        "size": 5874354
+      },
+      {
+        "name": "r8_10_shisetsu_fukuoka_shika_02.xlsx",
+        "size": 2813722
+      },
+      {
+        "name": "r8_10_shisetsu_fukuoka_yakkyoku_02.xlsx",
+        "size": 1824949
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "shikoku",
+    "url": "https://kouseikyoku.mhlw.go.jp/shikoku/000502937.zip",
+    "http_status": 200,
+    "bytes": 3564702,
+    "sha256": "88dbd65a044f0d03d3b941a57bcae9d0b9ef91dfcc9fb7dc56bd1ebb77d255eb",
+    "content_type": "application/zip",
+    "last_modified": "Wed, 07 Oct 2026 01:00:40 GMT",
+    "members": [
+      {
+        "name": "02_07 愛媛 医科 届出受理医療機関名簿.xlsx",
+        "size": 1544022
+      },
+      {
+        "name": "02_10 高知 医科 届出受理医療機関名簿.xlsx",
+        "size": 966304
+      },
+      {
+        "name": "02_01 香川 医科 届出受理医療機関名簿.xlsx",
+        "size": 1147780
+      },
+      {
+        "name": "02_04 徳島 医科 届出受理医療機関名簿.xlsx",
+        "size": 1083629
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_02-16-01.pdf",
+    "http_status": 200,
+    "bytes": 427147,
+    "sha256": "45abda720fda300dd22065583685b5d06dadd806889efa21f94537d6a229ac8a",
+    "pages": 64,
+    "first_page_text_extractable": true
+  },
+  {
+    "key": "tohoku",
+    "url": "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-ika-r0809.xlsx",
+    "http_status": 200,
+    "bytes": 7316319,
+    "sha256": "fc4fc312f3e8231e8f9db54e50d4cffc73c3f411c5b3f1b8dd4e660f44019a1d",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "last_modified": "Wed, 14 Oct 2026 15:01:07 GMT",
+    "status": "downloaded_and_excel_read"
+  },
+  {
+    "key": "tokaihokuriku",
+    "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_01-01.zip",
+    "http_status": 200,
+    "bytes": 11378180,
+    "sha256": "948811a954d243ac1638c6363bb4eedb5336df84962ace00316b5a15f98c7274",
+    "content_type": "application/zip",
+    "last_modified": "Tue, 06 Oct 2026 06:00:49 GMT",
+    "members": [
+      {
+        "name": "2610　届出受理医療機関名簿（医科）\\",
+        "size": 0
+      },
+      {
+        "name": "2610　届出受理医療機関名簿（医科）\\2610（三重医科）届出受理医療機関名簿.xlsx",
+        "size": 1576921
+      },
+      {
+        "name": "2610　届出受理医療機関名簿（医科）\\2610（富山医科）届出受理医療機関名簿.xlsx",
+        "size": 1128682
+      },
+      {
+        "name": "2610　届出受理医療機関名簿（医科）\\2610（岐阜医科）届出受理医療機関名簿.xlsx",
+        "size": 1909485
+      },
+      {
+        "name": "2610　届出受理医療機関名簿（医科）\\2610（愛知医科）届出受理医療機関名簿.xlsx",
+        "size": 6413721
+      },
+      {
+        "name": "2610　届出受理医療機関名簿（医科）\\2610（石川医科）届出受理医療機関名簿.xlsx",
+        "size": 1287440
+      },
+      {
+        "name": "2610　届出受理医療機関名簿（医科）\\2610（静岡医科）届出受理医療機関名簿.xlsx",
+        "size": 2999188
+      }
+    ],
+    "status": "downloaded_and_excel_read"
+  }
+]
