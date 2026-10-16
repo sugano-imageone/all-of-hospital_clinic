@@ -11,6 +11,8 @@ function client(){
   if(url.endsWith('/auth/v1/user'))return Response.json({id:'viewer-id'});
   if(url.includes('/rest/v1/app_members?'))return Response.json([{role:'user',approved:true}]);
   if(url.includes('/rest/v1/medical_institutions?'))return Response.json([],{headers:{'Content-Range':'*/0'}});
+  if(url.endsWith('/rpc/source_metadata'))return Response.json([]);
+  if(url.endsWith('/rpc/monthly_change_counts'))return Response.json({});
   if(url.endsWith('/rpc/record_access'))return new Response(null,{status:204});
   throw Error('Unexpected request');
  };
@@ -53,4 +55,15 @@ test('clinic bed classification preserves independent user bed bounds',async()=>
  const query=calls.find(url=>url.pathname==='/rest/v1/medical_institutions').searchParams;
  assert.deepEqual(query.getAll('total_beds'),['gte.1','lte.19']);
  assert.deepEqual(query.getAll('general_beds'),['gte.2','lte.10']);
+});
+
+test('dashboard fetches all 47 indexed prefecture partitions without a national query',async()=>{
+ const {window,calls}=client();
+ const response=await window.fetch('/api/dashboard');
+ assert.equal(response.status,200);
+ const queries=calls.filter(url=>url.pathname==='/rest/v1/medical_institutions').map(url=>url.searchParams);
+ assert.equal(queries.length,47);
+ assert.deepEqual(queries.map(q=>Number(q.get('prefecture_code').slice(3))).sort((a,b)=>a-b),Array.from({length:47},(_,i)=>i+1));
+ assert.ok(queries.every(q=>q.get('offset')==='0'&&q.get('limit')==='1000'));
+ assert.equal((await response.json()).total,0);
 });

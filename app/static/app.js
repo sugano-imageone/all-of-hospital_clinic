@@ -33,7 +33,9 @@ async function runSearch(newQuery=true){
 async function loadDashboard(){
  if(dashboardData)return;
  if(dashboardLoading)return dashboardLoading;
- dashboardLoading=renderDashboard().finally(()=>{dashboardLoading=null;});
+ $('#coverage').textContent='全国47都道府県の集計を読み込んでいます…';
+ $('#source-note').textContent='取得元・更新情報を読み込んでいます…';
+ dashboardLoading=renderDashboard().catch(e=>{dashboardData=null;$('#coverage').textContent='集計を取得できませんでした。タブを開き直すと再試行できます。';throw e;}).finally(()=>{dashboardLoading=null;});
  return dashboardLoading;
 }
 async function renderDashboard(){
