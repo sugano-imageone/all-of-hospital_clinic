@@ -212,3 +212,7 @@ FastAPI版では出力APIでも権限を検証します。GitHub Pages版は既�
 ## 利用者向けマニュアル
 
 [簡易操作マニュアル](https://sugano-imageone.github.io/all-of-hospital_clinic/static/user-guide.html) は画面上部の「操作マニュアル」から開けます。病院・診療所の検索、Excel／CSV出力、管理者向け全件出力・ユーザー追加を説明しています。ブラウザの印刷からPDFとして保存・配布できます。編集元は `app/static/user-guide.html` です。
+
+## 別環境への構築引継ぎ
+
+「すガコン用システムも作って」で開始する作業は、[すガコン版の構築手順・引継ぎ](docs/sugacon-build-handoff.md) にまとめています。別PCではこのリポジトリを開いて依頼してください。既存環境のSQLを新DBへそのまま一括適用せず、対象に合う新規構築SQLを作成・検証します。
