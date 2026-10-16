@@ -7,3 +7,6 @@ artifacts/
 web/node_modules/
 *.log
 playwright-report/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

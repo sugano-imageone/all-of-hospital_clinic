@@ -1,0 +1,90 @@
+{
+  "environment": "local_development_only",
+  "checked_date": "2026-10-16",
+  "audit": {
+    "pending_review": 0,
+    "prefectures": 47,
+    "current_rows": 1262021,
+    "expected_rows": 1262021,
+    "row_counts_match": true,
+    "current_filings": 1007651,
+    "current_institutions": 95650,
+    "nonmedical_original_rows": 69223,
+    "snapshots": 47,
+    "raw_rows": 1262021,
+    "foreign_key_errors": 0,
+    "duplicate_filing_keys": 0,
+    "duplicate_codes": 0
+  },
+  "repeat_import": {
+    "prefectures_unchanged": 47,
+    "snapshots_before": 47,
+    "snapshots_after": 47,
+    "raw_rows_before": 1262021,
+    "raw_rows_after": 1262021,
+    "live_source_resolution_and_download_verified": true
+  },
+  "example_query": {
+    "kind": "診療所",
+    "department": "整形外科",
+    "notification": "電子的診療情報連携体制整備加算",
+    "results": {
+      "filed": {
+        "count": 7488,
+        "unconfirmed_institutions": 152
+      },
+      "not_filed": {
+        "count": 4072,
+        "unconfirmed_institutions": 152
+      }
+    }
+  },
+  "departments": {
+    "source": "厚生局公開主一覧",
+    "navii_used": false,
+    "master_institutions": 97457,
+    "departments_present": 94200,
+    "departments_missing": 3257,
+    "hokkaido_missing": 3250
+  },
+  "production_changes": false,
+  "safety_tests": {
+    "tests_passed": 56,
+    "browser_search_verified": true,
+    "all_24_columns_in_browser_verified": true,
+    "browser_javascript_errors": 0,
+    "large_change_staging_verified": true,
+    "official_policy_change_blocks_switch_verified": true,
+    "future_answer_alone_cannot_approve_verified": true,
+    "concurrent_import_idempotence_verified": true,
+    "gazette_basis_required_verified": true
+  },
+  "policy_watch_baseline": [
+    {
+      "url": "https://www.mhlw.go.jp/stf/newpage_67729.html",
+      "status": "unchanged",
+      "links": 223,
+      "sha256": "2f9ffd2f1fe8d5fe653f2fbee788b1d7611d541109be18320d3ad7b64ed2cae3"
+    },
+    {
+      "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000188411_00074.html",
+      "status": "unchanged",
+      "links": 116,
+      "sha256": "2b11b00e802ea58a748ea8ff2c9141893c27ec622b0e0ce4fb1a527963632f79"
+    }
+  ],
+  "legal_basis": {
+    "authority": "厚生労働大臣の官報告示本文・別添",
+    "fields": [
+      "告示番号",
+      "公布日",
+      "施行日",
+      "官報掲載情報",
+      "本文・別添該当箇所",
+      "公式URL"
+    ],
+    "chuikyo_used_as_final_decision": false,
+    "direct_gazette_download": "not_verified_proxy_403",
+    "automated_watch": "MHLW pages carrying gazetted notices; original notice content requires verification"
+  }
+}
