@@ -14,7 +14,7 @@ def test_login_page_and_no_unauthenticated_data(client):
     for path in ['/api/dashboard','/api/admin/members']:
         assert client.get(path).status_code==401
     assert client.post('/api/search',json={}).status_code==401
-    for format in ['csv','xlsx','master']: assert client.post('/api/export/'+format,json={}).status_code==401
+    for format in ['csv','xlsx','master','full']: assert client.post('/api/export/'+format,json={}).status_code==401
 
 def test_csrf_cross_origin_denied(client):
     assert client.post('/auth/logout',headers={'Origin':'https://attacker.example'}).status_code==403
@@ -81,3 +81,25 @@ def test_active_clinic_with_bed_review_is_included_in_dashboard(client):
     assert data['total']==1 and data['kind']['診療所']==1
     assert data['quality_review_count']==3
     assert data['status_counts']=={'現存':1,'休止':1,'確認中':1}
+
+@pytest.mark.parametrize('role',['user','admin','master'])
+def test_full_export_permissions_and_unfiltered_rows(client,role):
+    import csv,io,json
+    class ExportDB:
+        def __init__(self):self.audits=[];self.reads=[]
+        def all(self,table,params):
+            self.reads.append((table,params))
+            return [{'id':'one','code':'0110000001','name':'病院','kind':'病院','status':'現存','raw':{'確認':'済'}},
+                    {'id':'two','code':'2710000002','name':'診療所','kind':'診療所','status':'廃止','raw':{}}]
+        def audit(self,*args):self.audits.append(args)
+    db=ExportDB();app.dependency_overrides[authorized]=lambda:(db,{'role':role})
+    response=client.post('/api/export/full',json={'prefectures':['東京都'],'name':'一致しない条件'})
+    if role=='user':
+        assert response.status_code==403 and not db.reads and not db.audits
+        return
+    assert response.status_code==200
+    rows=list(csv.DictReader(io.StringIO(response.content.decode('utf-8-sig'))))
+    assert len(rows)==2 and rows[0]['code']=='0110000001' and rows[1]['status']=='廃止'
+    assert json.loads(rows[0]['raw'])=={'確認':'済'}
+    assert db.reads==[('medical_institutions',[('select','*'),('order','code.asc,id.asc')])]
+    assert db.audits[0][0]=='export_full'

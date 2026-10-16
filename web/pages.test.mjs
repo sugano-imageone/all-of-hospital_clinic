@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-function client({approved=true,networkFailure=false,timeout=false}={}){
+function client({approved=true,networkFailure=false,timeout=false,role='user',exportRows=[]}={}){
  const calls=[];
  const config={url:'https://example.supabase.co',key:'sb_publishable_test',columns:[['code','コード']],prefectureCodes:{'福岡県':40}};
  const native=async(url)=>{
@@ -13,8 +13,8 @@ function client({approved=true,networkFailure=false,timeout=false}={}){
   if(url.includes('/auth/v1/token?grant_type=password'))return Response.json({access_token:'test-token',refresh_token:'test-refresh',user:{id:'viewer-id',email:'viewer@example.invalid'}});
   if(url.endsWith('/auth/v1/health'))return Response.json({version:'test'});
   if(url.endsWith('/auth/v1/user'))return Response.json({id:'viewer-id'});
-  if(url.includes('/rest/v1/app_members?'))return Response.json([{role:'user',approved}]);
-  if(url.includes('/rest/v1/medical_institutions?'))return Response.json([],{headers:{'Content-Range':'*/0'}});
+  if(url.includes('/rest/v1/app_members?'))return Response.json([{role,approved}]);
+  if(url.includes('/rest/v1/medical_institutions?'))return Response.json(exportRows.slice(Number(new URL(url).searchParams.get('offset')||0),Number(new URL(url).searchParams.get('offset')||0)+1000),{headers:{'Content-Range':'0-'+Math.max(0,exportRows.length-1)+'/'+exportRows.length}});
   if(url.endsWith('/rpc/source_metadata'))return Response.json([]);
   if(url.endsWith('/rpc/monthly_change_counts'))return Response.json({});
   if(url.endsWith('/rpc/record_access'))return new Response(null,{status:204});
@@ -99,3 +99,25 @@ for(const [options,status] of [[{networkFailure:true},503],[{timeout:true},504]]
   const body=await r.json();assert.match(body.detail,/接続を確認/);assert.ok(!body.detail.includes('Failed to fetch'));
  });
 }
+
+for(const role of ['user','admin','master']){
+ test(`full CSV export checks ${role} permissions and ignores search filters`,async()=>{
+  const {window,calls}=client({role,exportRows:[{id:'one',code:'0110000001',name:'病院',kind:'病院',status:'現存',raw:{確認:'済'}},{id:'two',code:'2710000002',kind:'診療所',status:'廃止',raw:{}}]});
+  const response=await window.fetch('/api/export/full',{method:'POST',body:JSON.stringify({kind:'病院',name:'一致しない条件',prefectures:['東京都']})});
+  const medical=calls.filter(url=>url.pathname==='/rest/v1/medical_institutions');
+  if(role==='user'){assert.equal(response.status,403);assert.equal(medical.length,0);return;}
+  assert.equal(response.status,200);const text=await response.text();
+  assert.match(text,/0110000001/);assert.match(text,/診療所/);assert.match(text,/廃止/);assert.match(text,/確認/);
+  const params=medical[0].searchParams;assert.equal(params.get('select'),'*');assert.equal(params.get('order'),'code.asc,id.asc');
+  for(const key of ['kind','status','name','prefecture'])assert.equal(params.has(key),false);
+  assert.ok(calls.some(url=>url.pathname==='/rest/v1/rpc/record_access'));
+ });
+}
+
+test('full export retrieves rows beyond the first 1000',async()=>{
+ const {window,calls}=client({role:'admin',exportRows:Array.from({length:1001},(_,i)=>({id:String(i),code:String(i).padStart(10,'0')}))});
+ const response=await window.fetch('/api/export/full',{method:'POST',body:'{}'});
+ assert.equal(response.status,200);const text=await response.text();
+ assert.equal(text.split('\r\n').length,1002);assert.match(text,/0000001000/);
+ assert.deepEqual(calls.filter(url=>url.pathname==='/rest/v1/medical_institutions').map(url=>url.searchParams.get('offset')),['0','1000']);
+});

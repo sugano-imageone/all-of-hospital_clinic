@@ -10,7 +10,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
 from app.store import Supabase, Search, search_params
 from app.domain import PREFECTURES, REGIONS, summarize
-from app.exports import csv_bytes, workbook_bytes
+from app.exports import csv_bytes, workbook_bytes, full_csv_bytes
 
 ROOT=Path(__file__).parent
 app=FastAPI(title='全国医療機関データベース｜イメージワン',docs_url=None,redoc_url=None)
@@ -129,7 +129,12 @@ def dashboard(auth:Auth):
 
 @app.post('/api/export/{format}')
 def export(format:str,query:Search,auth:Auth):
-    db,_=auth
+    db,user=auth
+    if format=='full':
+        if user['role'] not in ['admin','master']: raise HTTPException(403,'管理者権限が必要です')
+        records=db.all('medical_institutions',[('select','*'),('order','code.asc,id.asc')])
+        db.audit('export_full',{'count':len(records),'scope':'all_institutions_all_statuses_all_columns'})
+        return Response(full_csv_bytes(records),media_type='text/csv; charset=utf-8',headers={'Content-Disposition':"attachment; filename*=UTF-8''"+quote('全医療機関データ.csv')})
     if format not in ['csv','xlsx','master']: raise HTTPException(404)
     if format=='master':
         records=db.all('medical_institutions',[('status','eq.現存'),('order','code.asc')])

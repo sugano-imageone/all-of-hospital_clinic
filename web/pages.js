@@ -131,7 +131,17 @@ window.fetch=async function(url,options={}){
    return json({...summary(rows),collected:sources.map(r=>r.prefecture),missing:[],status_counts,quality_review_count:rows.filter(r=>r.needs_review).length,sources,monthly,note:'現存のみを集計。保険医療機関の通常医科主一覧。病床数の未記載は0床として扱います。'});
   }
   if(url.startsWith('/api/export/')){
-   const format=url.split('/').pop();if(!['csv','xlsx','master'].includes(format))fail(404,'出力形式を確認してください');
+   const format=url.split('/').pop();
+   if(format==='full'){
+    if(!['admin','master'].includes(me.role))fail(403,'管理者権限が必要です');
+    const rows=await allRows('medical_institutions',new URLSearchParams({select:'*',order:'code.asc,id.asc'}),(done,total)=>{document.getElementById('message').textContent='全データ取得中 '+done.toLocaleString()+' / '+total.toLocaleString()+' 件';});
+    const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))].sort();
+    const field=v=>'"'+String(v==null?'':typeof v==='object'?JSON.stringify(v):v).replaceAll('"','""')+'"';
+    const data='\ufeff'+[keys.map(field).join(','),...rows.map(r=>keys.map(k=>field(r[k])).join(','))].join('\r\n');
+    await audit('export_full',{count:rows.length,scope:'all_institutions_all_statuses_all_columns'});
+    return new Response(data,{headers:{'Content-Type':'text/csv;charset=utf-8'}});
+   }
+   if(!['csv','xlsx','master'].includes(format))fail(404,'出力形式を確認してください');
    const p=format==='master'?new URLSearchParams({status:'eq.現存',order:'code.asc'}):searchParams(q);p.set('select',publicFields);
    const rows=await allRows('medical_institutions',p,(done,total)=>{document.getElementById('message').textContent='データ取得中 '+done.toLocaleString()+' / '+total.toLocaleString()+' 件';});await audit('export_'+format,{count:rows.length,filters:q});
    if(format==='csv')return new Response(csv(rows),{headers:{'Content-Type':'text/csv;charset=utf-8'}});

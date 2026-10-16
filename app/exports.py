@@ -1,4 +1,5 @@
 import csv
+import json
 from io import StringIO, BytesIO
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
@@ -91,3 +92,14 @@ def workbook_bytes(records,sources,scope='現存のみ', changes=None):
         for col in ['B','E','G']: sheet.column_dimensions[col].width=32
     form.column_dimensions['A'].width=38;form.column_dimensions['B'].width=60
     output=BytesIO();book.save(output);return output.getvalue()
+
+
+def full_csv_bytes(records):
+    """Machine-readable full rows: DB keys, JSON cells and unchanged string values."""
+    keys=sorted({key for row in records for key in row})
+    output=StringIO(newline='');writer=csv.writer(output)
+    writer.writerow(keys)
+    for row in records:
+        writer.writerow([json.dumps(row[k],ensure_ascii=False,separators=(',',':'))
+                         if isinstance(row.get(k),(dict,list,bool)) else row.get(k) for k in keys])
+    return ('\ufeff'+output.getvalue()).encode('utf-8')
