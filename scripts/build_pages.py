@@ -41,7 +41,7 @@ def main():
   revision=hashlib.sha256(Path(source).read_bytes()).hexdigest()[:12]
   page=page.replace('./static/'+filename+'"','./static/'+filename+'?v='+revision+'"')
  (output/'index.html').write_text(page);(output/'.nojekyll').write_text('')
- for name in ['app.js','style.css','user-guide.html']:shutil.copy2(Path('app/static')/name,static/name)
+ for name in ['app.js','style.css','user-guide.html','user-guide.pdf']:shutil.copy2(Path('app/static')/name,static/name)
  shutil.copy2('web/pages.js',static/'pages.js');shutil.copy2('web/node_modules/jszip/dist/jszip.min.js',static/'jszip.min.js');shutil.copy2('web/node_modules/jszip/LICENSE.markdown',output/'JSZip-LICENSE.txt')
  assert not list(output.glob('*.xlsx')) and not list(output.glob('*.json'))
  print('GitHub Pages client built; no medical dataset, passwords or service key included')
