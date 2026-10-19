@@ -1,13 +1,19 @@
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 let page=1,total=0,lastQuery=null,dashboardData=null,currentUserId=null,dashboardLoading=null,canExportAll=false;
 const message=t=>{$('#message').textContent=t||'';};
+function showMaintenance(){
+ $('#login-heading').textContent='メンテナンス中';$('#maintenance-notice').hidden=false;$('#login-description').hidden=true;$('#login').hidden=true;
+ for(const input of $('#login').querySelectorAll('input,button'))input.disabled=true;
+ $('#login-panel').hidden=false;$('#workspace').hidden=true;message('');
+}
+
 async function api(url,options={},retry=true){
  const response=await fetch(url,options);
  if(response.status===401&&retry&&!url.startsWith('/auth/')){
   const refreshed=await fetch('/auth/refresh',{method:'POST'});
   if(refreshed.ok)return api(url,options,false);
  }
- if(!response.ok){let text='処理に失敗しました';try{const d=await response.json();text=typeof d.detail==='string'?d.detail:'入力条件を確認してください';}catch{}throw Error(text);}
+ if(!response.ok){let text='処理に失敗しました';try{const d=await response.json();text=typeof d.detail==='string'?d.detail:'入力条件を確認してください';}catch{}if(text==='メンテナンス中')showMaintenance();throw Error(text);}
  return response;
 }
 const post=(url,data)=>api(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
@@ -55,9 +61,9 @@ async function loadMembers(){
 }
 async function loadSession(knownUser=null){
  try{const user=knownUser||await(await api('/api/me')).json();currentUserId=user.user_id;canExportAll=['admin','master'].includes(user.role);$$('[data-admin-only]').forEach(b=>{b.disabled=!canExportAll;b.title=canExportAll?'検索条件に関係なく、全施設・全状態・全項目を出力します':'管理者のみ利用できます';});$('#login-panel').hidden=true;$('#workspace').hidden=false;$('#account').textContent=user.email||'';const out=document.createElement('button');out.className='secondary';out.textContent='ログアウト';out.onclick=async()=>{try{await api('/auth/logout',{method:'POST'});location.reload();}catch(e){message(e.message);}};$('#account').append(out);$('#admin-nav').hidden=!['admin','master'].includes(user.role);const siteLink=$('#site-settings-link');if(siteLink)siteLink.hidden=user.role!=='master';message(user.password_change_required?'仮パスワードでログインしています。「パスワード変更」からご自身のパスワードに変更してください':'');}
- catch(e){$('#login-panel').hidden=false;$('#workspace').hidden=true;if(!e.message.includes('ログイン'))message(e.message);}
+ catch(e){$('#login-panel').hidden=false;$('#workspace').hidden=true;if(!e.message.includes('ログイン')&&e.message!=='メンテナンス中')message(e.message);}
 }
-$('#login').onsubmit=async e=>{e.preventDefault();const button=e.target.querySelector('button');button.disabled=true;message('ログイン中…');try{const result=await(await api('/auth/login',{method:'POST',body:new FormData(e.target)})).json();$('#login').reset();await loadSession(result.user);}catch(e){message(e.message);}finally{button.disabled=false;}};
+$('#login').onsubmit=async e=>{e.preventDefault();const button=e.target.querySelector('button');button.disabled=true;message('ログイン中…');try{const result=await(await api('/auth/login',{method:'POST',body:new FormData(e.target)})).json();$('#login').reset();await loadSession(result.user);}catch(e){if(e.message!=='メンテナンス中')message(e.message);}finally{if(!$('#login').hidden)button.disabled=false;}};
 $('#search').onsubmit=e=>{e.preventDefault();page=1;runSearch();};
 $$('[name=kind]').forEach(r=>r.onchange=()=>{const h=r.value==='病院';$('#search').elements.minimum.value=h?20:'';$('#search').elements.maximum.value=h?200:'';$('#search').elements.clinic_beds.value='';});
 $('#prev').onclick=()=>{page--;runSearch(false);};$('#next').onclick=()=>{page++;runSearch(false);};

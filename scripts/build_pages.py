@@ -16,14 +16,15 @@ def main():
  else:assert key.startswith('sb_publishable_') and not key.startswith('sb_secret_')
  output=Path(args.output);output.mkdir(parents=True,exist_ok=True);static=output/'static';static.mkdir(exist_ok=True)
  env=Environment(loader=FileSystemLoader('app/templates'),autoescape=select_autoescape(['html']))
- page=env.get_template('index.html').render(prefectures=PREFECTURES,bureaus=REGIONS)
  settings=json.loads(Path('web/site-settings.json').read_text())
  assert isinstance(settings.get('title'),str) and 1<=len(settings['title'])<=120
+ assert isinstance(settings.get('maintenance',False),bool)
+ page=env.get_template('index.html').render(prefectures=PREFECTURES,bureaus=REGIONS,maintenance=settings.get('maintenance',False))
  page=page.replace('全国医療機関データベース｜イメージワン',html.escape(settings['title']))
  page=page.replace('</nav>','<a id="site-settings-link" class="secondary" href="https://github.com/sugano-imageone/all-of-hospital_clinic/edit/main/web/site-settings.json" target="_blank" rel="noopener" hidden>サイト設定を変更（GitHub）</a></nav>')
  page=page.replace('href="/"','href="./"').replace('href="/static/','href="./static/')
  page=page.replace('<script src="/static/app.js" defer></script>','<script src="./static/jszip.min.js" defer></script><script src="./static/pages.js" defer></script><script src="./static/app.js" defer></script>')
- config=json.dumps({'url':url,'key':key,'columns':COLUMNS,'prefectureCodes':{name:code for code,name in PREFECTURES.items()}},ensure_ascii=False).replace('<','\\u003c')
+ config=json.dumps({'url':url,'key':key,'columns':COLUMNS,'maintenance':settings.get('maintenance',False),'prefectureCodes':{name:code for code,name in PREFECTURES.items()}},ensure_ascii=False).replace('<','\\u003c')
  csp="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' "+url+"; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'"
  page=page.replace('</head>','<meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="'+csp+'"><script type="application/json" id="cloud-config">'+config+'</script></head>')
  admin='''<section class="card"><h2>ユーザーを追加</h2><p>メールアドレスがログインIDになります。閲覧者は検索・集計の閲覧・ダウンロードを利用できます。</p><form id="member-create" class="fields"><label>メールアドレス（ID）<input name="email" type="email" required autocomplete="off"></label><label>仮パスワード（12文字以上）<input name="password" type="password" minlength="12" maxlength="72" required autocomplete="new-password"></label><button type="button" id="generate-password" class="secondary">仮パスワードを自動生成</button><label>権限<select name="role"><option value="user">閲覧者</option><option value="admin">管理者</option></select></label><button type="submit">ユーザーを追加</button></form><section id="registration-memo" hidden><h3>送付用メモ</h3><p>以下をコピーして、管理者から利用者へメールで送信してください。仮パスワードはこの画面を離れる前に控えてください。</p><label>メール本文<textarea id="registration-memo-text" rows="12" readonly autocomplete="off"></textarea></label><div class="actions"><button type="button" id="copy-registration-memo">メモをコピー</button><button type="button" id="save-registration-memo" class="secondary">テキスト保存</button></div></section></section>'''
