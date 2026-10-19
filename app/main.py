@@ -1,4 +1,5 @@
 import os
+from datetime import date
 from collections import Counter, defaultdict
 from pathlib import Path
 from urllib.parse import quote, urlsplit
@@ -66,6 +67,13 @@ def login(email:Annotated[str,Form(max_length=254)],password:Annotated[str,Form(
     db=Supabase()
     try: tokens=db.request('POST','/auth/v1/token?grant_type=password',json={'email':email,'password':password}).json()
     finally: db.close()
+    verified=Supabase(tokens['access_token'])
+    try:
+        uid=tokens['user']['id']
+        membership=verified.request('GET','/rest/v1/app_members',params={'user_id':'eq.'+uid,'select':'role,approved'}).json()
+        if not membership or not membership[0]['approved']:raise HTTPException(403,'管理者の利用承認が必要です')
+        verified.rpc('record_login',{})
+    finally:verified.close()
     response=JSONResponse({'ok':True});cookies(response,tokens);return response
 
 @app.post('/auth/refresh')
@@ -90,12 +98,20 @@ def logout(request:Request):
 def me(auth:Auth):
     _,user=auth;return {'email':user.get('email'),'role':user['role'],'user_id':user['id']}
 
+@app.get('/api/notification-items')
+def notification_items(auth:Auth):
+    db,_=auth;return db.rpc('notification_item_names',{})
+
+@app.get('/api/reference-dates')
+def reference_dates(auth:Auth):
+    db,_=auth;return db.rpc('search_reference_dates',{})
+
 @app.post('/api/search')
 def search(query:Search,auth:Auth):
     db,_=auth
     # Fetch only public output fields; raw parser rows are not needed in result pages.
     params=search_params(query)+[('select','*'),('offset',str((query.page-1)*50)),('limit','50')]
-    r=db.request('GET','/rest/v1/medical_institutions',params=params,headers={'Prefer':'count=exact'})
+    r=db.request('GET','/rest/v1/'+('rpc/notification_search' if query.notifications_enabled else 'medical_institutions'),params=params,headers={'Prefer':'count=exact'})
     total=r.headers.get('content-range','*/0').split('/')[-1]
     if total=='*': raise HTTPException(502,'正確な件数を取得できませんでした')
     rows=r.json()
@@ -140,7 +156,7 @@ def export(format:str,query:Search,auth:Auth):
     if format not in ['csv','xlsx','master']: raise HTTPException(404)
     if format=='master':
         records=db.all('medical_institutions',[('status','eq.現存'),('order','code.asc')])
-    else: records=db.all('medical_institutions',search_params(query))
+    else: records=db.all('rpc/notification_search' if query.notifications_enabled else 'medical_institutions',search_params(query))
     db.audit('export_'+format,{'filters':query.model_dump(),'count':len(records)})
     if format=='csv': payload=csv_bytes(records);mime='text/csv; charset=utf-8';name='検索結果.csv'
     else:
@@ -154,6 +170,19 @@ class MemberUpdate(BaseModel):
     user_id:str=Field(pattern=r'^[a-fA-F0-9-]{36}$')
     role:str=Field(pattern=r'^(user|admin)$')
     approved:bool
+
+class LoginHistoryFilters(BaseModel):
+    email:str=Field(default='',max_length=254)
+    from_date:date|None=None
+    to_date:date|None=None
+    page:int=Field(default=1,ge=1,le=100000)
+
+@app.post('/api/admin/logins')
+def login_history(data:LoginHistoryFilters,auth:Auth):
+    db,user=auth
+    if user['role'] not in ['admin','master']:raise HTTPException(403,'管理者権限が必要です')
+    if data.from_date and data.to_date and data.from_date>data.to_date:raise HTTPException(422,'期間の開始日が終了日を超えています')
+    return db.rpc('viewer_login_history',{'p_email':data.email,'p_from':data.from_date.isoformat() if data.from_date else None,'p_to':data.to_date.isoformat() if data.to_date else None,'p_page':data.page})
 
 @app.get('/api/admin/members')
 def members(auth:Auth):

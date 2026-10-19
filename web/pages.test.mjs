@@ -18,6 +18,8 @@ function client({approved=true,networkFailure=false,timeout=false,role='user',ex
   if(url.includes('/rest/v1/medical_institutions?'))return Response.json(exportRows.slice(Number(new URL(url).searchParams.get('offset')||0),Number(new URL(url).searchParams.get('offset')||0)+1000),{headers:{'Content-Range':'0-'+Math.max(0,exportRows.length-1)+'/'+exportRows.length}});
   if(url.endsWith('/rpc/source_metadata'))return Response.json([]);
   if(url.endsWith('/rpc/monthly_change_counts'))return Response.json({});
+  if(url.endsWith('/rpc/record_login'))return new Response(null,{status:204});
+  if(url.includes('/rpc/notification_search?'))return Response.json(exportRows,{headers:{'Content-Range':'0-'+Math.max(0,exportRows.length-1)+'/'+exportRows.length}});
   if(url.endsWith('/rpc/record_access'))return new Response(null,{status:204});
   throw Error('Unexpected request');
  };
@@ -73,14 +75,14 @@ test('dashboard fetches all 47 indexed prefecture partitions without a national 
  assert.equal((await response.json()).total,0);
 });
 
-test('password login verifies membership with two requests and returns no token to the UI',async()=>{
+test('password login verifies membership and records the verified login and returns no token to the UI',async()=>{
  const {window,calls}=client();const form=new FormData();form.set('email','viewer@example.invalid');form.set('password','test-password');
  const r=await window.fetch('/auth/login',{method:'POST',body:form});assert.equal(r.status,200);
  const body=await r.json();assert.equal(body.user.email,'viewer@example.invalid');assert.equal(body.user.role,'user');
- assert.equal(calls.length,2);assert.equal(calls[0].pathname,'/auth/v1/token');assert.equal(calls[1].pathname,'/rest/v1/app_members');
+ assert.equal(calls.length,3);assert.equal(calls[2].pathname,'/rest/v1/rpc/record_login');assert.equal(calls[0].pathname,'/auth/v1/token');assert.equal(calls[1].pathname,'/rest/v1/app_members');
  assert.ok(!JSON.stringify(body).includes('test-token'));assert.ok(!JSON.stringify(body).includes('test-password'));
  const search=await window.fetch('/api/search',{method:'POST',body:'{}'});assert.equal(search.status,200);
- assert.equal(calls[2].pathname,'/auth/v1/user');assert.equal(calls[3].pathname,'/rest/v1/app_members');
+ assert.equal(calls[3].pathname,'/auth/v1/user');assert.equal(calls[4].pathname,'/rest/v1/app_members');
 });
 
 test('unapproved login clears the session and cannot search',async()=>{
@@ -129,4 +131,16 @@ for(const mode of ['static','server'])test(`maintenance ${mode} blocks login, re
   const r=await window.fetch(url,{method:'POST',body:'{}'});assert.equal(r.status,503);assert.equal((await r.json()).detail,'メンテナンス中');
  }
  assert.equal(calls.length,0);
+});
+
+test('notification conditions OFF ignore retained item and status',async()=>{
+ const {window,calls}=client();await window.fetch('/api/search',{method:'POST',body:JSON.stringify({notifications_enabled:false,notification_item:'条件残り',notification_status:'not_filed'})});
+ assert.ok(calls.some(c=>c.pathname==='/rest/v1/medical_institutions'));assert.ok(!calls.some(c=>c.pathname.includes('notification_search')));
+});
+test('notification search and CSV use the identical RPC filters',async()=>{
+ const {window,calls}=client();const q={notifications_enabled:true,notification_item:'医療安全対策加算１',notification_status:'not_filed',minimum:20,maximum:200};
+ for(const path of ['/api/search','/api/export/csv'])assert.equal((await window.fetch(path,{method:'POST',body:JSON.stringify(q)})).status,200);
+ const requests=calls.filter(c=>c.pathname==='/rest/v1/rpc/notification_search');assert.equal(requests.length,2);
+ for(const u of requests){assert.equal(u.searchParams.get('p_item'),q.notification_item);assert.equal(u.searchParams.get('p_status'),'unfiled');u.searchParams.delete('offset');u.searchParams.delete('limit');u.searchParams.sort();}
+ assert.equal(requests[0].search,requests[1].search);
 });

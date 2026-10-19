@@ -1,0 +1,187 @@
+{
+  "verified_on_jst": "2026-10-19",
+  "scope": "医科の全届出項目（医科名簿に掲載される併設歯科の届出は原文のまま保持）",
+  "prefecture_count": 47,
+  "source_detail_rows": 1192798,
+  "institution_count": 95650,
+  "official_item_name_count": 1271,
+  "latest_selection": {
+    "latest_institution_item_groups": 1003929,
+    "older_source_rows_removed": 2782,
+    "same_date_multiple_receipts": 1648,
+    "date_unknown": 0,
+    "unresolved_latest_groups": 0
+  },
+  "reference_dates": {
+    "中国四国": {
+      "31": "2026-09-01",
+      "32": "2026-09-01",
+      "33": "2026-09-01",
+      "34": "2026-09-01",
+      "35": "2026-09-01"
+    },
+    "九州": {
+      "40": "2026-10-01",
+      "41": "2026-10-01",
+      "42": "2026-10-01",
+      "43": "2026-10-01",
+      "44": "2026-10-01",
+      "45": "2026-10-01",
+      "46": "2026-10-01",
+      "47": "2026-10-01"
+    },
+    "四国": {
+      "37": "2026-10-01",
+      "36": "2026-10-01",
+      "38": "2026-10-01",
+      "39": "2026-10-01"
+    },
+    "東海北陸": {
+      "24": "2026-10-01",
+      "16": "2026-10-01",
+      "21": "2026-10-01",
+      "23": "2026-10-01",
+      "17": "2026-10-01",
+      "22": "2026-10-01"
+    },
+    "近畿": {
+      "18": "2026-10-01",
+      "28": "2026-10-01",
+      "26": "2026-10-01",
+      "29": "2026-10-01",
+      "27": "2026-10-01",
+      "25": "2026-10-01",
+      "30": "2026-10-01"
+    },
+    "関東信越": {
+      "08": "2026-09-01",
+      "09": "2026-09-01",
+      "10": "2026-09-01",
+      "11": "2026-09-01",
+      "12": "2026-09-01",
+      "13": "2026-09-01",
+      "14": "2026-09-01",
+      "15": "2026-09-01",
+      "19": "2026-09-01",
+      "20": "2026-09-01"
+    },
+    "北海道": {
+      "01": "2026-10-01"
+    },
+    "東北": {
+      "02": "2026-09-01",
+      "03": "2026-09-01",
+      "04": "2026-09-01",
+      "05": "2026-09-01",
+      "06": "2026-09-01",
+      "07": "2026-09-01"
+    }
+  },
+  "sources": [
+    {
+      "bureau": "北海道",
+      "url": "https://kouseikyoku.mhlw.go.jp/hokkaido/000502821.xlsx",
+      "sha256": "7bbb2a43bc518d82e3899088393a2b66df93d06b884e5fd774df45e511cb6557",
+      "retrieved_at": "2026-10-19T16:13:55.278638+09:00",
+      "bytes": 3529369
+    },
+    {
+      "bureau": "東北",
+      "url": "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-ika-r0809.xlsx",
+      "sha256": "fc4fc312f3e8231e8f9db54e50d4cffc73c3f411c5b3f1b8dd4e660f44019a1d",
+      "retrieved_at": "2026-10-19T16:13:55.279049+09:00",
+      "bytes": 7316319
+    },
+    {
+      "bureau": "関東信越",
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_ika_r0810.zip",
+      "sha256": "1daa11ebf13a3558fab7c0e02e724c3d1e676143db26c5e5d8707dadc59307d9",
+      "retrieved_at": "2026-10-19T16:14:00.421014+09:00",
+      "bytes": 22009912
+    },
+    {
+      "bureau": "東海北陸",
+      "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_01-01.zip",
+      "sha256": "948811a954d243ac1638c6363bb4eedb5336df84962ace00316b5a15f98c7274",
+      "retrieved_at": "2026-10-19T16:14:03.416785+09:00",
+      "bytes": 11378180
+    },
+    {
+      "bureau": "近畿",
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_sisetukijun_ika.zip",
+      "sha256": "2a3ace4da98d9c2e0af0e0802c7b2c77d19805deae36f4133a8cfb51b13d8c4e",
+      "retrieved_at": "2026-10-19T16:14:04.877709+09:00",
+      "bytes": 13136566
+    },
+    {
+      "bureau": "中国四国",
+      "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000502057.zip",
+      "sha256": "fb7d392e4ec10f381e7a6ffd46b2687792e46746235b79c79d87d1293c89834c",
+      "retrieved_at": "2026-10-19T16:14:06.703334+09:00",
+      "bytes": 8463225
+    },
+    {
+      "bureau": "四国",
+      "url": "https://kouseikyoku.mhlw.go.jp/shikoku/000502937.zip",
+      "sha256": "88dbd65a044f0d03d3b941a57bcae9d0b9ef91dfcc9fb7dc56bd1ebb77d255eb",
+      "retrieved_at": "2026-10-19T16:14:07.471128+09:00",
+      "bytes": 3564702
+    },
+    {
+      "bureau": "九州",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503830.zip",
+      "sha256": "ed48c6c8c52c6a2ea7dd6bdc3023b9f9d0fb6b188d4718143fe24c7914740406",
+      "retrieved_at": "2026-10-19T16:14:08.521024+09:00",
+      "bytes": 7610077
+    },
+    {
+      "bureau": "九州",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503831.zip",
+      "sha256": "57296ef9918f03441a0cd9031786b96420d5099c9d102db222a247c3d33df711",
+      "retrieved_at": "2026-10-19T16:14:08.571256+09:00",
+      "bytes": 1312021
+    },
+    {
+      "bureau": "九州",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503832.zip",
+      "sha256": "2c0354c9f4759c36a1d5a4b445a5321046d8bd3a290b7e21a20f488e0b4397b8",
+      "retrieved_at": "2026-10-19T16:14:09.758266+09:00",
+      "bytes": 2008689
+    },
+    {
+      "bureau": "九州",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503833.zip",
+      "sha256": "c0ea8d289ff62403b1e73d6b1efa2e1d51ac747a12d22c28a1c9e5af490c6fab",
+      "retrieved_at": "2026-10-19T16:14:09.963165+09:00",
+      "bytes": 2632122
+    },
+    {
+      "bureau": "九州",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503834.zip",
+      "sha256": "80b8aa852402c3d0f6a24aa4b2ce12a2e8dd726d57189517861fc5db1bc83cfc",
+      "retrieved_at": "2026-10-19T16:14:10.393439+09:00",
+      "bytes": 1776902
+    },
+    {
+      "bureau": "九州",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503835.zip",
+      "sha256": "7f9c7e56fed1d0b1e0ff1cb3c62ae538ecef3981061922fed8b27ded8cb7582b",
+      "retrieved_at": "2026-10-19T16:14:10.892076+09:00",
+      "bytes": 1522925
+    },
+    {
+      "bureau": "九州",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503836.zip",
+      "sha256": "2226aed3ecede8cbc975c865e9b5f0c13f418e3566dd2e9cd0a05a2b14e57160",
+      "retrieved_at": "2026-10-19T16:14:11.285539+09:00",
+      "bytes": 2482987
+    },
+    {
+      "bureau": "九州",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503837.zip",
+      "sha256": "8517ade3781cd6a1b9d0f8a35ab0c0fbb99aa8f7fd2b44817f6248e34f036c27",
+      "retrieved_at": "2026-10-19T16:14:12.008551+09:00",
+      "bytes": 1834856
+    }
+  ]
+}

@@ -19,6 +19,9 @@ class Search(BaseModel):
     minimum: int | None = Field(default=None,ge=0,le=100000)
     maximum: int | None = Field(default=None,ge=0,le=100000)
     psychiatric_class: Literal['','不明','精神病床なし','精神病床のみ','精神病床80%以上','混合型'] = ''
+    notifications_enabled: bool = False
+    notification_item: str = Field(default='',max_length=500)
+    notification_status: Literal['filed','not_filed'] = 'filed'
     include_suspended: bool = False
     sort: Literal['code','name','prefecture','total_beds','reference_date'] = 'code'
     direction: Literal['asc','desc'] = 'asc'
@@ -29,6 +32,10 @@ class Search(BaseModel):
             raise ValueError('病床数の下限が上限を超えています')
         if any(p not in PREFECTURES.values() for p in self.prefectures):
             raise ValueError('不明な都道府県です')
+        if self.notifications_enabled and not self.notification_item:
+            raise ValueError('正式な届出項目を選択してください')
+        if not self.notifications_enabled:
+            self.notification_item='';self.notification_status='filed'
         return self
 
 def settings():
@@ -90,4 +97,6 @@ def search_params(search):
     if search.minimum is not None: q.append((bed,'gte.'+str(search.minimum)))
     if search.maximum is not None: q.append((bed,'lte.'+str(search.maximum)))
     # Hospital / clinic classification never depends on the selected bed category.
+    if search.notifications_enabled:
+        q += [('p_item',search.notification_item),('p_status','filed' if search.notification_status=='filed' else 'unfiled')]
     return q
