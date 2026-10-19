@@ -1,0 +1,299 @@
+{
+  "checked_date_jst": "2026-10-19",
+  "main_sha": "8022e8edbdfde9dc60ea21faac9e01f476d627df",
+  "account_readiness": {
+    "turso": "screenshot_confirmed_sugano-imageone_Free_imageone-medical_Tokyo_empty_database",
+    "firebase": "project_creation_in_progress",
+    "cloudflare": "not_created_user_confirmed"
+  },
+  "maintenance": {
+    "pages": true,
+    "supabase": true,
+    "changed": false
+  },
+  "official_validation": {
+    "source_detail_rows": 1192798,
+    "prefecture_count": 47,
+    "institution_count": 95650,
+    "official_item_name_count": 1271
+  },
+  "latest_validation": {
+    "latest_institution_item_groups": 1003929,
+    "older_source_rows_removed": 2782,
+    "same_date_multiple_receipts": 1648,
+    "date_unknown": 0,
+    "unresolved_latest_groups": 0
+  },
+  "public_tables": {
+    "source_imports": {
+      "rows": 144,
+      "sha256_sqlite_rows": "5f3a917eca2e1dc00333415e9e2149989f9fa87466733a573cf635d9ed057255",
+      "primary_key": [
+        "id"
+      ]
+    },
+    "medical_institutions": {
+      "rows": 97461,
+      "sha256_sqlite_rows": "32599e0272f5fa4bae209467f29aec70e29f335f375f5c997bfa78ea9d06c777",
+      "primary_key": [
+        "id"
+      ]
+    },
+    "institution_beds": {
+      "rows": 97457,
+      "sha256_sqlite_rows": "35ac8d10779f9f29fe94c2ea2eb4c97e3c3e490084b6e5b45087981e97f320bc",
+      "primary_key": [
+        "institution_id"
+      ]
+    },
+    "institution_changes": {
+      "rows": 195698,
+      "sha256_sqlite_rows": "23b1f3a0db444dc34ef144d5eb61f48027d8ec4eb7fa25a5bd6c85412960632d",
+      "primary_key": [
+        "id"
+      ]
+    },
+    "institution_bed_history": {
+      "rows": 1467415,
+      "sha256_sqlite_rows": "3f4be5454727c82e35835179c5dc5c1601a5a6fd042386f5fd8330dcce692a70",
+      "primary_key": [
+        "institution_id",
+        "source_import_id",
+        "bed_type"
+      ]
+    },
+    "institution_links": {
+      "rows": 0,
+      "sha256_sqlite_rows": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "primary_key": [
+        "old_institution_id",
+        "new_institution_id"
+      ]
+    }
+  },
+  "capacity_bytes": {
+    "free_limit_conservative_decimal": 5000000000,
+    "operational_target_80_percent": 4000000000,
+    "all_public_medical_and_history": 1128329216,
+    "notification_two_copies_including_indexes": 2303930368,
+    "largest_bureau_staging": 305942528,
+    "uncompressed_steady": 3432259584,
+    "uncompressed_staging_peak": 3738202112,
+    "uncompressed_peak_headroom": 1261797888,
+    "cold_history_original_pages": 915476480,
+    "hot_medical_pages": 212852736,
+    "lossless_compressed_history_file": 524869632,
+    "compressed_steady": 3041652736,
+    "rejected_all_rows_zlib_without_rowid_trial": 1570967552,
+    "compressed_staging_peak": 3347595264,
+    "compressed_peak_headroom": 1652404736
+  },
+  "capacity_qualification": "Sum of actual local SQLite files/pages, including indexes. Two copies use identical latest originals; not two historical source periods. Does not establish remote Turso storage/PITR accounting, future growth, user-log storage, or other databases in the organization.",
+  "history_roundtrip_verified_rows": 1663113,
+  "writes_planning_rows": {
+    "initial_public_plus_two_notification_versions_table_rows": 4074130,
+    "monthly_notifications_all_bureaus_table_rows": 1107993,
+    "monthly_facility_full_refresh_case": 682274,
+    "monthly_combined_case": 1790267,
+    "combined_with_one_full_retry_case": 3580534,
+    "limit": 10000000,
+    "caveat": "Planning table rows only. Remote import method, index/build effects, retries, deletes, audit events and aborted writes must be checked against Turso telemetry; no billed writes were measured."
+  },
+  "local_benchmark": {
+    "queries": [
+      {
+        "filters": {
+          "kind": "病院"
+        },
+        "count": 7935,
+        "first_page": 50,
+        "seconds": 0.001067671000100745,
+        "plan": [
+          [
+            3,
+            0,
+            53,
+            "SEARCH m USING COVERING INDEX trial_kind_status_code (kind=? AND status=?)"
+          ]
+        ]
+      },
+      {
+        "filters": {
+          "kind": "診療所"
+        },
+        "count": 88799,
+        "first_page": 50,
+        "seconds": 0.004203254999993078,
+        "plan": [
+          [
+            3,
+            0,
+            53,
+            "SEARCH m USING COVERING INDEX trial_kind_status_code (kind=? AND status=?)"
+          ]
+        ]
+      },
+      {
+        "filters": {
+          "kind": "診療所",
+          "use_notifications": true,
+          "notification_item": "医療安全対策加算１",
+          "notification_status": "filed"
+        },
+        "count": 8,
+        "first_page": 8,
+        "seconds": 1.3273400309999488,
+        "plan": [
+          [
+            7,
+            0,
+            61,
+            "SEARCH m USING INDEX trial_kind_status_code (kind=? AND status=?)"
+          ],
+          [
+            18,
+            0,
+            0,
+            "CORRELATED SCALAR SUBQUERY 2"
+          ],
+          [
+            28,
+            18,
+            47,
+            "SEARCH nc USING INDEX sqlite_autoindex_notification_current_1 (bureau=?)"
+          ],
+          [
+            35,
+            18,
+            0,
+            "CORRELATED SCALAR SUBQUERY 1"
+          ],
+          [
+            39,
+            35,
+            39,
+            "SEARCH notifications.notification_filings USING PRIMARY KEY (snapshot_id=? AND code=? AND item_key=?)"
+          ],
+          [
+            51,
+            18,
+            45,
+            "SEARCH notifications.notification_facilities USING PRIMARY KEY (snapshot_id=? AND code=?)"
+          ],
+          [
+            63,
+            18,
+            46,
+            "SEARCH notifications.notification_snapshots USING INDEX sqlite_autoindex_notification_snapshots_1 (id=?)"
+          ],
+          [
+            73,
+            18,
+            45,
+            "SEARCH notifications.notification_items USING PRIMARY KEY (snapshot_id=? AND item_key=?)"
+          ]
+        ]
+      },
+      {
+        "filters": {
+          "kind": "診療所",
+          "use_notifications": true,
+          "notification_item": "医療安全対策加算１",
+          "notification_status": "unfiled"
+        },
+        "count": 87072,
+        "first_page": 50,
+        "seconds": 0.45008832000007715,
+        "plan": [
+          [
+            7,
+            0,
+            61,
+            "SEARCH m USING INDEX trial_kind_status_code (kind=? AND status=?)"
+          ],
+          [
+            18,
+            0,
+            0,
+            "CORRELATED SCALAR SUBQUERY 2"
+          ],
+          [
+            28,
+            18,
+            47,
+            "SEARCH nc USING INDEX sqlite_autoindex_notification_current_1 (bureau=?)"
+          ],
+          [
+            35,
+            18,
+            0,
+            "CORRELATED SCALAR SUBQUERY 1"
+          ],
+          [
+            39,
+            35,
+            39,
+            "SEARCH notifications.notification_filings USING PRIMARY KEY (snapshot_id=? AND code=? AND item_key=?)"
+          ],
+          [
+            51,
+            18,
+            45,
+            "SEARCH notifications.notification_facilities USING PRIMARY KEY (snapshot_id=? AND code=?)"
+          ],
+          [
+            63,
+            18,
+            46,
+            "SEARCH notifications.notification_snapshots USING INDEX sqlite_autoindex_notification_snapshots_1 (id=?)"
+          ],
+          [
+            73,
+            18,
+            45,
+            "SEARCH notifications.notification_items USING PRIMARY KEY (snapshot_id=? AND item_key=?)"
+          ]
+        ]
+      }
+    ],
+    "export": {
+      "rows": 96734,
+      "seconds": 4.214432446,
+      "node_max_rss_kib": 609108,
+      "csv_bytes": 38737059,
+      "xlsx_bytes": 13331961
+    },
+    "xlsx_sheet_rows": {
+      "病院": 7935,
+      "診療所": 88799
+    },
+    "csv_verified_rows": 96734,
+    "limits": "Local SQLite and Node trial; does not measure Turso billed reads or Worker CPU or a real browser memory limit.",
+    "production_write": false
+  },
+  "xlsx_before_streaming": {
+    "rows": 96734,
+    "seconds": 6.113322748,
+    "node_max_rss_kib": 1376856,
+    "csv_bytes": 38737059,
+    "xlsx_bytes": 13319643
+  },
+  "integrity": {
+    "public": "ok",
+    "notifications": "ok",
+    "history": "ok",
+    "notification_fk_violations": []
+  },
+  "production_writes": false,
+  "production_cutover": false,
+  "free_operation_confirmed": false,
+  "remaining_gates": [
+    "account setup",
+    "real Firebase/Turso/Worker integration",
+    "full Pages UI integration",
+    "member and legacy-log transfer",
+    "Worker CPU and billed usage",
+    "real browser memory",
+    "restore and retention approval"
+  ]
+}

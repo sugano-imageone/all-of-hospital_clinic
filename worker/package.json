@@ -1,0 +1,1 @@
+{"name":"imageone-migration-api","private":true,"type":"module","scripts":{"test":"node --test *.test.mjs"}}

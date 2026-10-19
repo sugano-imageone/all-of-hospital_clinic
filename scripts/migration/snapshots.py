@@ -1,0 +1,78 @@
+"""Local/libSQL-compatible validation and atomic pointer switch primitives.
+
+No network connection and no deletion. The caller must supply an expected current
+pointer, preventing an overlapping publisher from silently replacing a newer run.
+"""
+import datetime
+import json
+import sqlite3
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'facility_notifications'))
+from build_index import REGIONS
+from production import NAMES
+
+
+def adopt(c, snapshot, expected_current, today=None):
+    today = today or datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).date()
+    c.execute('BEGIN IMMEDIATE')
+    try:
+        row = c.execute('SELECT bureau,state,reference_dates,expected_facilities,expected_filings,manifest_json FROM notification_snapshots WHERE id=?', (snapshot,)).fetchone()
+        if row is None:
+            raise ValueError('Unknown snapshot')
+        bureau, state, dates, expected_facilities, expected_filings, manifest = row
+        short = next((b for b, full in NAMES.items() if full == bureau), None)
+        if short is None or state != 'validated':
+            raise ValueError('Validated official bureau required')
+        dates = json.loads(dates)
+        if {int(n) for n in dates} != set(REGIONS[short]):
+            raise ValueError('Incomplete prefecture dates')
+        if any(datetime.date.fromisoformat(d) > today for d in dates.values()):
+            raise ValueError('Future reference date')
+        found = {r[0] for r in c.execute('SELECT DISTINCT prefecture_code FROM notification_facilities WHERE snapshot_id=?', (snapshot,))}
+        if found != set(REGIONS[short]):
+            raise ValueError('Incomplete prefecture coverage')
+        for table, expected in [('notification_facilities', expected_facilities), ('notification_filings', expected_filings)]:
+            if expected <= 0 or c.execute(f'SELECT count(*) FROM {table} WHERE snapshot_id=?', (snapshot,)).fetchone()[0] != expected:
+                raise ValueError('Incomplete snapshot')
+        bad = c.execute("SELECT count(*) FROM notification_filings WHERE snapshot_id=? AND (json_extract(payload_json,'$.latest_selection_resolved') IS NOT 1 OR coalesce(json_array_length(payload_json,'$.versions'),0)=0)", (snapshot,)).fetchone()[0]
+        if bad or c.execute('PRAGMA foreign_key_check').fetchone():
+            raise ValueError('Invalid filing payload or references')
+        missing_refs = c.execute("SELECT count(*) FROM notification_filings n,json_each(n.payload_json,'$.versions') v WHERE n.snapshot_id=? AND (coalesce(json_array_length(v.value,'$.source_rows'),0)=0 OR json_type(v.value,'$.fields') IS NOT 'object' OR json_type(v.value,'$.details') IS NOT 'array')", (snapshot,)).fetchone()[0]
+        if missing_refs:
+            raise ValueError('Missing original versions/details/row references')
+        if not json.loads(manifest).get('files'):
+            raise ValueError('Missing original provenance')
+        current = c.execute('SELECT snapshot_id FROM notification_current WHERE bureau=?', (bureau,)).fetchone()
+        if (current[0] if current else None) != expected_current:
+            raise ValueError('Current pointer changed')
+        if current:
+            old_dates = json.loads(c.execute('SELECT reference_dates FROM notification_snapshots WHERE id=?', current).fetchone()[0])
+            if any(dates.get(k, '') < date for k, date in old_dates.items()):
+                raise ValueError('Reference date regression')
+        c.execute('INSERT INTO notification_current VALUES(?,?) ON CONFLICT(bureau) DO UPDATE SET snapshot_id=excluded.snapshot_id', (bureau, snapshot))
+        c.commit()
+    except Exception:
+        c.rollback()
+        raise
+
+
+def targets(c, now):
+    """No simulated date CLI: production callers must pass the actual aware clock."""
+    if now.tzinfo is None:
+        raise ValueError('Timezone-aware clock required')
+    jst = now.astimezone(datetime.timezone(datetime.timedelta(hours=9)))
+    if jst.day not in (20, 25):
+        raise ValueError('Only JST 20th or 25th')
+    month = jst.strftime('%Y-%m')
+    states = dict(c.execute('SELECT bureau,status FROM notification_jobs WHERE month=?', (month,)))
+    bureaus = list(NAMES.values())
+    if jst.day == 25:
+        if set(states) != set(bureaus):
+            raise ValueError('No complete 20th job state; refusing full fallback')
+        return [b for b in bureaus if states[b] == 'failed']
+    with c:
+        for bureau in bureaus:
+            c.execute("INSERT OR IGNORE INTO notification_jobs VALUES(?,?,'failed',NULL,'{}')", (month, bureau))
+    return [b for b in bureaus if states.get(b) != 'success']

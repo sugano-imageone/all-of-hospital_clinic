@@ -7,3 +7,7 @@ artifacts/
 web/node_modules/
 *.log
 playwright-report/
+work/
+worker/.dev.vars
+worker/.wrangler/
+worker/node_modules/
