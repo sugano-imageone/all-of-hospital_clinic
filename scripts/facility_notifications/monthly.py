@@ -3,7 +3,6 @@ import argparse,concurrent.futures,datetime,json,sqlite3,subprocess,sys
 from pathlib import Path
 from zoneinfo import ZoneInfo
 import collect
-import publish
 from build_index import REGIONS
 
 def init(c):
@@ -56,7 +55,7 @@ def acquire(bureau,root):
  return r
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--root',required=True);p.add_argument('--production',action='store_true');p.add_argument('--date',help='再現試験用の日本日付 YYYY-MM-DD');p.add_argument('--bootstrap-index',help='取得済み全局索引を初回の隔離データへ入れる（スケジュール実行とは区別）');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--root',required=True);p.add_argument('--date',help='再現試験用の日本日付 YYYY-MM-DD');p.add_argument('--bootstrap-index',help='取得済み全局索引を初回の隔離データへ入れる（スケジュール実行とは区別）');a=p.parse_args()
  root=Path(a.root);root.mkdir(parents=True,exist_ok=True);state=root/'state';state.mkdir(exist_ok=True);db=state/'current.sqlite'
  now=datetime.datetime.now(ZoneInfo('Asia/Tokyo'));date=datetime.date.fromisoformat(a.date) if a.date else now.date();month=date.strftime('%Y-%m');c=sqlite3.connect(db);init(c)
  if a.bootstrap_index:
@@ -70,14 +69,7 @@ def main():
    while batch:=rows.fetchmany(2000):
     c.executemany('INSERT INTO current_rows VALUES('+','.join('?'*13)+')',batch);count+=len(batch)
   src.close();print(json.dumps({'bootstrap_rows':count,'scheduled_jobs_marked_complete':False,'production_write':False}));c.close();return
- if a.production:
-  states=[publish.SHORT_NAMES[b] for b in publish.call('notification_monthly_targets',{})]
-  with c:
-   for b in REGIONS:
-    c.execute('INSERT OR REPLACE INTO monthly_jobs VALUES(?,?,?,?,?)',(month,b,'failed' if b in states else 'success',None,'{}'))
-  todo=states
- else:todo=targets(c,month,date.day)
- results=[]
+ todo=targets(c,month,date.day);results=[]
  for bureau in todo:
   stamp=datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat();run=root/'attempts'/month/(str(date.day)+'-'+bureau);run.mkdir(parents=True,exist_ok=True)
   try:
@@ -86,16 +78,12 @@ def main():
     subprocess.run([sys.executable,str(Path(__file__).with_name('build_index.py')),'--input',str(run),'--bureau',bureau],check=True,stdout=log,stderr=subprocess.STDOUT)
    candidate=run/'medical-notifications.sqlite'
    with (run/'latest.log').open('w') as log:subprocess.run([sys.executable,str(Path(__file__).with_name('latest.py')),'--database',str(candidate)],check=True,stdout=log,stderr=subprocess.STDOUT)
-   if a.production:
-    sources=[r for r in json.loads((run/'manifest.json').read_text())['files'] if r['role']=='full']
-    published=publish.publish_bureau(candidate,bureau,sources)
    count=replace_bureau(c,bureau,candidate,month,stamp,source);results.append({'bureau':bureau,'status':'success','rows':count})
   except Exception as e:
    with c:c.execute("INSERT OR REPLACE INTO monthly_jobs VALUES(?,?,'failed',?,?)",(month,bureau,stamp,json.dumps({'error':type(e).__name__+': '+str(e),'previous_snapshot_preserved':True},ensure_ascii=False)))
    results.append({'bureau':bureau,'status':'failed','error':str(e)})
-  if a.production:publish.call('notification_job_result',{'p_bureau':publish.FULL_NAMES[bureau],'p_success':results[-1]['status']=='success','p_details':results[-1]})
   print(json.dumps(results[-1],ensure_ascii=False),flush=True)
- report={'date_jst':date.isoformat(),'month':month,'attempted_bureaus':todo,'results':results,'production_write':a.production,'storage':'isolated SQLite; full replacement per successful bureau','jobs':[dict(zip(['bureau','status','attempted_at','details_json'],r)) for r in c.execute('SELECT bureau,status,attempted_at,details_json FROM monthly_jobs WHERE month=?',(month,))]}
+ report={'date_jst':date.isoformat(),'month':month,'attempted_bureaus':todo,'results':results,'production_write':False,'storage':'isolated SQLite; full replacement per successful bureau','jobs':[dict(zip(['bureau','status','attempted_at','details_json'],r)) for r in c.execute('SELECT bureau,status,attempted_at,details_json FROM monthly_jobs WHERE month=?',(month,))]}
  (state/'last-run.json').write_text(json.dumps(report,ensure_ascii=False,indent=2));c.close()
  if any(r['status']=='failed' for r in results):raise SystemExit(1)
 if __name__=='__main__':main()
