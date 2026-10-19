@@ -3,7 +3,7 @@
   "main_sha": "8022e8edbdfde9dc60ea21faac9e01f476d627df",
   "account_readiness": {
     "turso": "screenshot_confirmed_sugano-imageone_Free_imageone-medical_Tokyo_empty_database",
-    "firebase": "project_creation_in_progress",
+    "firebase": "screenshot_confirmed_imageone-medical_Spark_email_password_enabled",
     "cloudflare": "not_created_user_confirmed"
   },
   "maintenance": {
@@ -89,6 +89,23 @@
     "compressed_peak_headroom": 1652404736
   },
   "capacity_qualification": "Sum of actual local SQLite files/pages, including indexes. Two copies use identical latest originals; not two historical source periods. Does not establish remote Turso storage/PITR accounting, future growth, user-log storage, or other databases in the organization.",
+  "current_only_policy": {
+    "user_decision": "After validated adoption retire the previous medical/filing snapshot. Keep institution change and bed history only for the current JST update cycle. Preserve users, roles, access and login history. Failed prefectures/bureaus retain their previous successful data.",
+    "notification_current_only_bytes": 1152028672,
+    "all_current_cycle_history_verified_month": "2026-10",
+    "current_change_history_rows": 195698,
+    "current_bed_history_rows": 1467415,
+    "uncompressed_steady_bytes": 2280357888,
+    "uncompressed_largest_bureau_staging_peak_bytes": 2586300416,
+    "mixed_history_steady_bytes": 1889751040,
+    "mixed_history_largest_bureau_staging_peak_bytes": 2195693568,
+    "initial_table_rows_to_import": 2966153,
+    "monthly_write_planning_including_first_old_history_retirement": 4561373,
+    "migration_plus_monthly_plus_full_retry_planning": 12088899,
+    "write_budget_note": "Conservative planning counts retired table rows as writes too. Initial migration plus monthly replacement and a complete retry in the same month may exceed 10 million; require usage checks, unchanged-content skip, upload checkpoints and a stop threshold before enabling the schedule.",
+    "actual_deletion_executed": false,
+    "note": "All 144 source imports and all exported history rows belong to the 2026-10 acquisition/update cycle. No history removal was needed to produce these measured current-cycle capacities. Archive storage, allocator high-water and remote usage still need validation."
+  },
   "history_roundtrip_verified_rows": 1663113,
   "writes_planning_rows": {
     "initial_public_plus_two_notification_versions_table_rows": 4074130,

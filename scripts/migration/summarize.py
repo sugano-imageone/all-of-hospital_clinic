@@ -13,6 +13,7 @@ def summarize(root, destination):
     staging=read('notifications-largest-staging.report.json')
     history=read('history-compact-mixed.report.json')
     all_zlib=read('history-compressed.report.json')
+    current=read('notifications-current-only.report.json')
     c=sqlite3.connect((root/'medical-public.sqlite').resolve().as_uri()+'?mode=ro',uri=True)
     cold_names={r[0] for r in c.execute("SELECT name FROM sqlite_master WHERE tbl_name IN ('institution_changes','institution_bed_history') AND type IN ('table','index')")}
     c.close()
@@ -33,7 +34,7 @@ def summarize(root, destination):
     monthly_facility_case=institutions*(1+5+1)+47
     report={
       'checked_date_jst':'2026-10-19','main_sha':'8022e8edbdfde9dc60ea21faac9e01f476d627df',
-      'account_readiness':{'turso':'screenshot_confirmed_sugano-imageone_Free_imageone-medical_Tokyo_empty_database','firebase':'project_creation_in_progress','cloudflare':'not_created_user_confirmed'},
+      'account_readiness':{'turso':'screenshot_confirmed_sugano-imageone_Free_imageone-medical_Tokyo_empty_database','firebase':'screenshot_confirmed_imageone-medical_Spark_email_password_enabled','cloudflare':'not_created_user_confirmed'},
       'maintenance':{'pages':read('pages-audit.json')['maintenance'],'supabase':read('remote-audit.json')[0]['audit']['maintenance'],'changed':False},
       'official_validation':{k:v for k,v in read('validation.json').items() if k in ('source_detail_rows','prefecture_count','institution_count','official_item_name_count')},
       'latest_validation':read('latest-validation.json'),
@@ -46,6 +47,22 @@ def summarize(root, destination):
          'rejected_all_rows_zlib_without_rowid_trial':all_zlib['bytes'],
          'compressed_staging_peak':compressed_peak,'compressed_peak_headroom':5_000_000_000-compressed_peak},
       'capacity_qualification':'Sum of actual local SQLite files/pages, including indexes. Two copies use identical latest originals; not two historical source periods. Does not establish remote Turso storage/PITR accounting, future growth, user-log storage, or other databases in the organization.',
+      'current_only_policy':{
+         'user_decision':'After validated adoption retire the previous medical/filing snapshot. Keep institution change and bed history only for the current JST update cycle. Preserve users, roles, access and login history. Failed prefectures/bureaus retain their previous successful data.',
+         'notification_current_only_bytes':current['bytes'],
+         'all_current_cycle_history_verified_month':'2026-10',
+         'current_change_history_rows':public['tables']['institution_changes']['rows'],
+         'current_bed_history_rows':public['tables']['institution_bed_history']['rows'],
+         'uncompressed_steady_bytes':public['bytes']+current['bytes'],
+         'uncompressed_largest_bureau_staging_peak_bytes':public['bytes']+current['bytes']+staging['bytes'],
+         'mixed_history_steady_bytes':hot_bytes+history['bytes']+current['bytes'],
+         'mixed_history_largest_bureau_staging_peak_bytes':hot_bytes+history['bytes']+current['bytes']+staging['bytes'],
+         'initial_table_rows_to_import':initial_rows-(single_snapshot_rows+item_rows+8),
+         'monthly_write_planning_including_first_old_history_retirement':monthly_notifications+monthly_facility_case+monthly_notifications+history['verified_rows'],
+         'migration_plus_monthly_plus_full_retry_planning':initial_rows-(single_snapshot_rows+item_rows+8)+2*(monthly_notifications+monthly_facility_case+monthly_notifications+history['verified_rows']),
+         'write_budget_note':'Conservative planning counts retired table rows as writes too. Initial migration plus monthly replacement and a complete retry in the same month may exceed 10 million; require usage checks, unchanged-content skip, upload checkpoints and a stop threshold before enabling the schedule.',
+         'actual_deletion_executed':False,
+         'note':'All 144 source imports and all exported history rows belong to the 2026-10 acquisition/update cycle. No history removal was needed to produce these measured current-cycle capacities. Archive storage, allocator high-water and remote usage still need validation.'},
       'history_roundtrip_verified_rows':history['verified_rows'],
       'writes_planning_rows':{'initial_public_plus_two_notification_versions_table_rows':initial_rows,
          'monthly_notifications_all_bureaus_table_rows':monthly_notifications,'monthly_facility_full_refresh_case':monthly_facility_case,

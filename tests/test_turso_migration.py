@@ -108,6 +108,59 @@ def test_member_update_is_atomic_audited_and_protects_master_and_self(db):
     assert db.execute('SELECT count(*) FROM member_actions').fetchone()[0] == 1
 
 
+def test_new_month_replaces_then_retires_previous_snapshot_atomically(db):
+    from scripts.migration.snapshots import adopt
+    import datetime
+    payload=json.dumps({'latest_selection_resolved':True,'versions':[{'fields':{},'details':[],'source_rows':[{'file':'source.xlsx','sheet':'Sheet1','row':3}]}]})
+    with db:
+        for snapshot,date in [('old','2026-09-01'),('new','2026-10-01')]:
+            db.execute('INSERT INTO notification_snapshots VALUES(?,?,\'validated\',?,?,1,1)',(snapshot,'北海道厚生局',json.dumps({'1':date}),json.dumps({'files':[{}]})))
+            db.execute('INSERT INTO notification_facilities VALUES(?,?,1,?)',(snapshot,'0110000001',date))
+            db.execute('INSERT INTO notification_items VALUES(?,?,?)',(snapshot,'検査','検査'))
+            db.execute('INSERT INTO notification_filings VALUES(?,?,?,\'calculation_start\',NULL,NULL,?)',(snapshot,'0110000001','検査',payload))
+        db.execute("INSERT INTO app_members(firebase_uid,email,role) VALUES('member','viewer@example.invalid','user')")
+        db.execute("INSERT INTO app_login_history(session_key,firebase_uid,email,actor_role,auth_time) VALUES('session','member','viewer@example.invalid','user',1)")
+    adopt(db,'old',None,datetime.date(2026,10,19))
+    with pytest.raises(ValueError,match='Verified restore archive required'):
+        adopt(db,'new','old',datetime.date(2026,10,19),prune_previous=True)
+    assert db.execute('SELECT snapshot_id FROM notification_current').fetchone()==('old',)
+    receipt={'snapshot_id':'old','restore_verified':True,'sha256':'a'*64,'archive_location':'offline-unit-test-fixture'}
+    adopt(db,'new','old',datetime.date(2026,10,19),prune_previous=True,archive_receipt=receipt)
+    assert db.execute('SELECT snapshot_id FROM notification_current').fetchone()==('new',)
+    assert db.execute('SELECT id FROM notification_snapshots').fetchall()==[('new',)]
+    for table in ('notification_facilities','notification_items','notification_filings'):
+        assert db.execute('SELECT DISTINCT snapshot_id FROM '+table).fetchall()==[('new',)]
+    assert db.execute('SELECT count(*) FROM app_members').fetchone()[0]==1
+    assert db.execute('SELECT count(*) FROM app_login_history').fetchone()[0]==1
+
+
+def test_history_retention_only_after_success_and_preserves_failed_prefecture(db):
+    from scripts.migration.snapshots import retire_history_for_cycle
+    with db:
+        db.execute('CREATE TABLE source_imports(id INTEGER PRIMARY KEY,prefecture_code INTEGER,status TEXT,retrieved_at TEXT)')
+        db.executemany('INSERT INTO source_imports VALUES(?,?,\'success\',?)',[(9,1,'2026-09-20T00:00:00Z'),(10,1,'2026-10-25T00:00:00Z'),(11,1,'2026-10-20T00:00:00Z'),(8,2,'2026-09-20T00:00:00Z')])
+        db.execute('CREATE TABLE medical_institutions(id TEXT PRIMARY KEY,prefecture_code INTEGER,source_import_id INTEGER)')
+        db.executemany('INSERT INTO medical_institutions VALUES(?,?,?)',[('one',1,10),('two',2,8)])
+        for table in ('institution_changes','institution_bed_history'):
+            db.execute('CREATE TABLE '+table+'(institution_id TEXT,source_import_id INTEGER)')
+            db.executemany('INSERT INTO '+table+' VALUES(?,?)',[('one',9),('one',10),('one',11),('two',8)])
+    with pytest.raises(ValueError,match='whole update cycle'):
+        with db:retire_history_for_cycle(db,'2026-10',[1],[10],None)
+    with pytest.raises(ValueError,match='Verified previous history archive required'):
+        with db:retire_history_for_cycle(db,'2026-10',[1],[10,11],None)
+    assert db.execute('SELECT count(*) FROM institution_changes').fetchone()[0]==4
+    proof={'cycle_month':'2026-10','restore_verified':True,'sha256':'b'*64,'archive_location':'offline-test','source_import_ids':[9]}
+    with db:
+        deleted=retire_history_for_cycle(db,'2026-10',[1],[10,11],proof)
+    assert deleted=={'institution_changes':1,'institution_bed_history':1}
+    for table in deleted:
+        assert db.execute('SELECT * FROM '+table+' ORDER BY institution_id,source_import_id').fetchall()==[('one',10),('one',11),('two',8)]
+    with pytest.raises(ValueError,match='not been adopted'):
+        with db:
+            db.execute("UPDATE medical_institutions SET source_import_id=9 WHERE id='one'")
+            retire_history_for_cycle(db,'2026-10',[1],[10,11],proof)
+
+
 @pytest.mark.parametrize('compress_beds',[True,False])
 def test_cold_history_compression_is_lossless(tmp_path,compress_beds):
     import hashlib
