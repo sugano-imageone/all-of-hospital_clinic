@@ -36,6 +36,12 @@ jobs:
       - run: node web/notifications.test.mjs
       - run: node worker/auth.test.mjs
       - run: node web/firebase-client.test.mjs
+      - name: Optional read-only Turso connection check
+        if: github.event_name == 'push' && github.ref == 'refs/heads/migration/turso-firebase'
+        env:
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+          TURSO_DATABASE_URL: ${{ vars.TURSO_DATABASE_URL }}
+        run: node worker/smoke-remote.mjs
       - run: python -m unittest discover -s scripts/facility_notifications -p 'test_*.py'
       - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/bootstrap.sql
       - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f sql/001_initial.sql -f sql/002_import.sql -f sql/003_update_jobs.sql -f sql/005_reporting.sql
