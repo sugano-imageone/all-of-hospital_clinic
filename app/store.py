@@ -6,6 +6,9 @@ from typing import Literal
 from app.domain import BEDS, PREFECTURES
 
 class Search(BaseModel):
+    use_notifications: bool = False
+    notification_item: str = Field(default='',max_length=300)
+    notification_status: Literal['filed','unfiled'] = 'filed'
     kind: Literal['病院','診療所'] = '病院'
     prefectures: list[str] = Field(default_factory=list)
     bureau: str = ''
@@ -29,6 +32,8 @@ class Search(BaseModel):
             raise ValueError('病床数の下限が上限を超えています')
         if any(p not in PREFECTURES.values() for p in self.prefectures):
             raise ValueError('不明な都道府県です')
+        if self.use_notifications and not self.notification_item.strip():raise ValueError('届出項目を正式名称で選択してください')
+        if not self.use_notifications:self.notification_item='';self.notification_status='filed'
         return self
 
 def settings():
@@ -66,6 +71,15 @@ class Supabase:
             result.extend(data)
             if len(data)<1000: return result
         raise HTTPException(413,'出力件数が上限を超えました。条件を絞ってください')
+    def search_request(self,search,params,headers=None):
+        if not search.use_notifications:return self.request('GET','/rest/v1/medical_institutions',params=params,headers=headers or {})
+        return self.request('POST','/rest/v1/rpc/notification_search',params=params,headers=headers or {},json={'p_item':search.notification_item,'p_status':search.notification_status})
+    def search_all(self,search,params):
+        rows=[]
+        for offset in range(0,200000,1000):
+            chunk=self.search_request(search,[*params,('offset',str(offset)),('limit','1000')]).json();rows.extend(chunk)
+            if len(chunk)<1000:return rows
+        raise HTTPException(413,'条件を絞ってください')
     def audit(self,action,details=None):
         self.rpc('record_access',{'p_action':action,'p_details':details or {}})
 

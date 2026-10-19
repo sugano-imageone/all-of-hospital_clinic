@@ -63,12 +63,22 @@ function searchParams(q){
  return p;
 }
 const publicFields=config.columns.map(c=>c[0]).join(',');
-async function allRows(table,params,progress){
+function notificationQuery(q){
+ if(q.use_notifications!==true)return {table:'medical_institutions',args:null};
+ if(typeof q.notification_item!=='string'||!q.notification_item.trim())fail(422,'届出項目を正式名称で選択してください');
+ if(!['filed','unfiled'].includes(q.notification_status))fail(422,'届出済の／未届出のを選択してください');
+ return {table:'rpc/notification_search',args:{p_item:q.notification_item,p_status:q.notification_status}};
+}
+async function dataRequest(table,params,args=null,headers={}){
+ return remote('/rest/v1/'+table+'?'+params,args?{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(args)}:{headers});
+}
+function effectiveFilters(q){const r={...q};if(r.use_notifications!==true){r.use_notifications=false;delete r.notification_item;delete r.notification_status;}return r;}
+async function allRows(table,params,progress,args=null){
  const first=new URLSearchParams(params);first.set('offset','0');first.set('limit','1000');
- const r=await remote('/rest/v1/'+table+'?'+first,{headers:{Prefer:'count=exact'}});
+ const r=await dataRequest(table,first,args,{Prefer:'count=exact'});
  const total=Number(r.headers.get('content-range')?.split('/')[1]);if(!Number.isFinite(total)||total>200000)fail(502,'件数を確認できませんでした');
  const rows=await r.json(),pages=[];let next=1000;
- async function worker(){while(next<total){const offset=next;next+=1000;const p=new URLSearchParams(params);p.set('offset',String(offset));p.set('limit','1000');const chunk=await(await remote('/rest/v1/'+table+'?'+p)).json();pages.push([offset,chunk]);if(progress)progress(Math.min(total,offset+chunk.length),total);}}
+ async function worker(){while(next<total){const offset=next;next+=1000;const p=new URLSearchParams(params);p.set('offset',String(offset));p.set('limit','1000');const chunk=await(await dataRequest(table,p,args)).json();pages.push([offset,chunk]);if(progress)progress(Math.min(total,offset+chunk.length),total);}}
  await Promise.all([worker(),worker(),worker()]);pages.sort((a,b)=>a[0]-b[0]);for(const [,chunk]of pages)rows.push(...chunk);
  if(rows.length!==total)fail(403,'取得中にデータまたは利用権限が変わりました。再度ログインしてお試しください');return rows;
 }
@@ -118,7 +128,7 @@ window.fetch=async function(url,options={}){
    document.getElementById('message').textContent='メールアドレス・パスワードを認証しています…';
    const r=await remote('/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:form.get('email'),password:form.get('password')})},false);const tokens=await r.json();save(tokens);
    document.getElementById('message').textContent='利用権限を確認しています…';
-   try{return json({ok:true,user:profile(await member(tokens.user))});}catch(e){save(null);throw e;}
+   try{const me=await member(tokens.user);await rpc('record_login');return json({ok:true,user:profile(me)});}catch(e){save(null);throw e;}
   }
   if(url==='/api/connection-check'){
    const start=performance.now();await remote('/auth/v1/health',{},false);return json({ok:true,seconds:Math.round((performance.now()-start)/10)/100});
@@ -126,13 +136,26 @@ window.fetch=async function(url,options={}){
   if(url==='/auth/refresh'){await refresh();return json({ok:true});}
   if(url==='/auth/logout'){try{if(session)await remote('/auth/v1/logout',{method:'POST'});}finally{save(null);}return json({ok:true});}
   const me=await member();if(url==='/api/me')return json(profile(me));
-  const q=options.body?JSON.parse(options.body):{};
+  const q=effectiveFilters(options.body?JSON.parse(options.body):{});
+  if(url==='/api/admin/logins'){
+   if(!['admin','master'].includes(me.role))fail(403,'管理者権限が必要です');
+   if(typeof(q.email??'')!=='string'||(q.email||'').length>254||!Number.isInteger(q.page??1)||(q.page??1)<1||(q.page??1)>100000)fail(422,'履歴の検索条件を確認してください');
+   for(const date of [q.from_date,q.to_date])if(date!=null&&!/^\d{4}-\d{2}-\d{2}$/.test(date))fail(422,'日付を確認してください');
+   if(q.from_date&&q.to_date&&q.from_date>q.to_date)fail(422,'期間の開始日が終了日を超えています');
+   return json(await rpc('viewer_login_history',{p_email:q.email||'',p_from:q.from_date||null,p_to:q.to_date||null,p_page:q.page||1}));
+  }
   if(url==='/auth/password'){
    if(typeof q.password!=='string'||q.password.length<12||new TextEncoder().encode(q.password).length>72)fail(400,'パスワードは12文字以上、72バイト以下で設定してください');
    await remote('/auth/v1/user',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:q.password,data:{password_change_required:false}})});return json({ok:true});
   }
   if(url==='/api/search'){
-   const p=searchParams(q);p.set('select',publicFields);p.set('offset',String(((q.page||1)-1)*50));p.set('limit','50');const r=await remote('/rest/v1/medical_institutions?'+p,{headers:{Prefer:'count=exact'}}),items=await r.json();const total=Number(r.headers.get('content-range')?.split('/')[1]);await audit('search',{count:total,filters:q});return json({items,total,page:q.page||1,page_size:50});
+   const p=searchParams(q);p.set('select',publicFields);p.set('offset',String(((q.page||1)-1)*50));p.set('limit','50');const {table,args}=notificationQuery(q);const r=await dataRequest(table,p,args,{Prefer:'count=exact'}),items=await r.json();const total=Number(r.headers.get('content-range')?.split('/')[1]);await audit('search',{count:total,filters:q});return json({items,total,page:q.page||1,page_size:50});
+  }
+  if(url==='/api/notifications/metadata'){
+   const [n,sources]=await Promise.all([rpc('notification_metadata'),rpc('source_metadata')]);
+   const current=currentSources(sources.filter(r=>r.status==='success'));
+   const names=['北海道厚生局','東北厚生局','関東信越厚生局','東海北陸厚生局','近畿厚生局','中国四国厚生局','四国厚生支局','九州厚生局'];
+   return json({items:n.items,bureaus:names.map(bureau=>({bureau,facility:current.filter(r=>r.bureau===bureau),notification:Object.entries(n.bureaus.find(r=>r.bureau===bureau)?.reference_dates||{}).map(([code,reference_date])=>({prefecture:Object.keys(config.prefectureCodes).find(p=>config.prefectureCodes[p]===Number(code))||code,reference_date}))}))});
   }
   if(url==='/api/dashboard'){
    const [rows,rawSources,monthly]=await Promise.all([dashboardRows(),rpc('source_metadata'),rpc('monthly_change_counts')]);const sources=currentSources(rawSources),status_counts={};for(const r of rows)status_counts[r.status]=(status_counts[r.status]||0)+1;
@@ -151,7 +174,7 @@ window.fetch=async function(url,options={}){
    }
    if(!['csv','xlsx','master'].includes(format))fail(404,'出力形式を確認してください');
    const p=format==='master'?new URLSearchParams({status:'eq.現存',order:'code.asc'}):searchParams(q);p.set('select',publicFields);
-   const rows=await allRows('medical_institutions',p,(done,total)=>{document.getElementById('message').textContent='データ取得中 '+done.toLocaleString()+' / '+total.toLocaleString()+' 件';});await audit('export_'+format,{count:rows.length,filters:q});
+   const {table,args}=format==='master'?{table:'medical_institutions',args:null}:notificationQuery(q);const rows=await allRows(table,p,(done,total)=>{document.getElementById('message').textContent='データ取得中 '+done.toLocaleString()+' / '+total.toLocaleString()+' 件';},args);await audit('export_'+format,{count:rows.length,filters:q});
    if(format==='csv')return new Response(csv(rows),{headers:{'Content-Type':'text/csv;charset=utf-8'}});
    document.getElementById('message').textContent='Excelを生成しています…';const sources=currentSources(await rpc('source_metadata'));const blob=await workbook(rows,sources,format==='master'?'現存のみ・全47都道府県':'検索条件に一致');return new Response(blob,{headers:{'Content-Type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}});
   }
