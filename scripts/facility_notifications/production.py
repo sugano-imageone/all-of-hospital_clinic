@@ -86,6 +86,10 @@ def publish(remote,database,bureau,root):
   batch=[]
   for r in rows:
    payload=json.loads(r['payload_json'])
+   # The institution identity comes from the existing facility master. Preserve
+   # selected filing fields/details/provenance without duplicating addresses etc.
+   for version in payload.get('versions',[]):
+    version['fields']={k:v for k,v in version['fields'].items() if k in ['受理記号','受理番号','受理日','受理年月日','算定開始年月日','個別有効開始年月日']}
    # Store trusted source date kinds and original versions; do not invent receipt dates.
    batch.append({'code':r['medical_code'],'item_key':r['item_name_search'],'official_item_name':r['official_item_name'],'date_basis':payload['date_basis'],'receipt_date':payload['receipt_date_iso'] or None,'calculation_start':r['calculation_start_iso'] or None,'payload':payload})
   remote.rpc('upload_notification_batch',{'p_snapshot':snapshot,'p_filings':batch});sent+=len(batch)

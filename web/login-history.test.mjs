@@ -37,6 +37,9 @@ assert.equal((await db.query("select public.viewer_login_history('viewer','2026-
 assert.equal((await db.query("select public.viewer_login_history('%',null,null,1) d")).rows[0].d.total,0);checks++; // Literal email substring.
 await assert.rejects(db.query("select public.viewer_login_history('',null,null,0)"),/invalid history filters/);checks++;
 await caller(master,null);assert.equal((await db.query('select public.viewer_login_history() d')).rows[0].d.total,1);checks++;
+await db.exec('reset role');await db.exec("insert into auth.sessions values ('cccccccc-cccc-cccc-cccc-cccccccccccc','11111111-1111-1111-1111-111111111111','2020-01-01T00:00:00Z')");
+await caller(viewer,'cccccccc-cccc-cccc-cccc-cccccccccccc');await db.query('select record_login()');
+await caller(admin,'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');assert.equal((await db.query('select viewer_login_history() d')).rows[0].d.total,1);checks++;
 await db.exec('reset role');await db.query('update public.app_members set approved=false where user_id=$1',[master]);
 await caller(master,null);await assert.rejects(db.query('select public.viewer_login_history()'),/admin required/);checks++;
 await db.close();console.log(JSON.stringify({isolated_postgres_checks_passed:checks,production_connected:false}));

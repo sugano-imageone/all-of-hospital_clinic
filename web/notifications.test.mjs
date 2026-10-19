@@ -15,6 +15,9 @@ alter table medical_institutions enable row level security;grant select on medic
 await db.exec(fs.readFileSync(new URL('../sql/017_maintenance.sql',import.meta.url),'utf8'));
 await db.exec('create policy approved_read on medical_institutions for select to authenticated using((select is_approved()));');
 await db.exec(fs.readFileSync(new URL('../sql/018_notifications.sql',import.meta.url),'utf8'));
+await db.exec(`create table source_imports(id int);create table update_jobs(id int);insert into source_imports values(1);insert into update_jobs values(1);alter table source_imports enable row level security;alter table update_jobs enable row level security;grant select on source_imports,update_jobs to authenticated;create policy imports_admin_read on source_imports for select to authenticated using(is_admin());create policy admin_jobs on update_jobs for select to authenticated using(is_admin());insert into app_members values('44444444-4444-4444-4444-444444444444','admin',true);`);
+await db.exec(fs.readFileSync(new URL('../sql/019_collection_log_permissions.sql',import.meta.url),'utf8'));
+
 async function role(name,uid='11111111-1111-1111-1111-111111111111'){await db.exec('reset role');await db.query("select set_config('request.uid',$1,false),set_config('request.role',$2,false)",[uid,name]);await db.exec('set role '+name);}
 await role('service_role');
 const metadata={bureau:'北海道厚生局',reference_dates:{1:'2026-10-01'},source:{url:'https://official.invalid/source'},filings:1,facilities:3};
@@ -39,6 +42,12 @@ assert.equal((await db.query('select count(*)::int n from notification_jobs')).r
 await role('authenticated','33333333-3333-3333-3333-333333333333');assert.deepEqual(await codes('医療安全対策加算１','filed'),[]);
 await assert.rejects(db.query('select notification_metadata()'),/approval required/);
 await role('anon');await assert.rejects(db.query('select * from notification_search($1,$2)',['医療安全対策加算１','filed']),/permission denied/);
+await role('authenticated','44444444-4444-4444-4444-444444444444');
+assert.equal((await db.query('select count(*)::int n from source_imports')).rows[0].n,0);
+assert.equal((await db.query('select count(*)::int n from update_jobs')).rows[0].n,0);
+await role('authenticated','22222222-2222-2222-2222-222222222222');
+assert.equal((await db.query('select count(*)::int n from source_imports')).rows[0].n,1);
+assert.equal((await db.query('select count(*)::int n from update_jobs')).rows[0].n,1);
 await role('service_role');
 const bad=await begin({...metadata,reference_dates:{1:'2026-09-01'}});
 await db.query('select upload_notification_batch($1,$2,$3)',[bad,facilities.map(f=>({...f,reference_date:'2026-09-01'})),[filing]]);
