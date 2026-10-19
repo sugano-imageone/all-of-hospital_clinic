@@ -21,6 +21,7 @@ function cell(row,value){const td=document.createElement('td');td.textContent=va
 function query(){
  const data=new FormData($('#search')),q={};
  for(const [k,v] of data){if(k!=='prefectures')q[k]=v;}
+ q.use_notifications=data.has('use_notifications');if(!q.use_notifications){delete q.notification_item;delete q.notification_status;}
  q.prefectures=data.getAll('prefectures');q.include_suspended=data.has('include_suspended');
  for(const k of ['minimum','maximum'])q[k]=q[k]===''?null:Number(q[k]);
  return {...q,page,sort:$('#sort').value,direction:$('#direction').value};
@@ -60,14 +61,39 @@ async function loadMembers(){
  for(const m of members){const row=document.createElement('div');row.className='member';const id=document.createElement('code');id.textContent=m.email||m.user_id;const role=document.createElement('select');for(const r of (m.role==='master'?['master']:['user','admin'])){const o=new Option(r==='master'?'マスター':r==='admin'?'管理者':'閲覧者',r);role.add(o);}role.value=m.role;const label=document.createElement('label');label.className='inline';const check=document.createElement('input');check.type='checkbox';check.checked=m.approved;label.append(check,document.createTextNode('利用を承認'));const save=document.createElement('button');save.textContent='保存';if(m.user_id===currentUserId||m.role==='master'){role.disabled=true;check.disabled=true;save.disabled=true;}save.onclick=async()=>{try{await post('/api/admin/members',{user_id:m.user_id,role:role.value,approved:check.checked});message('承認状態を更新しました');}catch(e){message(e.message);}};row.append(id,role,label,save);$('#members').append(row);}
 }
 async function loadSession(knownUser=null){
- try{const user=knownUser||await(await api('/api/me')).json();currentUserId=user.user_id;canExportAll=['admin','master'].includes(user.role);$$('[data-admin-only]').forEach(b=>{b.disabled=!canExportAll;b.title=canExportAll?'検索条件に関係なく、全施設・全状態・全項目を出力します':'管理者のみ利用できます';});$('#login-panel').hidden=true;$('#workspace').hidden=false;$('#account').textContent=user.email||'';const out=document.createElement('button');out.className='secondary';out.textContent='ログアウト';out.onclick=async()=>{try{await api('/auth/logout',{method:'POST'});location.reload();}catch(e){message(e.message);}};$('#account').append(out);$('#admin-nav').hidden=!['admin','master'].includes(user.role);const siteLink=$('#site-settings-link');if(siteLink)siteLink.hidden=user.role!=='master';message(user.password_change_required?'仮パスワードでログインしています。「パスワード変更」からご自身のパスワードに変更してください':'');}
+ try{const user=knownUser||await(await api('/api/me')).json();currentUserId=user.user_id;canExportAll=['admin','master'].includes(user.role);$$('[data-admin-only]').forEach(b=>{b.disabled=!canExportAll;b.title=canExportAll?'検索条件に関係なく、全施設・全状態・全項目を出力します':'管理者のみ利用できます';});$('#login-panel').hidden=true;$('#workspace').hidden=false;$('#account').textContent=user.email||'';const out=document.createElement('button');out.className='secondary';out.textContent='ログアウト';out.onclick=async()=>{try{await api('/auth/logout',{method:'POST'});location.reload();}catch(e){message(e.message);}};$('#account').append(out);$('#admin-nav').hidden=!['admin','master'].includes(user.role);$('#login-history-nav').hidden=!['admin','master'].includes(user.role);await loadNotificationMetadata();const siteLink=$('#site-settings-link');if(siteLink)siteLink.hidden=user.role!=='master';message(user.password_change_required?'仮パスワードでログインしています。「パスワード変更」からご自身のパスワードに変更してください':'');}
  catch(e){$('#login-panel').hidden=false;$('#workspace').hidden=true;if(!e.message.includes('ログイン')&&e.message!=='メンテナンス中')message(e.message);}
 }
 $('#login').onsubmit=async e=>{e.preventDefault();const button=e.target.querySelector('button');button.disabled=true;message('ログイン中…');try{const result=await(await api('/auth/login',{method:'POST',body:new FormData(e.target)})).json();$('#login').reset();await loadSession(result.user);}catch(e){if(e.message!=='メンテナンス中')message(e.message);}finally{if(!$('#login').hidden)button.disabled=false;}};
+const notificationToggle=$('#use-notifications');
+function toggleNotifications(){for(const id of ['#notification-item','#notification-status'])$(id).disabled=!notificationToggle.checked;}
+notificationToggle.onchange=toggleNotifications;
+$('#search').addEventListener('reset',()=>setTimeout(toggleNotifications,0));
+async function loadNotificationMetadata(){
+ const d=await(await api('/api/notifications/metadata')).json();
+ $('#notification-items').replaceChildren();for(const name of d.items){const o=document.createElement('option');o.value=name;$('#notification-items').append(o);}
+ const fmt=value=>{if(!value)return '未取得';const [y,m,d]=value.split('-').map(Number);return `${y}年${m}月${d}日`;};
+ function dates(rows){if(!rows.length)return '未取得';const unique=[...new Set(rows.map(r=>r.reference_date))];return unique.length===1?fmt(unique[0]):rows.map(r=>r.prefecture+'：'+fmt(r.reference_date)).join('、');}
+ $('#reference-dates').replaceChildren();for(const bureau of d.bureaus){const tr=document.createElement('tr');cell(tr,bureau.bureau);cell(tr,dates(bureau.facility));cell(tr,dates(bureau.notification));$('#reference-dates').append(tr);}
+}
 $('#search').onsubmit=e=>{e.preventDefault();page=1;runSearch();};
 $$('[name=kind]').forEach(r=>r.onchange=()=>{const h=r.value==='病院';$('#search').elements.minimum.value=h?20:'';$('#search').elements.maximum.value=h?200:'';$('#search').elements.clinic_beds.value='';});
 $('#prev').onclick=()=>{page--;runSearch(false);};$('#next').onclick=()=>{page++;runSearch(false);};
 for(const sel of ['#sort','#direction'])$(sel).onchange=()=>{page=1;runSearch();};
-$$('.nav').forEach(b=>b.onclick=async()=>{$$('.nav').forEach(x=>x.classList.toggle('active',x===b));$$('.tab').forEach(t=>t.hidden=t.id!==b.dataset.tab);try{if(b.dataset.tab==='admin-panel')await loadMembers();else if(['dashboard-panel','sources-panel'].includes(b.dataset.tab))await loadDashboard();}catch(e){message(e.message);}});
+$$('.nav').forEach(b=>b.onclick=async()=>{$$('.nav').forEach(x=>x.classList.toggle('active',x===b));$$('.tab').forEach(t=>t.hidden=t.id!==b.dataset.tab);try{if(b.dataset.tab==='login-history-panel')await loadLoginHistory();else if(b.dataset.tab==='admin-panel')await loadMembers();else if(['dashboard-panel','sources-panel'].includes(b.dataset.tab))await loadDashboard();}catch(e){message(e.message);}});
 $$('[data-export]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{message('ファイルを生成中…');const response=await post('/api/export/'+b.dataset.export,b.dataset.export==='full'?{}:lastQuery||query());const blob=await response.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=b.dataset.export==='full'?'全医療機関データ.csv':b.dataset.export==='csv'?'検索結果.csv':b.dataset.export==='master'?'全国医療機関マスター.xlsx':'検索結果.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);message(b.dataset.export==='full'?'全医療機関データを出力しました。':'出力しました。対象範囲はファイル内の更新情報をご確認ください。');}catch(e){message(e.message);}finally{b.disabled=b.hasAttribute('data-admin-only')&&!canExportAll;}});
+let loginHistoryPage=1;
+async function loadLoginHistory(){
+ try{
+  const form=new FormData($('#login-history-filter'));const filters={email:String(form.get('email')||''),from_date:form.get('from_date')||null,to_date:form.get('to_date')||null,page:loginHistoryPage};
+  const d=await(await post('/api/admin/logins',filters)).json();
+  $('#login-history-results').replaceChildren();
+  for(const r of d.items){const tr=document.createElement('tr');cell(tr,new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(r.created_at)));cell(tr,r.email||r.user_id);$('#login-history-results').append(tr);}
+  if(!d.items.length){const tr=document.createElement('tr');cell(tr,'該当するログイン履歴はありません');tr.firstChild.colSpan=2;$('#login-history-results').append(tr);}
+  $('#login-history-count').textContent=d.total.toLocaleString()+' 件';$('#login-history-page').textContent=loginHistoryPage+' / '+Math.max(1,Math.ceil(d.total/50))+' ページ';$('#login-history-prev').disabled=loginHistoryPage<=1;$('#login-history-next').disabled=loginHistoryPage*50>=d.total;message('');
+ }catch(e){message(e.message);}
+}
+$('#login-history-filter').onsubmit=e=>{e.preventDefault();loginHistoryPage=1;loadLoginHistory();};
+$('#login-history-prev').onclick=()=>{loginHistoryPage--;loadLoginHistory();};
+$('#login-history-next').onclick=()=>{loginHistoryPage++;loadLoginHistory();};
 loadSession();

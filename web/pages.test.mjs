@@ -2,13 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import JSZip from 'jszip';
 
 function client({approved=true,networkFailure=false,timeout=false,role='user',exportRows=[],maintenance=false,serverMaintenance=false}={}){
- const calls=[];
+ const calls=[],requests=[];
  const config={maintenance,url:'https://example.supabase.co',key:'sb_publishable_test',columns:[['code','コード']],prefectureCodes:{'福岡県':40}};
- const native=async(url)=>{
+ const native=async(url,options={})=>{
   if(url.endsWith('/rpc/maintenance_status'))return Response.json({active:serverMaintenance});
-  calls.push(new URL(url));
+  calls.push(new URL(url));requests.push({url:new URL(url),body:options.body?JSON.parse(options.body):null});
   if(networkFailure)throw new TypeError('Failed to fetch');
   if(timeout)throw new DOMException('Timed out','TimeoutError');
   if(url.includes('/auth/v1/token?grant_type=password'))return Response.json({access_token:'test-token',refresh_token:'test-refresh',user:{id:'viewer-id',email:'viewer@example.invalid'}});
@@ -16,8 +17,12 @@ function client({approved=true,networkFailure=false,timeout=false,role='user',ex
   if(url.endsWith('/auth/v1/user'))return Response.json({id:'viewer-id'});
   if(url.includes('/rest/v1/app_members?'))return Response.json([{role,approved}]);
   if(url.includes('/rest/v1/medical_institutions?'))return Response.json(exportRows.slice(Number(new URL(url).searchParams.get('offset')||0),Number(new URL(url).searchParams.get('offset')||0)+1000),{headers:{'Content-Range':'0-'+Math.max(0,exportRows.length-1)+'/'+exportRows.length}});
+  if(url.includes('/rpc/notification_search?')){const p=new URL(url).searchParams;const offset=Number(p.get('offset')||0),limit=Number(p.get('limit')||1000);return Response.json(exportRows.slice(offset,offset+limit),{headers:{'Content-Range':'0-'+Math.max(0,exportRows.length-1)+'/'+exportRows.length}});}
+  if(url.endsWith('/rpc/notification_metadata'))return Response.json({items:['医療安全対策加算１'],bureaus:[{bureau:'九州厚生局',reference_dates:{40:'2026-10-01'}}]});
   if(url.endsWith('/rpc/source_metadata'))return Response.json([]);
   if(url.endsWith('/rpc/monthly_change_counts'))return Response.json({});
+  if(url.endsWith('/rpc/record_login'))return new Response(null,{status:204});
+  if(url.endsWith('/rpc/viewer_login_history'))return Response.json({items:[],total:0,page:1,page_size:50});
   if(url.endsWith('/rpc/record_access'))return new Response(null,{status:204});
   throw Error('Unexpected request');
  };
@@ -25,9 +30,9 @@ function client({approved=true,networkFailure=false,timeout=false,role='user',ex
  vm.runInNewContext(fs.readFileSync(new URL('./pages.js',import.meta.url),'utf8'),{
   window,document:{getElementById:id=>id==='cloud-config'?{textContent:JSON.stringify(config)}:id==='message'?{textContent:''}:null},
   sessionStorage:{getItem:()=>JSON.stringify({access_token:'test-token'}),setItem(){},removeItem(){}},
-  Response,URL,URLSearchParams,TextEncoder,AbortSignal,performance,
+  Response,URL,URLSearchParams,TextEncoder,AbortSignal,performance,JSZip,
  });
- return {window,calls};
+ return {window,calls,requests};
 }
 
 for(const [key,value] of [['clinic_beds','無床'],['clinic_beds','有床'],['bureau','九州厚生局'],['owner_type','医療法人'],['psychiatric_class','精神病床なし'],['code','4010210047']]){
@@ -73,14 +78,14 @@ test('dashboard fetches all 47 indexed prefecture partitions without a national 
  assert.equal((await response.json()).total,0);
 });
 
-test('password login verifies membership with two requests and returns no token to the UI',async()=>{
+test('password login verifies membership and records a verified session and returns no token to the UI',async()=>{
  const {window,calls}=client();const form=new FormData();form.set('email','viewer@example.invalid');form.set('password','test-password');
  const r=await window.fetch('/auth/login',{method:'POST',body:form});assert.equal(r.status,200);
  const body=await r.json();assert.equal(body.user.email,'viewer@example.invalid');assert.equal(body.user.role,'user');
- assert.equal(calls.length,2);assert.equal(calls[0].pathname,'/auth/v1/token');assert.equal(calls[1].pathname,'/rest/v1/app_members');
+ assert.equal(calls.length,3);assert.equal(calls[0].pathname,'/auth/v1/token');assert.equal(calls[1].pathname,'/rest/v1/app_members');assert.equal(calls[2].pathname,'/rest/v1/rpc/record_login');
  assert.ok(!JSON.stringify(body).includes('test-token'));assert.ok(!JSON.stringify(body).includes('test-password'));
  const search=await window.fetch('/api/search',{method:'POST',body:'{}'});assert.equal(search.status,200);
- assert.equal(calls[2].pathname,'/auth/v1/user');assert.equal(calls[3].pathname,'/rest/v1/app_members');
+ assert.equal(calls[3].pathname,'/auth/v1/user');assert.equal(calls[4].pathname,'/rest/v1/app_members');
 });
 
 test('unapproved login clears the session and cannot search',async()=>{
@@ -129,4 +134,24 @@ for(const mode of ['static','server'])test(`maintenance ${mode} blocks login, re
   const r=await window.fetch(url,{method:'POST',body:'{}'});assert.equal(r.status,503);assert.equal((await r.json()).detail,'メンテナンス中');
  }
  assert.equal(calls.length,0);
+});
+
+for(const status of ['filed','unfiled'])test(`notification ${status}: search/CSV/Excel share conditions`,async()=>{
+ const {window,requests}=client({exportRows:[{code:'4010000001',kind:'病院',status:'現存',prefecture:'福岡県'}]});
+ const q={use_notifications:true,notification_item:'医療安全対策加算１',notification_status:status,kind:'病院',prefectures:['福岡県'],minimum:20,maximum:200,sort:'code',direction:'asc'};
+ const search=await window.fetch('/api/search',{method:'POST',body:JSON.stringify(q)});assert.equal(search.status,200);assert.equal((await search.json()).total,1);
+ const csv=await window.fetch('/api/export/csv',{method:'POST',body:JSON.stringify(q)});assert.equal(csv.status,200);assert.match(await csv.text(),/4010000001/);
+ const xlsx=await window.fetch('/api/export/xlsx',{method:'POST',body:JSON.stringify(q)});assert.equal(xlsx.status,200);
+ const zip=await JSZip.loadAsync(await xlsx.arrayBuffer());assert.match(await zip.file('xl/worksheets/sheet3.xml').async('string'),/4010000001/);
+ const calls=requests.filter(r=>r.url.pathname.endsWith('/rpc/notification_search'));assert.equal(calls.length,3);
+ for(const call of calls){assert.equal(call.body.p_item,q.notification_item);assert.equal(call.body.p_status,status);assert.equal(call.url.searchParams.get('prefecture_code'),'in.(40)');assert.deepEqual(call.url.searchParams.getAll('total_beds'),['gte.20','lte.200']);}
+});
+test('notification OFF ignores stored conditions in requests and audit records',async()=>{
+ const {window,requests}=client();
+ for(const path of ['/api/search','/api/export/csv'])assert.equal((await window.fetch(path,{method:'POST',body:JSON.stringify({use_notifications:false,notification_item:'残った条件',notification_status:'unfiled'})})).status,200);
+ assert.equal(requests.some(r=>r.url.pathname.includes('/rpc/notification_')),false);
+ for(const call of requests.filter(r=>r.url.pathname.endsWith('/rpc/record_access'))){assert.equal(call.body.p_details.filters.use_notifications,false);assert.equal('notification_item' in call.body.p_details.filters,false);}
+});
+test('adopted notification metadata has eight separate bureaus and stored dates',async()=>{
+ const {window}=client();const r=await window.fetch('/api/notifications/metadata');assert.equal(r.status,200);const d=await r.json();assert.equal(d.bureaus.length,8);assert.ok(d.bureaus.some(b=>b.bureau==='中国四国厚生局'));assert.ok(d.bureaus.some(b=>b.bureau==='四国厚生支局'));assert.equal(d.bureaus.find(b=>b.bureau==='九州厚生局').notification[0].reference_date,'2026-10-01');
 });

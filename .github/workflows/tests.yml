@@ -32,6 +32,9 @@ jobs:
       - run: node --test web/admin-users.test.mjs
       - run: node --test web/pages.test.mjs
       - run: node web/maintenance.test.mjs
+      - run: node web/login-history.test.mjs
+      - run: node web/notifications.test.mjs
+      - run: python -m unittest discover -s scripts/facility_notifications -p 'test_*.py'
       - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/bootstrap.sql
       - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f sql/001_initial.sql -f sql/002_import.sql -f sql/003_update_jobs.sql -f sql/005_reporting.sql
       - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -c 'create database directory_existing_test'

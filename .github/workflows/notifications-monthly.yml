@@ -1,19 +1,21 @@
-name: Monthly medical notifications (staging only)
+name: Monthly medical notifications
 on:
   schedule:
-    # 09:20 JST on the 20th and 25th. The worker also checks the JST date.
+    # JST 09:20 on the 20th and 25th; DB enforces actual JST date.
     - cron: '20 0 20,25 * *'
   workflow_dispatch:
 permissions:
   contents: read
-  actions: read
 concurrency:
-  group: medical-notifications-staging
+  group: medical-notifications-production
   cancel-in-progress: false
 jobs:
   collect:
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    env:
+      SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,55 +25,9 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - name: Verify replacement, retry and search rules
         run: python -m unittest discover -s scripts/facility_notifications -p 'test_*.py'
-      - name: Restore the previous staging state
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            fs.mkdirSync('work/notifications/state', {recursive:true});
-            const all = await github.paginate(github.rest.actions.listArtifactsForRepo, {
-              ...context.repo, per_page:100
-            });
-            const candidates = all.filter(a => !a.expired &&
-              a.name.startsWith('facility-notifications-state-') &&
-              a.workflow_run?.head_branch === context.payload.repository.default_branch &&
-              a.workflow_run.id !== context.runId)
-              .sort((a,b) => b.created_at.localeCompare(a.created_at));
-            for (const artifact of candidates) {
-              const run = await github.rest.actions.getWorkflowRun({
-                ...context.repo, run_id:artifact.workflow_run.id
-              });
-              if (run.data.path !== '.github/workflows/notifications-monthly.yml' ||
-                  run.data.status !== 'completed') continue;
-              const archive = await github.rest.actions.downloadArtifact({
-                ...context.repo, artifact_id:artifact.id, archive_format:'zip'
-              });
-              fs.writeFileSync('work/notifications/previous-state.zip',Buffer.from(archive.data));
-              core.info(`Restoring staging artifact ${artifact.id}`);
-              break;
-            }
-      - name: Unpack the restored state
-        shell: python
-        run: |
-          from pathlib import Path
-          import zipfile
-          p=Path('work/notifications/previous-state.zip')
-          if p.exists():
-              with zipfile.ZipFile(p) as z:
-                  for name in ['current.sqlite','last-run.json']:
-                      if name in z.namelist():
-                          Path('work/notifications/state',name).write_bytes(z.read(name))
-      - name: Collect, validate, select latest filings and replace staging snapshots
-        run: python scripts/facility_notifications/monthly.py --root work/notifications
-      - name: Preserve state even when a bureau fails
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: facility-notifications-state-${{ github.run_id }}-${{ github.run_attempt }}
-          path: work/notifications/state/
-          if-no-files-found: error
-          retention-days: 45
-      - name: Preserve this run's official raw files and verification records
+      - name: Collect, validate and atomically replace successful bureaus
+        run: python scripts/facility_notifications/production.py --root work/notifications
+      - name: Preserve official raw sources and verification records
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -84,5 +40,6 @@ jobs:
             work/notifications/attempts/**/validation.json
             work/notifications/attempts/**/latest-validation.json
             work/notifications/attempts/**/*.log
+            work/notifications/production-result.json
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 90
