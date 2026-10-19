@@ -1,11 +1,12 @@
 -- Apply only when the unreleased login-history client is ready. No production data included.
 begin;
-create table if not exists public.app_login_history_settings(singleton boolean primary key default true check(singleton),started_at timestamptz not null default now());
+create table if not exists public.app_login_history_settings (
+ singleton boolean primary key default true check(singleton),started_at timestamptz not null default now()
+);
 insert into public.app_login_history_settings(singleton) values(true) on conflict do nothing;
 alter table public.app_login_history_settings enable row level security;
 revoke all on public.app_login_history_settings from public,anon,authenticated;
 grant all on public.app_login_history_settings to service_role;
-
 create table if not exists public.app_login_history (
  session_id uuid primary key,
  user_id uuid not null references auth.users(id) on delete cascade,
@@ -28,7 +29,7 @@ language plpgsql security definer set search_path='' as $$
 declare v_role text; v_session uuid; v_created timestamptz; v_email text;
 begin
  select m.role into v_role from public.app_members m where m.user_id=auth.uid() and m.approved;
- if v_role is null then raise exception 'approval required'; end if;
+ if not public.is_approved() or v_role is null then raise exception 'approval required'; end if;
  v_session:=nullif(auth.jwt()->>'session_id','')::uuid;
  select s.created_at,u.email into v_created,v_email
  from auth.sessions s join auth.users u on u.id=s.user_id
@@ -65,5 +66,6 @@ begin
 end $$;
 revoke all on function public.viewer_login_history(text,date,date,integer) from public,anon;
 grant execute on function public.viewer_login_history(text,date,date,integer) to authenticated;
+insert into public.directory_migrations(version) values('login-history-v1') on conflict do nothing;
 notify pgrst,'reload schema';
 commit;

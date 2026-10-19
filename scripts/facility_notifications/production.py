@@ -28,7 +28,7 @@ class Remote:
      # Parameter names/functions are internal constants. JSON strings are SQL quoted.
      lit=lambda v:"'"+json.dumps(v,ensure_ascii=False).replace("'","''")+"'::jsonb"
      params=','.join(k+'=>'+(lit(v) if isinstance(v,(dict,list)) else "'"+str(v).replace("'","''")+"'" if v is not None else 'null') for k,v in args.items())
-     sql="begin;select set_config('request.jwt.claim.role','service_role',true);select public."+name+'('+params+') as result;commit;'
+     sql="select set_config('request.jwt.claim.role','service_role',true);select public."+name+'('+params+') as result;'
      r=self.client.post('https://api.supabase.com/v1/projects/jnoukmkrtmpgchdpcskc/database/query',headers={'Authorization':'Bearer '+self.token},json={'query':sql,'read_only':False})
     else:
      headers={'apikey':self.key}

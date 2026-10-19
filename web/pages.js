@@ -153,8 +153,8 @@ window.fetch=async function(url,options={}){
   }
   if(url==='/api/notifications/metadata'){
    const [n,sources]=await Promise.all([rpc('notification_metadata'),rpc('source_metadata')]);
-   const current=currentSources(sources.filter(r=>r.status==='success'));
    const names=['北海道厚生局','東北厚生局','関東信越厚生局','東海北陸厚生局','近畿厚生局','中国四国厚生局','四国厚生支局','九州厚生局'];
+   const current=currentSources(sources.filter(r=>r.status==='success'&&names.includes(r.bureau)));
    return json({items:n.items,bureaus:names.map(bureau=>({bureau,facility:current.filter(r=>r.bureau===bureau),notification:Object.entries(n.bureaus.find(r=>r.bureau===bureau)?.reference_dates||{}).map(([code,reference_date])=>({prefecture:Object.keys(config.prefectureCodes).find(p=>config.prefectureCodes[p]===Number(code))||code,reference_date}))}))});
   }
   if(url==='/api/dashboard'){

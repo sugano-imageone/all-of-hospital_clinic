@@ -6,6 +6,7 @@ await db.exec(`create role anon;create role authenticated;create role service_ro
 create schema auth;grant usage on schema auth to authenticated,service_role;
 create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.uid',true),'')::uuid$$;
 create function auth.role() returns text language sql stable as $$select current_setting('request.role',true)$$;
+create table directory_migrations(version text primary key);
 create table app_members(user_id uuid primary key,role text,approved boolean);
 insert into app_members values('11111111-1111-1111-1111-111111111111','user',true),('22222222-2222-2222-2222-222222222222','master',true),('33333333-3333-3333-3333-333333333333','user',false);
 create table medical_institutions(code text primary key,bureau text,status text);

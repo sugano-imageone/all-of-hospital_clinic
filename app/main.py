@@ -196,7 +196,7 @@ def notifications_metadata(auth:Auth):
     db,_=auth;n=db.rpc('notification_metadata',{});sources=db.rpc('source_metadata',{})
     current={}
     for r in sources:
-        if r['status']=='success' and (r['prefecture_code'] not in current or r['id']>current[r['prefecture_code']]['id']):current[r['prefecture_code']]=r
+        if r['status']=='success' and r['bureau'] in REGIONS and (r['prefecture_code'] not in current or r['id']>current[r['prefecture_code']]['id']):current[r['prefecture_code']]=r
     bureaus=[]
     for bureau in REGIONS:
         dates=next((r['reference_dates'] for r in n['bureaus'] if r['bureau']==bureau),{})
