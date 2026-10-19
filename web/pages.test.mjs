@@ -3,10 +3,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-function client({approved=true,networkFailure=false,timeout=false,role='user',exportRows=[]}={}){
+function client({approved=true,networkFailure=false,timeout=false,role='user',exportRows=[],maintenance=false,serverMaintenance=false}={}){
  const calls=[];
- const config={url:'https://example.supabase.co',key:'sb_publishable_test',columns:[['code','コード']],prefectureCodes:{'福岡県':40}};
+ const config={maintenance,url:'https://example.supabase.co',key:'sb_publishable_test',columns:[['code','コード']],prefectureCodes:{'福岡県':40}};
  const native=async(url)=>{
+  if(url.endsWith('/rpc/maintenance_status'))return Response.json({active:serverMaintenance});
   calls.push(new URL(url));
   if(networkFailure)throw new TypeError('Failed to fetch');
   if(timeout)throw new DOMException('Timed out','TimeoutError');
@@ -120,4 +121,12 @@ test('full export retrieves rows beyond the first 1000',async()=>{
  assert.equal(response.status,200);const text=await response.text();
  assert.equal(text.split('\r\n').length,1002);assert.match(text,/0000001000/);
  assert.deepEqual(calls.filter(url=>url.pathname==='/rest/v1/medical_institutions').map(url=>url.searchParams.get('offset')),['0','1000']);
+});
+
+for(const mode of ['static','server'])test(`maintenance ${mode} blocks login, refresh and data before authentication`,async()=>{
+ const {window,calls}=client({maintenance:mode==='static',serverMaintenance:mode==='server'});
+ for(const url of ['/auth/login','/auth/refresh','/api/me','/api/search']){
+  const r=await window.fetch(url,{method:'POST',body:'{}'});assert.equal(r.status,503);assert.equal((await r.json()).detail,'メンテナンス中');
+ }
+ assert.equal(calls.length,0);
 });

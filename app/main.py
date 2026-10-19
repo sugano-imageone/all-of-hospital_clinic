@@ -19,6 +19,8 @@ templates=Jinja2Templates(directory=ROOT/'templates')
 
 @app.middleware('http')
 async def security_headers(request,call_next):
+    if os.getenv('APP_MAINTENANCE','').lower()=='true' and request.url.path.startswith(('/auth/','/api/')) and request.url.path!='/auth/logout':
+        return JSONResponse({'detail':'メンテナンス中'},status_code=503,headers={'Retry-After':'300','Cache-Control':'no-store'})
     if request.method in ['POST','PUT','PATCH','DELETE']:
         origin=request.headers.get('origin')
         # Browser forms and session cookies require same-origin requests.
@@ -52,7 +54,7 @@ def cookies(response,tokens):
 
 @app.get('/',response_class=HTMLResponse)
 def index(request:Request):
-    return templates.TemplateResponse(request=request,name='index.html',context={'prefectures':PREFECTURES,'bureaus':REGIONS})
+    return templates.TemplateResponse(request=request,name='index.html',context={'prefectures':PREFECTURES,'bureaus':REGIONS,'maintenance':os.getenv('APP_MAINTENANCE','').lower()=='true'})
 
 @app.get('/health')
 def health():

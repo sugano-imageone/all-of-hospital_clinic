@@ -1,0 +1,35 @@
+import {PGlite} from '@electric-sql/pglite';
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const db=new PGlite();
+await db.exec(`create role anon;create role authenticated;create role service_role;
+create schema auth;grant usage on schema auth to authenticated,service_role;
+create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.uid',true),'')::uuid$$;
+create function auth.role() returns text language sql stable as $$select current_user::text$$;
+create table public.app_members(user_id uuid primary key,role text,approved boolean);
+insert into public.app_members values('11111111-1111-1111-1111-111111111111','user',true),('22222222-2222-2222-2222-222222222222','master',true),('33333333-3333-3333-3333-333333333333','user',false);
+alter table public.app_members enable row level security;
+grant select on public.app_members to authenticated;
+create policy own_member on public.app_members for select to authenticated using(user_id=auth.uid());
+create table public.example_records(id integer);insert into public.example_records values(1);
+alter table public.example_records enable row level security;grant select on public.example_records to authenticated;`);
+const script=fs.readFileSync(new URL('../sql/017_maintenance.sql',import.meta.url),'utf8');
+await db.exec(script);await db.exec(script);
+await db.exec('create policy approved_read on public.example_records for select to authenticated using(public.is_approved());');
+// auth.role() is a JWT helper in production. Use a request claim in this isolated DB.
+await db.exec("create or replace function auth.role() returns text language sql stable as $$select current_setting('request.role',true)$$;");
+async function role(name,uid='11111111-1111-1111-1111-111111111111'){await db.exec('reset role');await db.query("select set_config('request.uid',$1,false),set_config('request.role',$2,false)",[uid,name]);await db.exec('set role '+name);}
+let checks=0;
+await role('anon');assert.equal((await db.query('select maintenance_status() s')).rows[0].s.active,false);checks++;
+await assert.rejects(db.query('select set_maintenance(true)'),/permission denied/);checks++;
+await role('authenticated');assert.equal((await db.query('select count(*)::int n from app_members')).rows[0].n,1);checks++;
+assert.equal((await db.query('select count(*)::int n from example_records')).rows[0].n,1);checks++;
+await assert.rejects(db.query('select set_maintenance(true)'),/permission denied/);checks++;
+await role('service_role');await db.query('select set_maintenance(true)');
+await role('authenticated');assert.equal((await db.query('select count(*)::int n from app_members')).rows[0].n,0);checks++;
+assert.equal((await db.query('select count(*)::int n from example_records')).rows[0].n,0);checks++;
+await role('authenticated','22222222-2222-2222-2222-222222222222');assert.equal((await db.query('select is_admin() a,is_master() m')).rows[0].a,false);checks++;
+await role('service_role');await db.query('select set_maintenance(false)');
+await role('authenticated');assert.equal((await db.query('select count(*)::int n from example_records')).rows[0].n,1);checks++;
+await db.exec('reset role');assert.deepEqual((await db.query('select approved from app_members order by user_id')).rows.map(r=>r.approved),[true,true,false]);checks++;
+await db.close();console.log(JSON.stringify({maintenance_sql_checks_passed:checks,production_connected:false}));

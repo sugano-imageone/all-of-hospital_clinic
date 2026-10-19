@@ -25,6 +25,13 @@ async function remote(path,options={},retry=true){
  return r;
 }
 const rpc=async(name,payload={})=>{const r=await remote('/rest/v1/rpc/'+name,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});return r.status===204?null:r.json();};
+async function inMaintenance(){
+ if(config.maintenance===true)return true;
+ const r=await network('/rest/v1/rpc/maintenance_status',{method:'POST',headers:{apikey:config.key,'Content-Type':'application/json'},body:'{}',cache:'no-store'});
+ if(r.status===404)return false; // Compatible with deployments before migration 017.
+ if(!r.ok)fail(503,'接続状況を確認できません。時間をおいて再度お試しください');
+ return (await r.json()).active===true;
+}
 async function member(authenticatedUser=null){
  if(!session)fail(401,'ログインが必要です');
  const user=authenticatedUser||await(await remote('/auth/v1/user')).json();
@@ -105,6 +112,7 @@ async function adminFunction(action,payload={}){try{return (await remote('/funct
 window.fetch=async function(url,options={}){
  if(typeof url!=='string'||(!url.startsWith('/api/')&&!url.startsWith('/auth/')))return nativeFetch(url,options);
  try{
+  if(!['/auth/logout','/api/connection-check'].includes(url)&&await inMaintenance())fail(503,'メンテナンス中');
   if(url==='/auth/login'){
    const form=options.body;save(null);
    document.getElementById('message').textContent='メールアドレス・パスワードを認証しています…';

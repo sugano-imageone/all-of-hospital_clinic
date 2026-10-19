@@ -1,1 +1,1 @@
-{"name":"imageone-medical-pages","version":"1.0.0","private":true,"dependencies":{"jszip":"3.10.1"}}
+{"name":"imageone-medical-pages","version":"1.0.0","private":true,"dependencies":{"jszip":"3.10.1"},"devDependencies":{"@electric-sql/pglite":"^0.3.14"}}
