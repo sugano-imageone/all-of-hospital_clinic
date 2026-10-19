@@ -110,7 +110,7 @@ window.fetch=async function(url,options={}){
    document.getElementById('message').textContent='メールアドレス・パスワードを認証しています…';
    const r=await remote('/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:form.get('email'),password:form.get('password')})},false);const tokens=await r.json();save(tokens);
    document.getElementById('message').textContent='利用権限を確認しています…';
-   try{return json({ok:true,user:profile(await member(tokens.user))});}catch(e){save(null);throw e;}
+   try{const me=await member(tokens.user);await rpc('record_login');return json({ok:true,user:profile(me)});}catch(e){save(null);throw e;}
   }
   if(url==='/api/connection-check'){
    const start=performance.now();await remote('/auth/v1/health',{},false);return json({ok:true,seconds:Math.round((performance.now()-start)/10)/100});
@@ -119,6 +119,13 @@ window.fetch=async function(url,options={}){
   if(url==='/auth/logout'){try{if(session)await remote('/auth/v1/logout',{method:'POST'});}finally{save(null);}return json({ok:true});}
   const me=await member();if(url==='/api/me')return json(profile(me));
   const q=options.body?JSON.parse(options.body):{};
+  if(url==='/api/admin/logins'){
+   if(!['admin','master'].includes(me.role))fail(403,'管理者権限が必要です');
+   if(typeof(q.email??'')!=='string'||(q.email||'').length>254||!Number.isInteger(q.page??1)||(q.page??1)<1||(q.page??1)>100000)fail(422,'履歴の検索条件を確認してください');
+   for(const date of [q.from_date,q.to_date])if(date!=null&&!/^\d{4}-\d{2}-\d{2}$/.test(date))fail(422,'日付を確認してください');
+   if(q.from_date&&q.to_date&&q.from_date>q.to_date)fail(422,'期間の開始日が終了日を超えています');
+   return json(await rpc('viewer_login_history',{p_email:q.email||'',p_from:q.from_date||null,p_to:q.to_date||null,p_page:q.page||1}));
+  }
   if(url==='/auth/password'){
    if(typeof q.password!=='string'||q.password.length<12||new TextEncoder().encode(q.password).length>72)fail(400,'パスワードは12文字以上、72バイト以下で設定してください');
    await remote('/auth/v1/user',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:q.password,data:{password_change_required:false}})});return json({ok:true});

@@ -1,4 +1,5 @@
 import os
+from datetime import date
 from collections import Counter, defaultdict
 from pathlib import Path
 from urllib.parse import quote, urlsplit
@@ -64,6 +65,13 @@ def login(email:Annotated[str,Form(max_length=254)],password:Annotated[str,Form(
     db=Supabase()
     try: tokens=db.request('POST','/auth/v1/token?grant_type=password',json={'email':email,'password':password}).json()
     finally: db.close()
+    verified=Supabase(tokens['access_token'])
+    try:
+        uid=tokens['user']['id']
+        membership=verified.request('GET','/rest/v1/app_members',params={'user_id':'eq.'+uid,'select':'role,approved'}).json()
+        if not membership or not membership[0]['approved']:raise HTTPException(403,'管理者の利用承認が必要です')
+        verified.rpc('record_login',{})
+    finally:verified.close()
     response=JSONResponse({'ok':True});cookies(response,tokens);return response
 
 @app.post('/auth/refresh')
@@ -152,6 +160,19 @@ class MemberUpdate(BaseModel):
     user_id:str=Field(pattern=r'^[a-fA-F0-9-]{36}$')
     role:str=Field(pattern=r'^(user|admin)$')
     approved:bool
+
+class LoginHistoryFilters(BaseModel):
+    email:str=Field(default='',max_length=254)
+    from_date:date|None=None
+    to_date:date|None=None
+    page:int=Field(default=1,ge=1,le=100000)
+
+@app.post('/api/admin/logins')
+def login_history(data:LoginHistoryFilters,auth:Auth):
+    db,user=auth
+    if user['role'] not in ['admin','master']:raise HTTPException(403,'管理者権限が必要です')
+    if data.from_date and data.to_date and data.from_date>data.to_date:raise HTTPException(422,'期間の開始日が終了日を超えています')
+    return db.rpc('viewer_login_history',{'p_email':data.email,'p_from':data.from_date.isoformat() if data.from_date else None,'p_to':data.to_date.isoformat() if data.to_date else None,'p_page':data.page})
 
 @app.get('/api/admin/members')
 def members(auth:Auth):

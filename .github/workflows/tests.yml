@@ -26,6 +26,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - run: npm ci --prefix web --ignore-scripts --no-audit --no-fund
+      - run: node web/login-history.test.mjs
       - run: node --check app/static/app.js
       - run: node --check web/pages.js
       - run: node --test web/admin-users.test.mjs
