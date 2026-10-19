@@ -17,6 +17,8 @@ function client({approved=true,networkFailure=false,timeout=false,role='user',ex
   if(url.includes('/rest/v1/medical_institutions?'))return Response.json(exportRows.slice(Number(new URL(url).searchParams.get('offset')||0),Number(new URL(url).searchParams.get('offset')||0)+1000),{headers:{'Content-Range':'0-'+Math.max(0,exportRows.length-1)+'/'+exportRows.length}});
   if(url.endsWith('/rpc/source_metadata'))return Response.json([]);
   if(url.endsWith('/rpc/monthly_change_counts'))return Response.json({});
+  if(url.endsWith('/rpc/record_login'))return new Response(null,{status:204});
+  if(url.endsWith('/rpc/viewer_login_history'))return Response.json({items:[],total:0,page:1,page_size:50});
   if(url.endsWith('/rpc/record_access'))return new Response(null,{status:204});
   throw Error('Unexpected request');
  };
@@ -72,14 +74,14 @@ test('dashboard fetches all 47 indexed prefecture partitions without a national 
  assert.equal((await response.json()).total,0);
 });
 
-test('password login verifies membership with two requests and returns no token to the UI',async()=>{
+test('password login verifies membership and records the session and returns no token to the UI',async()=>{
  const {window,calls}=client();const form=new FormData();form.set('email','viewer@example.invalid');form.set('password','test-password');
  const r=await window.fetch('/auth/login',{method:'POST',body:form});assert.equal(r.status,200);
  const body=await r.json();assert.equal(body.user.email,'viewer@example.invalid');assert.equal(body.user.role,'user');
- assert.equal(calls.length,2);assert.equal(calls[0].pathname,'/auth/v1/token');assert.equal(calls[1].pathname,'/rest/v1/app_members');
+ assert.equal(calls.length,3);assert.equal(calls[0].pathname,'/auth/v1/token');assert.equal(calls[1].pathname,'/rest/v1/app_members');assert.equal(calls[2].pathname,'/rest/v1/rpc/record_login');
  assert.ok(!JSON.stringify(body).includes('test-token'));assert.ok(!JSON.stringify(body).includes('test-password'));
  const search=await window.fetch('/api/search',{method:'POST',body:'{}'});assert.equal(search.status,200);
- assert.equal(calls[2].pathname,'/auth/v1/user');assert.equal(calls[3].pathname,'/rest/v1/app_members');
+ assert.equal(calls[3].pathname,'/auth/v1/user');assert.equal(calls[4].pathname,'/rest/v1/app_members');
 });
 
 test('unapproved login clears the session and cannot search',async()=>{
@@ -120,4 +122,9 @@ test('full export retrieves rows beyond the first 1000',async()=>{
  assert.equal(response.status,200);const text=await response.text();
  assert.equal(text.split('\r\n').length,1002);assert.match(text,/0000001000/);
  assert.deepEqual(calls.filter(url=>url.pathname==='/rest/v1/medical_institutions').map(url=>url.searchParams.get('offset')),['0','1000']);
+});
+
+for(const role of ['user','admin','master'])test(`login history permission ${role}`,async()=>{
+ const {window,calls}=client({role});const r=await window.fetch('/api/admin/logins',{method:'POST',body:'{}'});
+ assert.equal(r.status,role==='user'?403:200);assert.equal(calls.some(c=>c.pathname.endsWith('/rpc/viewer_login_history')),role!=='user');
 });
