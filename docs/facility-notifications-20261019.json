@@ -1,0 +1,783 @@
+{
+  "verified_on_jst": "2026-10-19",
+  "scope": "医科の全届出項目（医科名簿に掲載される併設歯科の届出は原文のまま保持）",
+  "source_detail_rows": 1192798,
+  "prefecture_count": 47,
+  "institution_count": 95650,
+  "official_item_name_count": 1271,
+  "no_filing_institution_rows": 4874,
+  "latest_selection": {
+    "latest_institution_item_groups": 1003929,
+    "older_source_rows_removed": 2782,
+    "same_date_multiple_receipts": 1648,
+    "date_unknown": 0,
+    "unresolved_latest_groups": 0
+  },
+  "bureaus": [
+    {
+      "bureau": "北海道",
+      "official_page": "https://kouseikyoku.mhlw.go.jp/hokkaido/gyomu/gyomu/hoken_kikan/todokede_juri_ichiran.html",
+      "reference_dates": [
+        "2026-10-01"
+      ],
+      "full_urls": [
+        "https://kouseikyoku.mhlw.go.jp/hokkaido/000502821.xlsx"
+      ]
+    },
+    {
+      "bureau": "東北",
+      "official_page": "https://kouseikyoku.mhlw.go.jp/tohoku/gyomu/gyomu/hoken_kikan/documents/201805koushin.html",
+      "reference_dates": [
+        "2026-09-01"
+      ],
+      "full_urls": [
+        "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-ika-r0809.xlsx"
+      ]
+    },
+    {
+      "bureau": "関東信越",
+      "official_page": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/chousa/kijyun.html",
+      "reference_dates": [
+        "2026-09-01"
+      ],
+      "full_urls": [
+        "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_ika_r0810.zip"
+      ]
+    },
+    {
+      "bureau": "東海北陸",
+      "official_page": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/newpage_00349.html",
+      "reference_dates": [
+        "2026-10-01"
+      ],
+      "full_urls": [
+        "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_01-01.zip"
+      ]
+    },
+    {
+      "bureau": "近畿",
+      "official_page": "https://kouseikyoku.mhlw.go.jp/kinki/gyomu/gyomu/hoken_kikan/shitei_jokyo_00004.html",
+      "reference_dates": [
+        "2026-10-01"
+      ],
+      "full_urls": [
+        "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_sisetukijun_ika.zip"
+      ]
+    },
+    {
+      "bureau": "中国四国",
+      "official_page": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/chousaka/shisetsukijunjuri.html",
+      "reference_dates": [
+        "2026-09-01"
+      ],
+      "full_urls": [
+        "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000502057.zip"
+      ]
+    },
+    {
+      "bureau": "四国",
+      "official_page": "https://kouseikyoku.mhlw.go.jp/shikoku/gyomu/gyomu/hoken_kikan/shitei/",
+      "reference_dates": [
+        "2026-10-01"
+      ],
+      "full_urls": [
+        "https://kouseikyoku.mhlw.go.jp/shikoku/000502937.zip"
+      ]
+    },
+    {
+      "bureau": "九州",
+      "official_page": "https://kouseikyoku.mhlw.go.jp/kyushu/gyomu/gyomu/hoken_kikan/index_00007.html",
+      "reference_dates": [
+        "2026-10-01"
+      ],
+      "full_urls": [
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503830.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503831.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503832.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503833.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503834.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503835.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503836.zip",
+        "https://kouseikyoku.mhlw.go.jp/kyushu/000503837.zip"
+      ]
+    }
+  ],
+  "full_source_files": [
+    {
+      "bureau": "北海道",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/hokkaido/000502821.xlsx",
+      "retrieved_at": "2026-10-19T12:19:36.626065+09:00",
+      "path": "raw/北海道/000502821.xlsx",
+      "bytes": 3529369,
+      "sha256": "7bbb2a43bc518d82e3899088393a2b66df93d06b884e5fd774df45e511cb6557",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/hokkaido/000502821.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "last_modified": "Thu, 08 Oct 2026 23:30:41 GMT",
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "東北",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-ika-r0809.xlsx",
+      "retrieved_at": "2026-10-19T12:19:36.625719+09:00",
+      "path": "raw/東北/shisetsu-touhoku-ika-r0809.xlsx",
+      "bytes": 7316319,
+      "sha256": "fc4fc312f3e8231e8f9db54e50d4cffc73c3f411c5b3f1b8dd4e660f44019a1d",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-touhoku-ika-r0809.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "last_modified": "Wed, 14 Oct 2026 15:01:07 GMT",
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "関東信越",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_ika_r0810.zip",
+      "retrieved_at": "2026-10-19T12:19:38.016653+09:00",
+      "path": "raw/関東信越/shisetsu_ika_r0810.zip",
+      "bytes": 22009912,
+      "sha256": "1daa11ebf13a3558fab7c0e02e724c3d1e676143db26c5e5d8707dadc59307d9",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/shisetsu_ika_r0810.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 15 Oct 2026 01:00:12 GMT",
+      "members": [
+        {
+          "member": "shisetsu_ika_r0810/08届出受理医療機関名簿（医科）茨城r0810.xlsx",
+          "bytes": 1771471,
+          "sha256": "0c4ae7dd984512bed1c97b6f2f07b4d9c4f2deb32d15d46c476838affa1a6720"
+        },
+        {
+          "member": "shisetsu_ika_r0810/09届出受理医療機関名簿（医科）栃木r0810.xlsx",
+          "bytes": 1097283,
+          "sha256": "bce9119c8c552ea000ff8d9ee1a60fee57619d4236781855138048d11b0c4ac7"
+        },
+        {
+          "member": "shisetsu_ika_r0810/10届出受理医療機関名簿（医科）群馬r0810.xlsx",
+          "bytes": 1625802,
+          "sha256": "1e34bb68eefcc79e567af7bb2ad74e7d030038c7bece11d35bae884c268788b0"
+        },
+        {
+          "member": "shisetsu_ika_r0810/11届出受理医療機関名簿（医科）埼玉r0810.xlsx",
+          "bytes": 3562144,
+          "sha256": "0c98ef6c22fc3291581de218bbbd60ed7638a0d4bcc30d51dfe3742ef3b3b354"
+        },
+        {
+          "member": "shisetsu_ika_r0810/12届出受理医療機関名簿（医科）千葉r0810.xlsx",
+          "bytes": 3679140,
+          "sha256": "b37c03c22e861e374f0e4a258c04eb2d04e64f87670412113f28eeed1df415b7"
+        },
+        {
+          "member": "shisetsu_ika_r0810/13届出受理医療機関名簿（医科）東京r0810.xlsx",
+          "bytes": 9518450,
+          "sha256": "f4c545a3e6d1ebc432a361af810b919fb6134bb99b001148de148b4ebfbcfb72"
+        },
+        {
+          "member": "shisetsu_ika_r0810/14届出受理医療機関名簿（医科）神奈川r0810.xlsx",
+          "bytes": 5021154,
+          "sha256": "4e65ebe0494eb973e9ee4e0f4a39c5843aaf38f8f2c389a356aba6d3cc355c08"
+        },
+        {
+          "member": "shisetsu_ika_r0810/15届出受理医療機関名簿（医科）新潟r0810.xlsx",
+          "bytes": 1413139,
+          "sha256": "1ef9f504ee32c9f57470b8c68fff8daf0ed25578d66212d23d7047c02dd1ba32"
+        },
+        {
+          "member": "shisetsu_ika_r0810/19届出受理医療機関名簿（医科）山梨r0810.xlsx",
+          "bytes": 503913,
+          "sha256": "9c5184d8a966539e79e0b65f4bc390f32fc9d91f154236a1ab074c970599072a"
+        },
+        {
+          "member": "shisetsu_ika_r0810/20届出受理医療機関名簿（医科）長野r0810.xlsx",
+          "bytes": 1758524,
+          "sha256": "2da413747501feefbea1e15761d895f8cbccaafbb4458c3be92d7e6c6abef264"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "東海北陸",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_01-01.zip",
+      "retrieved_at": "2026-10-19T12:19:38.471066+09:00",
+      "path": "raw/東海北陸/2610-06_01-01.zip",
+      "bytes": 11378180,
+      "sha256": "948811a954d243ac1638c6363bb4eedb5336df84962ace00316b5a15f98c7274",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_01-01.zip",
+      "content_type": "application/zip",
+      "last_modified": "Tue, 06 Oct 2026 06:00:49 GMT",
+      "members": [
+        {
+          "member": "2610　届出受理医療機関名簿（医科）\\",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "member": "2610　届出受理医療機関名簿（医科）\\2610（三重医科）届出受理医療機関名簿.xlsx",
+          "bytes": 1576921,
+          "sha256": "0f75dd26f8363f605e3c216225197731588c6e70479357a8a7855ace583006eb"
+        },
+        {
+          "member": "2610　届出受理医療機関名簿（医科）\\2610（富山医科）届出受理医療機関名簿.xlsx",
+          "bytes": 1128682,
+          "sha256": "28905289a01dde55a6c5c82faf2f1d56550b89d79486eae9ac02b3efe705a00c"
+        },
+        {
+          "member": "2610　届出受理医療機関名簿（医科）\\2610（岐阜医科）届出受理医療機関名簿.xlsx",
+          "bytes": 1909485,
+          "sha256": "a4b59ba077b29d7d0f95b0d76d45d5135ac7c53defbf8102142a27298289f4b5"
+        },
+        {
+          "member": "2610　届出受理医療機関名簿（医科）\\2610（愛知医科）届出受理医療機関名簿.xlsx",
+          "bytes": 6413721,
+          "sha256": "09a030f20162c2de0c5dd8f296914e9b1ea1f29e719663397a15ef51d2651267"
+        },
+        {
+          "member": "2610　届出受理医療機関名簿（医科）\\2610（石川医科）届出受理医療機関名簿.xlsx",
+          "bytes": 1287440,
+          "sha256": "a12fe000e5d1f3f3326a9a1e187f5d0d2da500991033049d35a1c4d6d73ed347"
+        },
+        {
+          "member": "2610　届出受理医療機関名簿（医科）\\2610（静岡医科）届出受理医療機関名簿.xlsx",
+          "bytes": 2999188,
+          "sha256": "799024781c9188cb6018c5c7eaa6a68f033f28700a13ec77745ecbb25beb7866"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "近畿",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_sisetukijun_ika.zip",
+      "retrieved_at": "2026-10-19T12:19:39.133212+09:00",
+      "path": "raw/近畿/2026.10_sisetukijun_ika.zip",
+      "bytes": 13136566,
+      "sha256": "2a3ace4da98d9c2e0af0e0802c7b2c77d19805deae36f4133a8cfb51b13d8c4e",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_sisetukijun_ika.zip",
+      "content_type": "application/zip",
+      "last_modified": "Sun, 04 Oct 2026 15:01:35 GMT",
+      "members": [
+        {
+          "member": "2026.10_sisetukijun_ika/2026.10_sisetukijun_fukui_ika.xlsx",
+          "bytes": 559650,
+          "sha256": "c439e76e2b5c711bd53ca2f42421ea41c57030f47ac684b394165eaff90f6763"
+        },
+        {
+          "member": "2026.10_sisetukijun_ika/2026.10_sisetukijun_hyogo_ika.xlsx",
+          "bytes": 5269709,
+          "sha256": "e3b0ca89e234dd3d5892398077b0288823dd8bf6f47a2d7f4966c1a26594f1d9"
+        },
+        {
+          "member": "2026.10_sisetukijun_ika/2026.10_sisetukijun_kyoto_ika.xlsx",
+          "bytes": 2046936,
+          "sha256": "3c74d5ef3635fcab22a72f1a25c4079f835382bc8913471a4ef0c1c152c1ee33"
+        },
+        {
+          "member": "2026.10_sisetukijun_ika/2026.10_sisetukijun_nara_ika.xlsx",
+          "bytes": 1166631,
+          "sha256": "dc2f77bddf6b1f6b2672cb63f3c3e406e44db2909c8e2da6883305e384a3d0f2"
+        },
+        {
+          "member": "2026.10_sisetukijun_ika/2026.10_sisetukijun_osaka_ika.xlsx",
+          "bytes": 7142907,
+          "sha256": "149c2c641f70cfc4e5720beaded1a4bda85082539cd6b0c9e3bccff292b13148"
+        },
+        {
+          "member": "2026.10_sisetukijun_ika/2026.10_sisetukijun_shiga_ika.xlsx",
+          "bytes": 940247,
+          "sha256": "e938f6b1f51a02d0321ff0462d685abd1652d51ac960f741d20b321593cffaac"
+        },
+        {
+          "member": "2026.10_sisetukijun_ika/2026.10_sisetukijun_wakayama_ika.xlsx",
+          "bytes": 1015383,
+          "sha256": "245b168b8faae50b188b42dcbdbff6ea88ed840a737a2ccbf70cbcb85666b3bf"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "中国四国",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000502057.zip",
+      "retrieved_at": "2026-10-19T12:19:39.523715+09:00",
+      "path": "raw/中国四国/000502057.zip",
+      "bytes": 8463225,
+      "sha256": "fb7d392e4ec10f381e7a6ffd46b2687792e46746235b79c79d87d1293c89834c",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000502057.zip",
+      "content_type": "application/zip",
+      "last_modified": "Sun, 27 Sep 2026 23:30:41 GMT",
+      "members": [
+        {
+          "member": "35_山口_届出受理医療機関名簿.xlsx",
+          "bytes": 2116014,
+          "sha256": "dddf5f356903bb54aacec0da85c6865683d7203b4391b0f15ce81cfe328a25e7"
+        },
+        {
+          "member": "31_鳥取_届出受理医療機関名簿.xlsx",
+          "bytes": 896360,
+          "sha256": "b21d28deb903ae8597f176c2d43fa972ce2d7eaf0d7c24cdbd91962b6e47c099"
+        },
+        {
+          "member": "32_島根_届出受理医療機関名簿.xlsx",
+          "bytes": 1102247,
+          "sha256": "e4363064649115ea7f7872be03ea2382e293c76e35918a2277c67b68375538a7"
+        },
+        {
+          "member": "33_岡山_届出受理医療機関名簿.xlsx",
+          "bytes": 3073650,
+          "sha256": "7d65db50fbbd5b19b25ac0045c1a75ce09f61e166bb8e3da467aed317f938994"
+        },
+        {
+          "member": "34_広島_届出受理医療機関名簿.xlsx",
+          "bytes": 4653608,
+          "sha256": "9bb3b239d1c8b5e44e9e19f98f46b9c782f11c9ef11afd91c5102801e4a5c397"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "四国",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/shikoku/000502937.zip",
+      "retrieved_at": "2026-10-19T12:19:39.770748+09:00",
+      "path": "raw/四国/000502937.zip",
+      "bytes": 3564702,
+      "sha256": "88dbd65a044f0d03d3b941a57bcae9d0b9ef91dfcc9fb7dc56bd1ebb77d255eb",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/shikoku/000502937.zip",
+      "content_type": "application/zip",
+      "last_modified": "Wed, 07 Oct 2026 01:00:40 GMT",
+      "members": [
+        {
+          "member": "02_07 愛媛 医科 届出受理医療機関名簿.xlsx",
+          "bytes": 1544022,
+          "sha256": "515b2aeb8d9b9ef222d77611da6c910799704c8dc67c6a69c65016fa91b14c6b"
+        },
+        {
+          "member": "02_10 高知 医科 届出受理医療機関名簿.xlsx",
+          "bytes": 966304,
+          "sha256": "45c47cf7e00c77fb3e1d77ebb48159db6a866045ba5dcf004d3c2b04f65c8011"
+        },
+        {
+          "member": "02_01 香川 医科 届出受理医療機関名簿.xlsx",
+          "bytes": 1147780,
+          "sha256": "b21c0be53dd57508ea80871db7b1090ee1a2ebcf3bc573874e78a24fb5b1cff1"
+        },
+        {
+          "member": "02_04 徳島 医科 届出受理医療機関名簿.xlsx",
+          "bytes": 1083629,
+          "sha256": "7dd0e8874feb9ed108340b390a5a7899a80109991c6ebe35054b49d4661de052"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "九州",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503830.zip",
+      "retrieved_at": "2026-10-19T12:19:40.189900+09:00",
+      "path": "raw/九州/000503830.zip",
+      "bytes": 7610077,
+      "sha256": "ed48c6c8c52c6a2ea7dd6bdc3023b9f9d0fb6b188d4718143fe24c7914740406",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503830.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 08 Oct 2026 23:32:26 GMT",
+      "members": [
+        {
+          "member": "r8_10_shisetsu_fukuoka_ika_02.xlsx",
+          "bytes": 5874354,
+          "sha256": "7c62e0f25a440928faaedf891b94eead6af7574b510faf50b572dde026a4abd7"
+        },
+        {
+          "member": "r8_10_shisetsu_fukuoka_shika_02.xlsx",
+          "bytes": 2813722,
+          "sha256": "e2e56d8b5696bb48941bd0d98f221a31840cd4d836349ffd650eee06d9c3853d"
+        },
+        {
+          "member": "r8_10_shisetsu_fukuoka_yakkyoku_02.xlsx",
+          "bytes": 1824949,
+          "sha256": "b0927c2b1cf97ee64edcc7b89c1692d043a638750c5ea5db83d9cad28c64d587"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "九州",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503831.zip",
+      "retrieved_at": "2026-10-19T12:19:40.227128+09:00",
+      "path": "raw/九州/000503831.zip",
+      "bytes": 1312021,
+      "sha256": "57296ef9918f03441a0cd9031786b96420d5099c9d102db222a247c3d33df711",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503831.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 08 Oct 2026 23:32:28 GMT",
+      "members": [
+        {
+          "member": "r8_10_shisetsu_saga_ika_02.xlsx",
+          "bytes": 1102454,
+          "sha256": "5e4d34f067e65721870bacf17e560bba73890b48b1ad5378245d0083f5228b3e"
+        },
+        {
+          "member": "r8_10_shisetsu_saga_shika_02.xlsx",
+          "bytes": 405170,
+          "sha256": "d4a60216270180d499e743e07658e5059b686de0b298400c4475f7b32299d7cf"
+        },
+        {
+          "member": "r8_10_shisetsu_saga_yakkyoku_02.xlsx",
+          "bytes": 324296,
+          "sha256": "5163291b379c29bf49acf035ede01b0606a139bf5406f8dd6decf14c2d1b1b63"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "九州",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503832.zip",
+      "retrieved_at": "2026-10-19T12:19:40.258945+09:00",
+      "path": "raw/九州/000503832.zip",
+      "bytes": 2008689,
+      "sha256": "2c0354c9f4759c36a1d5a4b445a5321046d8bd3a290b7e21a20f488e0b4397b8",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503832.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 08 Oct 2026 23:32:27 GMT",
+      "members": [
+        {
+          "member": "r8_10_shisetsu_nagasaki_ika_02.xlsx",
+          "bytes": 1716316,
+          "sha256": "0d1079b251a7d0ad7ea07dce5e4a5a4a047fc1f4f1c2746ded6cf6eb16bb398c"
+        },
+        {
+          "member": "r8_10_shisetsu_nagasaki_shika_02.xlsx",
+          "bytes": 643275,
+          "sha256": "7a4ff42ca2177225883b74619444a06bc90d47420104a8e84392a3f48adc1db0"
+        },
+        {
+          "member": "r8_10_shisetsu_nagasaki_yakkyoku_02.xlsx",
+          "bytes": 421366,
+          "sha256": "408d83298c79b75bf19081e5629f8f75368c0734f6464f131f9cc19675c515c7"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "九州",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503833.zip",
+      "retrieved_at": "2026-10-19T12:19:40.470518+09:00",
+      "path": "raw/九州/000503833.zip",
+      "bytes": 2632122,
+      "sha256": "c0ea8d289ff62403b1e73d6b1efa2e1d51ac747a12d22c28a1c9e5af490c6fab",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503833.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 08 Oct 2026 23:32:34 GMT",
+      "members": [
+        {
+          "member": "r8_10_shisetsu_kumamoto_ika_02.xlsx",
+          "bytes": 2255400,
+          "sha256": "42f52303f4cc5d2ab513aa9face54da5e876682cc113e2a0de5025c9c33e044d"
+        },
+        {
+          "member": "r8_10_shisetsu_kumamoto_shika_02.xlsx",
+          "bytes": 865718,
+          "sha256": "5281faca484b5a1956f8de110b7644e0b9a4e279b1bdba0192e490767233fc2e"
+        },
+        {
+          "member": "r8_10_shisetsu_kumamoto_yakkyoku_02.xlsx",
+          "bytes": 537522,
+          "sha256": "e9f4d1c919420e907734048057865f43eaf088d9f5f12d25217462bb8cf55db5"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "九州",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503834.zip",
+      "retrieved_at": "2026-10-19T12:19:40.541916+09:00",
+      "path": "raw/九州/000503834.zip",
+      "bytes": 1776902,
+      "sha256": "80b8aa852402c3d0f6a24aa4b2ce12a2e8dd726d57189517861fc5db1bc83cfc",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503834.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 08 Oct 2026 23:32:32 GMT",
+      "members": [
+        {
+          "member": "r8_10_shisetsu_ooita_ika_02.xlsx",
+          "bytes": 1661025,
+          "sha256": "68e870a49553c9ec3229246fa3694f97fd9abd8fb96222d415c987e3c2de7993"
+        },
+        {
+          "member": "r8_10_shisetsu_ooita_shika_02.xlsx",
+          "bytes": 432030,
+          "sha256": "eee83075068e3db15a62f4e6d275b7225cc66018296e763c14ea036dd55b484e"
+        },
+        {
+          "member": "r8_10_shisetsu_ooita_yakkyoku_02.xlsx",
+          "bytes": 369383,
+          "sha256": "cd4a2bf0058c169791eda1e32cae65af9edf83f1bcbf555ca57e359801a6b358"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "九州",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503835.zip",
+      "retrieved_at": "2026-10-19T12:19:40.781240+09:00",
+      "path": "raw/九州/000503835.zip",
+      "bytes": 1522925,
+      "sha256": "7f9c7e56fed1d0b1e0ff1cb3c62ae538ecef3981061922fed8b27ded8cb7582b",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503835.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 08 Oct 2026 23:32:36 GMT",
+      "members": [
+        {
+          "member": "r8_10_shisetsu_miyazaki_ika_02.xlsx",
+          "bytes": 1284960,
+          "sha256": "f199beba6ccd27a2fb65ac45608396da66640bed9a046c85f904d876d4450e96"
+        },
+        {
+          "member": "r8_10_shisetsu_miyazaki_shika_02.xlsx",
+          "bytes": 481048,
+          "sha256": "3a45f7ff9f1bb6f3a40ac86021745da6fd31b66063a6790de77dd6bdd20f78c5"
+        },
+        {
+          "member": "r8_10_shisetsu_miyazaki_yakkyoku_02.xlsx",
+          "bytes": 348332,
+          "sha256": "74de778a6616be4f30a985dd5df3fef61601ca3525064f80dc6bf3f98dc96731"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "九州",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503836.zip",
+      "retrieved_at": "2026-10-19T12:19:40.830389+09:00",
+      "path": "raw/九州/000503836.zip",
+      "bytes": 2482987,
+      "sha256": "2226aed3ecede8cbc975c865e9b5f0c13f418e3566dd2e9cd0a05a2b14e57160",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503836.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 08 Oct 2026 23:32:35 GMT",
+      "members": [
+        {
+          "member": "r8_10_shisetsu_kagoshima_ika_02.xlsx",
+          "bytes": 2269056,
+          "sha256": "ecebb5e65f5ce24dd4a66e8d4543ee50b183aa50778daeb40e1b527c105a62e4"
+        },
+        {
+          "member": "r8_10_shisetsu_kagoshima_shika_02.xlsx",
+          "bytes": 689100,
+          "sha256": "ce93863c60f6aa04d9cd75abbc6ded03bbbf6a6cbf1a94890150db88f2a7b683"
+        },
+        {
+          "member": "r8_10_shisetsu_kagoshima_yakkyoku_02.xlsx",
+          "bytes": 518871,
+          "sha256": "2e4cb61af19f08544ef3a519f0ef3c89753b6ab16c9fb52d7181aa769c6da010"
+        }
+      ],
+      "status": "downloaded_validated"
+    },
+    {
+      "bureau": "九州",
+      "role": "full",
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503837.zip",
+      "retrieved_at": "2026-10-19T12:19:41.001640+09:00",
+      "path": "raw/九州/000503837.zip",
+      "bytes": 1834856,
+      "sha256": "8517ade3781cd6a1b9d0f8a35ab0c0fbb99aa8f7fd2b44817f6248e34f036c27",
+      "http_status": 200,
+      "final_url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503837.zip",
+      "content_type": "application/zip",
+      "last_modified": "Thu, 08 Oct 2026 23:32:29 GMT",
+      "members": [
+        {
+          "member": "r8_10_shisetsu_okinawa_ika_02.xlsx",
+          "bytes": 1536384,
+          "sha256": "36bbaa8b9eb55b34c65ed1295d9acbbd68a3696477f6084cba8b4187e8ba1d87"
+        },
+        {
+          "member": "r8_10_shisetsu_okinawa_shika_02.xlsx",
+          "bytes": 532199,
+          "sha256": "ffdf016ae9e0e41a4abba220cb180809e0fa401b84994a66ce97dd6eaa27aae2"
+        },
+        {
+          "member": "r8_10_shisetsu_okinawa_yakkyoku_02.xlsx",
+          "bytes": 402669,
+          "sha256": "0c14294adbfa2809919bfb2dd01a6b3a6e89b3028e9e7dafab3ed70e60b24b4f"
+        }
+      ],
+      "status": "downloaded_validated"
+    }
+  ],
+  "production_write": false,
+  "verification": {
+    "unit_tests_passed": 27,
+    "saved_page_resolver_passed": [
+      {
+        "bureau": "北海道",
+        "pass": true,
+        "full_files": 1
+      },
+      {
+        "bureau": "東北",
+        "pass": true,
+        "full_files": 1
+      },
+      {
+        "bureau": "関東信越",
+        "pass": true,
+        "full_files": 1
+      },
+      {
+        "bureau": "東海北陸",
+        "pass": true,
+        "full_files": 1
+      },
+      {
+        "bureau": "近畿",
+        "pass": true,
+        "full_files": 1
+      },
+      {
+        "bureau": "中国四国",
+        "pass": true,
+        "full_files": 1
+      },
+      {
+        "bureau": "四国",
+        "pass": true,
+        "full_files": 1
+      },
+      {
+        "bureau": "九州",
+        "pass": true,
+        "full_files": 8
+      }
+    ],
+    "date_columns": {
+      "xlsx_sheet_count": 47,
+      "observed_date_column_sets": [
+        [
+          "算定開始年月日",
+          "個別有効開始年月日"
+        ]
+      ]
+    },
+    "representative_official_pdfs": [
+      {
+        "bureau": "北海道",
+        "url": "https://kouseikyoku.mhlw.go.jp/hokkaido/000502820.pdf",
+        "date_labels": {
+          "受理年月日": 0,
+          "受理日": 0,
+          "届出年月日": 0,
+          "届出日": 0,
+          "算定開始年月日": 1191,
+          "個別有効開始年月日": 0
+        }
+      },
+      {
+        "bureau": "東北",
+        "url": "https://kouseikyoku.mhlw.go.jp/tohoku/shisetsu-02aomori-ika-r0809.pdf",
+        "date_labels": {
+          "受理年月日": 0,
+          "受理日": 0,
+          "届出年月日": 0,
+          "届出日": 0,
+          "算定開始年月日": 390,
+          "個別有効開始年月日": 0
+        }
+      },
+      {
+        "bureau": "関東信越",
+        "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/08shisetsu_ika_ibaraki_r0810.pdf",
+        "date_labels": {
+          "受理年月日": 0,
+          "受理日": 0,
+          "届出年月日": 0,
+          "届出日": 0,
+          "算定開始年月日": 489,
+          "個別有効開始年月日": 0
+        }
+      },
+      {
+        "bureau": "近畿",
+        "url": "https://kouseikyoku.mhlw.go.jp/kinki/2026.10_sisetukijun_fukui_ika.pdf",
+        "date_labels": {
+          "受理年月日": 0,
+          "受理日": 0,
+          "届出年月日": 0,
+          "届出日": 0,
+          "算定開始年月日": 178,
+          "個別有効開始年月日": 0
+        }
+      },
+      {
+        "bureau": "中国四国",
+        "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/000502052.pdf",
+        "date_labels": {
+          "受理年月日": 0,
+          "受理日": 0,
+          "届出年月日": 0,
+          "届出日": 0,
+          "算定開始年月日": 279,
+          "個別有効開始年月日": 0
+        }
+      },
+      {
+        "bureau": "四国",
+        "url": "https://kouseikyoku.mhlw.go.jp/shikoku/000502925.pdf",
+        "date_labels": {
+          "受理年月日": 0,
+          "受理日": 0,
+          "届出年月日": 0,
+          "届出日": 0,
+          "算定開始年月日": 433,
+          "個別有効開始年月日": 0
+        }
+      },
+      {
+        "bureau": "九州",
+        "url": "https://kouseikyoku.mhlw.go.jp/kyushu/000503805.pdf",
+        "date_labels": {
+          "受理年月日": 0,
+          "受理日": 0,
+          "届出年月日": 0,
+          "届出日": 0,
+          "算定開始年月日": 1118,
+          "個別有効開始年月日": 0
+        }
+      },
+      {
+        "bureau": "東海北陸",
+        "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/2610-06_01-16-01.pdf",
+        "date_columns_confirmed": [
+          "算定開始年月日"
+        ]
+      }
+    ]
+  },
+  "latest_selection_policy": {
+    "preferred": "受理年月日・受理日",
+    "fallback_when_receipt_dates_absent": "算定開始年月日",
+    "fallback_user_authorized_on_jst": "2026-10-19",
+    "same_latest_date": "同じ最新日付の原文を保持し、受理番号の大小で選ばない",
+    "individual_validity_start_used_for_ordering": false
+  }
+}
